@@ -57,6 +57,19 @@ const GOD_FLOW={
   }
 };
 
+const GOD_FLOW_ALT_ACTION={
+  비견:'내가 정할 영역과 타인과 합의할 영역을 문장으로 나눠두면 선택이 훨씬 가벼워집니다.',
+  겁재:'함께 움직이는 일은 시작 전에 시간·비용·성과의 몫을 숫자나 문장으로 정해두세요.',
+  식신:'매일 반복할 최소 단위를 정하고, 완성된 산출물이 실제로 쌓이는지를 확인해보세요.',
+  상관:'불편한 점을 발견했다면 비판보다 수정안·시안·대안을 먼저 만들어보는 편이 효과적입니다.',
+  편재:'새 기회를 잡기 전 이번 달에 쓸 수 있는 시간과 비용의 한도를 먼저 정해두세요.',
+  정재:'들어오고 나가는 돈과 완료된 일을 기록해, 실제로 남는 결과를 확인하는 편이 좋습니다.',
+  편관:'급한 일일수록 오늘 처리할 것과 미뤄도 되는 것을 분리해 압박의 범위를 줄여보세요.',
+  정관:'해야 할 일만 늘리지 말고 그만큼의 결정 권한과 평가 기준이 있는지도 함께 확인하세요.',
+  편인:'새로운 것을 탐색한 뒤 하나는 실제 작업이나 생활에 시험 적용해보는 단계까지 가져가세요.',
+  정인:'배운 내용을 메모에만 두지 말고 작은 결과물 하나로 옮기는 시점을 정해두세요.'
+};
+
 const RELATION_FLOW={
   clash:{
     label:'충',
@@ -177,6 +190,25 @@ const relationText=item=>{
   };
 };
 
+
+const relationBundle=relations=>{
+  if(!relations.length) return null;
+  const primary=relationText(relations[0]);
+  if(relations.length===1) return primary;
+  const extraLabels=[...new Set(relations.slice(1).map(item=>relationText(item).label))];
+  return {
+    label:[primary.label,...extraLabels].join('·'),
+    body:`${primary.body} 여기에 ${extraLabels.join('·')} 관계도 함께 걸려 있어, 한 가지 신호만으로 흐름을 단정하지 않습니다.`,
+    action:primary.action
+  };
+};
+
+const alternateGuideFor=(stemGod,branchGod)=>{
+  const stem=GOD_FLOW_ALT_ACTION[stemGod];
+  const branch=GOD_FLOW_ALT_ACTION[branchGod];
+  return stemGod===branchGod?stem:[stem,branch].filter(Boolean).join(' ');
+};
+
 const godPairSummary=(stemGod,branchGod)=>{
   const stem=GOD_FLOW[stemGod];
   const branch=GOD_FLOW[branchGod];
@@ -184,7 +216,9 @@ const godPairSummary=(stemGod,branchGod)=>{
     title:stemGod===branchGod
       ?`${withSubject(stem.keyword)} 반복해서 앞에 오는 흐름`
       :`${withComitative(stem.keyword)} ${withSubject(branch.keyword)} 함께 움직이는 흐름`,
-    body:`겉으로 드러나는 주제는 ${stemGod}의 ${stem.keyword}, 생활 속 바탕에는 ${branchGod}의 ${withSubject(branch.keyword)} 놓입니다. ${stem.body}`,
+    body:stemGod===branchGod
+      ?`천간과 지지에서 모두 ${withSubject(stemGod)} 겹쳐 ${stem.keyword} 주제가 반복해서 강조됩니다. ${stem.body}`
+      :`겉으로 드러나는 주제는 ${stemGod}의 ${stem.keyword}, 생활 속 바탕에는 ${branchGod}의 ${withSubject(branch.keyword)} 놓입니다. ${stem.body}`,
     guide:stemGod===branchGod?stem.action:`${stem.action} 동시에 ${branch.action}`,
     keywords:stemGod===branchGod?stem.keyword:`${stem.keyword} · ${branch.keyword}`
   };
@@ -195,8 +229,7 @@ const buildAnnual=(result,year,currentYear,index)=>{
   const stemGod=tenGod(result.pillars.day.stemIndex,pillar.stemIndex);
   const branchGod=branchTenGod(result.pillars.day.stemIndex,pillar.branchIndex);
   const relations=flowRelations(result,pillar.branchIndex,`annual-${year}`);
-  const relation=relations[0]??null;
-  const relationCopy=relationText(relation);
+  const relationCopy=relationBundle(relations);
   const pair=godPairSummary(stemGod,branchGod);
   return {
     year,
@@ -214,11 +247,12 @@ const buildAnnual=(result,year,currentYear,index)=>{
     title:pair.title,
     body:relationCopy?`${pair.body} ${relationCopy.body}`:pair.body,
     guide:relationCopy?`${pair.guide} ${relationCopy.action}`:pair.guide,
+    guideAlt:alternateGuideFor(stemGod,branchGod),
     evidence:[
       `${year} ${pillar.hanja}`,
       `천간 ${stemGod}`,
       `지지 ${branchGod}`,
-      relationEvidence(relation)
+      ...relations.map(relationEvidence)
     ].filter(Boolean),
     isCurrent:year===currentYear,
     confidence:'medium',
@@ -265,8 +299,7 @@ const buildDaeun=(result,target)=>{
   const stemGod=tenGod(result.pillars.day.stemIndex,cycle.pillar.stemIndex);
   const branchGod=branchTenGod(result.pillars.day.stemIndex,cycle.pillar.branchIndex);
   const relations=flowRelations(result,cycle.pillar.branchIndex,'daeun-current');
-  const relation=relations[0]??null;
-  const relationCopy=relationText(relation);
+  const relationCopy=relationBundle(relations);
   const pair=godPairSummary(stemGod,branchGod);
   const endAge=cycle.startAgeMonths+120;
   return {
@@ -277,13 +310,14 @@ const buildDaeun=(result,target)=>{
     title:pair.title,
     body:relationCopy?`${pair.body} ${relationCopy.body}`:pair.body,
     guide:relationCopy?`${pair.guide} ${relationCopy.action}`:pair.guide,
+    guideAlt:alternateGuideFor(stemGod,branchGod),
     stemTenGod:stemGod,
     branchTenGod:branchGod,
     evidence:[
       `대운 ${cycle.pillar.hanja}`,
       `천간 ${stemGod}`,
       `지지 ${branchGod}`,
-      relationEvidence(relation)
+      ...relations.map(relationEvidence)
     ].filter(Boolean),
     confidence:'medium',
     approximateStart:true,
@@ -310,15 +344,39 @@ const buildDaeunTimeline=result=>{
   });
 };
 
+
+const dedupeGuides=(daeun,annuals)=>{
+  const used=new Set();
+  const makeUnique=item=>{
+    if(!item?.guide) return item;
+    let guide=item.guide;
+    if(used.has(guide)&&item.guideAlt) guide=item.guideAlt;
+    if(used.has(guide)&&item.pillar?.hanja){
+      guide=`${guide} ${item.pillar.hanja} 흐름에서는 한꺼번에 모두 바꾸기보다 한 가지 기준부터 적용해보세요.`;
+    }
+    used.add(guide);
+    const {guideAlt,...rest}=item;
+    return {...rest,guide};
+  };
+  return {
+    daeun:makeUnique(daeun),
+    annuals:annuals.map(makeUnique)
+  };
+};
+
 export function buildCurrentFlow(result,{today=new Date()}={}){
   const target=dateFromValue(today);
   const currentYear=sajuYearAt(target);
+  const unique=dedupeGuides(
+    buildDaeun(result,target),
+    [0,1,2].map(offset=>buildAnnual(result,currentYear+offset,currentYear,offset))
+  );
   return {
     asOf:`${target.year}-${String(target.month).padStart(2,'0')}-${String(target.day).padStart(2,'0')}`,
     currentSajuYear:currentYear,
-    daeun:buildDaeun(result,target),
+    daeun:unique.daeun,
     daeunTimeline:buildDaeunTimeline(result),
-    annuals:[0,1,2].map(offset=>buildAnnual(result,currentYear+offset,currentYear,offset)),
+    annuals:unique.annuals,
     policy:{
       yearBoundary:'li-chun',
       daeunStart:'3-days-per-year, rounded to months',
