@@ -301,7 +301,8 @@ export function buildReadingV2(result){
     evidence:[
       wealthVisible?`재성 ${counts.wealth}`:wealthHidden?'재성 지장간':null,
       outputVisible?`식상 ${counts.output}`:null,
-      resourceVisible?`인성 ${counts.resource}`:null
+      resourceVisible?`인성 ${counts.resource}`:null,
+      !wealthVisible&&!wealthHidden&&!outputVisible&&!resourceVisible?`일간 ${result.dayMaster.hanja}`:null
     ]
   });
 
