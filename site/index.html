@@ -8,7 +8,7 @@
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <title>사주결 · SAJU GYEOL</title>
   <meta name="description" content="태어난 순간의 네 기둥을 정확한 계산 기준과 차분한 해석으로 읽는 사주 서비스.">
-  <link rel="stylesheet" href="./assets/style.css?v=20261006-brand2">
+  <link rel="stylesheet" href="./assets/style.css?v=20261006-result3">
 </head>
 <body class="home-page">
   <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -74,6 +74,7 @@
       <div class="service-strip"><span><i>性</i> 성향</span><span><i>緣</i> 관계</span><span><i>業</i> 일</span><span><i>財</i> 돈</span><small>네 가지 시선으로 읽는 나</small></div>
       <section class="result-preview" id="result-preview" aria-live="polite" hidden>
         <div class="result-topline">
+          <img class="result-art" src="./assets/saju-hero.webp" alt="" loading="lazy">
           <div>
             <p class="eyebrow">02 · 나의 사주 기록</p>
             <h2>나를 이루는 네 기둥</h2>
@@ -89,9 +90,10 @@
           <article data-pillar="hour"><small>HOUR · 시주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>—</span></article>
         </div>
 
-        <div class="result-grid">
-          <section class="result-panel">
+        <div class="result-grid" id="result-elements">
+          <section class="result-panel elements-panel">
             <div class="panel-title"><span>五行</span><h3>오행의 균형</h3></div>
+            <div class="element-visual"><div class="element-donut" id="element-donut" role="img" aria-label="오행 분포"><div><strong id="element-total">8</strong><span>글자의 기운</span></div></div></div>
             <div class="element-list">
               <div data-element="wood"><span class="element-dot">木</span><b>목</b><span class="element-bar"><i data-bar></i></span><em data-count>—</em></div>
               <div data-element="fire"><span class="element-dot">火</span><b>화</b><span class="element-bar"><i data-bar></i></span><em data-count>—</em></div>
@@ -114,7 +116,7 @@
           </section>
         </div>
 
-        <div class="structure-facts">
+        <div class="structure-facts" id="result-structure">
           <section class="fact-card">
             <div class="panel-title"><span>十二</span><h3>십이운성</h3></div>
             <div class="fact-chips" id="twelve-stages"></div>
@@ -136,15 +138,15 @@
           </section>
         </div>
 
-        <div class="interpretation-heading">
+        <div class="interpretation-heading" id="result-reading">
           <p class="eyebrow">03 · READING</p>
           <h2>이제, 나의 이야기로 읽어볼까요.</h2>
         </div>
         <div class="reading-cards">
-          <article data-reading="temperament"><span>01</span><h3 data-reading-title>성향</h3><p data-reading-body>계산 후 원국 구조를 바탕으로 구체적인 성향 해설을 보여줍니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
-          <article data-reading="relationship"><span>02</span><h3 data-reading-title>관계</h3><p data-reading-body>계산 후 관계에서 반복되기 쉬운 패턴과 기준을 풀어봅니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
-          <article data-reading="career"><span>03</span><h3 data-reading-title>일</h3><p data-reading-body>계산 후 어떤 업무 방식에서 강점을 쓰기 쉬운지 구체적으로 설명합니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
-          <article data-reading="money"><span>04</span><h3 data-reading-title>돈</h3><p data-reading-body>계산 후 재성·식상·지장간의 연결을 바탕으로 돈을 다루는 방식을 읽습니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+          <article data-reading="temperament"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="9"/><path d="M16 3v4m0 18v4M3 16h4m18 0h4m-9-19 3 3M7 25l3-3m-3-15 3 3m12 12 3 3"/></svg></div><span>01</span><h3 data-reading-title>성향</h3><p data-reading-body>계산 후 원국 구조를 바탕으로 구체적인 성향 해설을 보여줍니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+          <article data-reading="relationship"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 26 5 15C-1 6 10 1 16 10c6-9 17-4 11 5Z"/></svg></div><span>02</span><h3 data-reading-title>관계</h3><p data-reading-body>계산 후 관계에서 반복되기 쉬운 패턴과 기준을 풀어봅니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+          <article data-reading="career"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="24" height="17" rx="4"/><path d="M11 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3M4 16c8 6 16 6 24 0m-12 1v5"/></svg></div><span>03</span><h3 data-reading-title>일</h3><p data-reading-body>계산 후 어떤 업무 방식에서 강점을 쓰기 쉬운지 구체적으로 설명합니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+          <article data-reading="money"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><path d="m9 10 4 12 3-9 3 9 4-12M8 16h16"/></svg></div><span>04</span><h3 data-reading-title>돈</h3><p data-reading-body>계산 후 재성·식상·지장간의 연결을 바탕으로 돈을 다루는 방식을 읽습니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
         </div>
 
         <aside class="validation-note">
@@ -161,6 +163,6 @@
     <div><span>© SAJU GYEOL</span></div>
     <div class="footer-links"><a href="./methodology/">계산 기준</a></div>
   </footer>
-  <script src="./assets/engine-app.js?v=20261006-brand2" defer></script>
+  <script src="./assets/engine-app.js?v=20261006-result3" defer></script>
 </body>
 </html>

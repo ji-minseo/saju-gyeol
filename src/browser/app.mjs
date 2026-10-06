@@ -42,11 +42,13 @@ const renderPillar=(key,pillar,stemTenGod,branchTenGod)=>{
   const detail=card.querySelector('[data-pillar-detail]');
   if(!pillar){
     card.classList.add('is-empty');
+    delete card.dataset.stemElement;
     hanja.textContent='—';
     detail.textContent=key==='hour'?'출생시간 미상':'계산되지 않음';
     return;
   }
   card.classList.remove('is-empty');
+  card.dataset.stemElement=pillar.stem.element;
   hanja.textContent=pillar.hanja;
   const stemMeta=`${pillar.stem.korean}${elementNames[pillar.stem.element]} · ${pillar.stem.polarity==='yang'?'양':'음'}`;
   detail.textContent=key==='day'
@@ -62,6 +64,20 @@ const renderElements=result=>{
       const bar=row.querySelector('[data-bar]');
       if(bar) bar.style.width=`${Math.max(0,Math.min(100,(count/result.fiveElements.characterCount)*100))}%`;
     }
+  }
+  const colors={wood:'#789a82',fire:'#d48a78',earth:'#c0a263',metal:'#a698b5',water:'#7697b5'};
+  const donut=document.querySelector('#element-donut');
+  const total=result.fiveElements.characterCount;
+  let offset=0;
+  const stops=Object.entries(colors).map(([element,color])=>{
+    const start=offset;
+    offset+=(result.fiveElements.counts[element]/total)*100;
+    return `${color} ${start}% ${offset}%`;
+  });
+  if(donut){
+    donut.style.background=`conic-gradient(${stops.join(',')})`;
+    donut.setAttribute('aria-label',`오행 분포: ${Object.keys(colors).map(k=>`${elementNames[k]} ${result.fiveElements.counts[k]}개`).join(', ')}`);
+    document.querySelector('#element-total').textContent=total;
   }
   elementNote.textContent=`천간·지지 표면 ${result.fiveElements.characterCount}글자 기준 · 강약 판정 아님`;
 };
