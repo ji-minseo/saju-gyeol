@@ -2254,3 +2254,55 @@ body{
       );
   }
 }
+
+
+/* v0.26 lunar birth-date controls */
+.date-field>span{display:block}
+#solar-date-fields[hidden],
+.lunar-date-fields[hidden],
+.leap-month-check[hidden]{display:none!important}
+
+.lunar-date-fields{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:7px;
+}
+.lunar-date-fields label{
+  position:relative;
+  display:block;
+}
+.lunar-date-fields input{
+  width:100%;
+  padding-right:28px!important;
+}
+.lunar-date-fields small{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  color:rgba(255,255,255,.72);
+  font-size:11px;
+  pointer-events:none;
+}
+.leap-month-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:max-content;
+  margin-top:9px;
+  color:#f8fbfa;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+.leap-month-check input{
+  width:16px!important;
+  height:16px;
+  margin:0;
+  accent-color:#e67739;
+}
+@media(max-width:520px){
+  .lunar-date-fields{grid-template-columns:1.35fr 1fr 1fr;gap:6px}
+  .lunar-date-fields input{padding-left:10px!important;padding-right:24px!important}
+  .lunar-date-fields small{right:8px}
+}
