@@ -33,6 +33,10 @@ const flowAsOf=document.querySelector('#flow-as-of');
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
 const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
 
+const normalizeFlowDisplay=text=>String(text??'')
+  .replaceAll('생산 · 루틴가','생산 · 루틴이')
+  .replaceAll('내 선택 · 독립가','내 선택 · 독립이');
+
 engineBadge.textContent=`ENGINE · v${ENGINE_VERSION}`;
 
 
@@ -179,9 +183,21 @@ const renderStructureFacts=result=>{
     return;
   }
   daeunMeta.textContent=`${result.daeun.direction==='forward'?'순행':'역행'} · 대운수 약 ${result.daeun.startAgeYearsRounded} · ${result.daeun.boundary.name} 절입 기준`;
+  const flow=buildCurrentFlow(result,{today:new Date()});
   for(const cycle of result.daeun.cycles){
+    const timeline=flow.daeunTimeline.find(item=>item.order===cycle.order);
     const item=document.createElement('div');
-    item.innerHTML=`<small>${cycle.startAge}세~</small><strong>${cycle.pillar.hanja}</strong><span>${cycle.pillar.korean}</span>`;
+
+    const age=document.createElement('small');
+    age.textContent=`${cycle.startAge}세~`;
+    const pillar=document.createElement('strong');
+    pillar.textContent=cycle.pillar.hanja;
+    const korean=document.createElement('span');
+    korean.textContent=cycle.pillar.korean;
+    const theme=document.createElement('em');
+    theme.textContent=timeline?normalizeFlowDisplay(timeline.theme):'';
+
+    item.append(age,pillar,korean,theme);
     daeunTrack.append(item);
   }
 };
@@ -262,7 +278,7 @@ const renderFlow=result=>{
     daeun.status==='needs-birth-time'?'출생시간을 입력하면 현재 대운을 계산합니다.':
     '현재 입력에서는 대운 위치를 표시할 수 없습니다.'
   );
-  currentDaeunTitle.textContent=daeun.title||'지금의 큰 흐름';
+  currentDaeunTitle.textContent=normalizeFlowDisplay(daeun.title||'지금의 큰 흐름');
   currentDaeunBody.textContent=daeun.body||'세운은 아래에서 계속 확인할 수 있어요.';
   currentDaeunGuide.textContent=daeun.guide||'대운 계산에 필요한 정보를 입력하면 활용 포인트를 함께 보여드립니다.';
   addEvidenceChips(currentDaeunEvidence,daeun.evidence||[]);
@@ -290,7 +306,7 @@ const renderFlow=result=>{
     period.textContent=annual.period;
 
     const title=document.createElement('h4');
-    title.textContent=annual.title;
+    title.textContent=normalizeFlowDisplay(annual.title);
 
     const body=document.createElement('p');
     body.className='annual-body';
