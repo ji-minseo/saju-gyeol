@@ -188,6 +188,13 @@ const renderStructureFacts=result=>{
 
 const renderReading=result=>{
   const reading=buildReadingV2(result);
+
+  for(const [key,section] of Object.entries(reading)){
+    const summaryCard=document.querySelector(`[data-summary="${key}"]`);
+    const summaryTitle=summaryCard?.querySelector('[data-summary-title]');
+    if(summaryTitle) summaryTitle.textContent=section.title;
+  }
+
   for(const [key,section] of Object.entries(reading)){
     const card=document.querySelector(`[data-reading="${key}"]`);
     if(!card) continue;
