@@ -1,4 +1,5 @@
 import {calculateSaju,ENGINE_VERSION} from '../engine/calculator.mjs';
+import {buildReading} from '../content/reading-v1.mjs';
 
 const form=document.querySelector('#birth-form');
 const dateInput=document.querySelector('#birth-date');
@@ -48,14 +49,18 @@ const renderPillar=(key,pillar,stemTenGod,branchTenGod)=>{
   hanja.textContent=pillar.hanja;
   const stemMeta=`${pillar.stem.korean}${elementNames[pillar.stem.element]} · ${pillar.stem.polarity==='yang'?'양':'음'}`;
   detail.textContent=key==='day'
-    ?`나를 나타내는 중심 · ${stemMeta} · 지지 ${branchTenGod}`
-    :`${pillar.korean} · 천간 ${stemTenGod} · 지지 ${branchTenGod}`;
+    ?`${stemMeta} · 지지 ${branchTenGod}`
+    :`천간 ${stemTenGod} · 지지 ${branchTenGod}`;
 };
 
 const renderElements=result=>{
   for(const [element,count] of Object.entries(result.fiveElements.counts)){
     const row=document.querySelector(`[data-element="${element}"]`);
-    if(row) row.querySelector('[data-count]').textContent=`${count}개`;
+    if(row){
+      row.querySelector('[data-count]').textContent=`${count}개`;
+      const bar=row.querySelector('[data-bar]');
+      if(bar) bar.style.width=`${Math.max(0,Math.min(100,(count/result.fiveElements.characterCount)*100))}%`;
+    }
   }
   elementNote.textContent=`천간·지지 표면 ${result.fiveElements.characterCount}글자 기준 · 강약 판정 아님`;
 };
@@ -154,6 +159,23 @@ const renderStructureFacts=result=>{
   }
 };
 
+const renderReading=result=>{
+  const reading=buildReading(result);
+  for(const [key,section] of Object.entries(reading)){
+    const card=document.querySelector(`[data-reading="${key}"]`);
+    if(!card) continue;
+    card.querySelector('[data-reading-title]').textContent=section.title;
+    card.querySelector('[data-reading-body]').textContent=section.body;
+    const evidence=card.querySelector('[data-reading-evidence]');
+    evidence.replaceChildren();
+    for(const item of section.evidence){
+      const chip=document.createElement('span');
+      chip.textContent=item;
+      evidence.append(chip);
+    }
+  }
+};
+
 const renderSummary=(result,sex)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
@@ -170,6 +192,7 @@ const showResult=(result,sex)=>{
   renderTenGods(result);
   renderHiddenStems(result);
   renderStructureFacts(result);
+  renderReading(result);
   renderSummary(result,sex);
   preview.hidden=false;
   requestAnimationFrame(()=>preview.classList.add('is-visible'));
