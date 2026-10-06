@@ -4,6 +4,12 @@ import {
   sexagenary,yearPillar,monthPillar,dayPillar,effectiveDayDate,
   hourBranchIndex,hourPillar,tenGod,surfaceElementCounts
 } from '../src/engine/rules.mjs';
+import {
+  offsetMinutesAt,resolveSeoulCivilTime
+} from '../src/engine/korea-time.mjs';
+import {
+  JIE_2026,monthIndexAtInstant,liChunReachedAt
+} from '../src/engine/data/solar-terms-2026.mjs';
 
 test('sexagenary cycle anchors are stable',()=>{
   assert.equal(sexagenary(0).hanja,'甲子');
@@ -31,11 +37,11 @@ test('day pillar matches KASI October 2026 records',()=>{
 
 test('23:00 boundary convention is explicit rather than hidden',()=>{
   assert.deepEqual(
-    effectiveDayDate({year:2026,month:10,6,hour:23},{dayBoundary:'midnight'}),
+    effectiveDayDate({year:2026,month:10,day:6,hour:23},{dayBoundary:'midnight'}),
     {year:2026,month:10,day:6}
   );
   assert.deepEqual(
-    effectiveDayDate({year:2026,month:10,6,hour:23},{dayBoundary:'zi-start'}),
+    effectiveDayDate({year:2026,month:10,day:6,hour:23},{dayBoundary:'zi-start'}),
     {year:2026,month:10,day:7}
   );
 });
@@ -77,4 +83,33 @@ test('surface element count is exactly eight visible characters for four pillars
   ];
   const counts=surfaceElementCounts(pillars);
   assert.equal(Object.values(counts).reduce((a,b)=>a+b,0),8);
+});
+
+test('Asia/Seoul historical civil offsets come from the runtime IANA tz database',()=>{
+  assert.equal(offsetMinutesAt(Date.parse('1965-01-15T00:00:00Z')),510);
+  assert.equal(offsetMinutesAt(Date.parse('1970-01-15T00:00:00Z')),540);
+  assert.equal(offsetMinutesAt(Date.parse('1988-07-01T00:00:00Z')),600);
+  assert.equal(offsetMinutesAt(Date.parse('1988-12-01T00:00:00Z')),540);
+});
+
+test('a normal modern Seoul civil time resolves to one instant',()=>{
+  const resolved=resolveSeoulCivilTime({year:2026,month:10,day:6,hour:10,minute:10});
+  assert.equal(resolved.status,'valid');
+  assert.equal(resolved.matches.length,1);
+  assert.equal(resolved.matches[0].offsetMinutes,540);
+  assert.equal(resolved.matches[0].utcIso,'2026-10-06T01:10:00.000Z');
+});
+
+test('KASI 2026 Li Chun boundary changes at the published minute',()=>{
+  const before=Date.parse('2026-02-04T05:01:00+09:00');
+  const exact=Date.parse('2026-02-04T05:02:00+09:00');
+  assert.equal(monthIndexAtInstant(before,JIE_2026),11);
+  assert.equal(monthIndexAtInstant(exact,JIE_2026),0);
+  assert.equal(liChunReachedAt(before,JIE_2026),false);
+  assert.equal(liChunReachedAt(exact,JIE_2026),true);
+});
+
+test('KASI 2026 Hanlu boundary changes You month to Xu month at 15:29 KST',()=>{
+  assert.equal(monthIndexAtInstant(Date.parse('2026-10-08T15:28:00+09:00'),JIE_2026),7);
+  assert.equal(monthIndexAtInstant(Date.parse('2026-10-08T15:29:00+09:00'),JIE_2026),8);
 });
