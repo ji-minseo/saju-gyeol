@@ -1,9 +1,18 @@
 import {calculateSaju,ENGINE_VERSION} from '../engine/calculator.mjs';
 import {buildReadingV2} from '../content/reading-v2.mjs';
 import {buildCurrentFlow} from '../content/flow-v1.mjs';
+import {lunarToSolarDate} from '../engine/lunar-calendar.mjs';
 
 const form=document.querySelector('#birth-form');
 const dateInput=document.querySelector('#birth-date');
+const solarDateFields=document.querySelector('#solar-date-fields');
+const lunarDateFields=document.querySelector('#lunar-date-fields');
+const lunarYear=document.querySelector('#lunar-year');
+const lunarMonth=document.querySelector('#lunar-month');
+const lunarDay=document.querySelector('#lunar-day');
+const lunarLeap=document.querySelector('#lunar-leap');
+const leapMonthRow=document.querySelector('#leap-month-row');
+const calendarInputs=[...document.querySelectorAll('input[name="calendar"]')];
 const timeInput=document.querySelector('#birth-time');
 const timeUnknown=document.querySelector('#time-unknown');
 const preview=document.querySelector('#result-preview');
@@ -35,6 +44,26 @@ const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
 
 
 engineBadge.textContent=`ENGINE · v${ENGINE_VERSION}`;
+
+
+const selectedCalendar=()=>form.elements.calendar?.value||'solar';
+
+const syncCalendarFields=()=>{
+  const lunar=selectedCalendar()==='lunar';
+  solarDateFields.hidden=lunar;
+  lunarDateFields.hidden=!lunar;
+  leapMonthRow.hidden=!lunar;
+  dateInput.required=!lunar;
+  lunarYear.required=lunar;
+  lunarMonth.required=lunar;
+  lunarDay.required=lunar;
+};
+
+calendarInputs.forEach(input=>input.addEventListener('change',()=>{
+  setError('');
+  syncCalendarFields();
+}));
+syncCalendarFields();
 
 
 timeUnknown?.addEventListener('change',()=>{
@@ -353,14 +382,17 @@ const renderFlow=result=>{
   }
 };
 
-const renderSummary=(result,sex)=>{
+const renderSummary=(result,sex,calendarMeta=null)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
   const status=result.status==='partial'?' · 시주 제외':'';
-  summary.textContent=`${y}년 ${Number(m)}월 ${Number(d)}일 · ${time} · ${sex}${status}`;
+  const dateLabel=calendarMeta?.type==='lunar'
+    ?`음력 ${calendarMeta.year}년 ${calendarMeta.month}월 ${calendarMeta.day}일${calendarMeta.isLeapMonth?' · 윤달':''} → 양력 ${y}년 ${Number(m)}월 ${Number(d)}일`
+    :`${y}년 ${Number(m)}월 ${Number(d)}일`;
+  summary.textContent=`${dateLabel} · ${time} · ${sex}${status}`;
 };
 
-const showResult=(result,sex)=>{
+const showResult=(result,sex,calendarMeta=null)=>{
   document.body.classList.add('has-result');
   renderPillar('year',result.pillars.year,result.tenGods.visibleStems.year,result.tenGods.visibleBranches.year);
   renderPillar('month',result.pillars.month,result.tenGods.visibleStems.month,result.tenGods.visibleBranches.month);
@@ -372,7 +404,7 @@ const showResult=(result,sex)=>{
   renderStructureFacts(result);
   renderReading(result);
   renderFlow(result);
-  renderSummary(result,sex);
+  renderSummary(result,sex,calendarMeta);
   preview.hidden=false;
   requestAnimationFrame(()=>preview.classList.add('is-visible'));
   preview.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
@@ -381,18 +413,47 @@ const showResult=(result,sex)=>{
 form?.addEventListener('submit',event=>{
   event.preventDefault();
   setError('');
-  if(!dateInput.value){dateInput.focus();return;}
+  const calendar=selectedCalendar();
+  let birthDate=dateInput.value;
+  let calendarMeta=null;
+
+  if(calendar==='solar'){
+    if(!birthDate){dateInput.focus();return;}
+  }else{
+    if(!lunarYear.value||!lunarMonth.value||!lunarDay.value){
+      setError('음력 생년월일의 년·월·일을 모두 입력해 주세요.');
+      (!lunarYear.value?lunarYear:!lunarMonth.value?lunarMonth:lunarDay).focus();
+      return;
+    }
+    try{
+      const converted=lunarToSolarDate({
+        year:lunarYear.value,
+        month:lunarMonth.value,
+        day:lunarDay.value,
+        isLeapMonth:lunarLeap.checked
+      });
+      birthDate=converted.solarDate;
+      calendarMeta={type:'lunar',...converted.lunar};
+    }catch(error){
+      const message=String(error?.message||error);
+      if(message.includes('not a leap month')) setError('선택한 해의 이 달은 윤달이 아니에요. 윤달 체크를 해제하거나 날짜를 다시 확인해 주세요.');
+      else if(message.includes('1970..2050')) setError('현재 음력 변환 지원 범위는 1970년부터 2050년까지예요.');
+      else setError('존재하지 않는 음력 날짜예요. 음력 날짜와 윤달 여부를 다시 확인해 주세요.');
+      return;
+    }
+  }
+
   const sexValue=form.elements.sex?.value||null;
   const sex=sexValue==='female'?'여성':sexValue==='male'?'남성':'성별 미선택';
   const birthTime=timeUnknown.checked?null:(timeInput.value||null);
   try{
-    const result=calculateSaju({birthDate:dateInput.value,birthTime,sex:sexValue});
+    const result=calculateSaju({birthDate,birthTime,sex:sexValue});
     if(result.status==='needs-birth-time'){
       setError('이 날짜는 절기 경계가 바뀌는 날이라 정확한 년주·월주 판정을 위해 출생시간이 필요해요.');
       preview.hidden=true;
       return;
     }
-    showResult(result,sex);
+    showResult(result,sex,calendarMeta);
   }catch(error){
     const message=String(error?.message||error);
     if(message.includes('did not exist')) setError('입력한 시각은 당시 한국의 표준시 전환 때문에 존재하지 않았던 시각이에요. 출생기록을 다시 확인해 주세요.');
