@@ -317,3 +317,99 @@ footer strong{font-size:18px;color:var(--ink)}
   .daeun-track{display:flex;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x proximity}
   .daeun-track>div{min-width:84px;scroll-snap-align:start}
 }
+
+
+/* v0.5 readable result + mobile overflow hardening */
+.birth-form,.result-preview,.result-grid,.result-panel,.pillar-grid,.pillar-grid article,
+.structure-facts,.fact-card,.reading-cards,.reading-cards article,.hidden-stem-box,.hidden-stems,
+.result-topline,.field,.form-grid>*{min-width:0}
+
+.field input[type="date"],.field input[type="time"]{
+  display:block;width:100%;max-width:100%;min-width:0;
+  -webkit-appearance:none;appearance:none;font-size:16px;
+}
+.field input[type="date"]::-webkit-date-and-time-value,
+.field input[type="time"]::-webkit-date-and-time-value{
+  min-width:0;text-align:left;
+}
+.field input[type="date"]::-webkit-calendar-picker-indicator,
+.field input[type="time"]::-webkit-calendar-picker-indicator{
+  flex:0 0 auto;margin-left:6px;
+}
+
+.element-list>div{
+  grid-template-columns:28px 24px minmax(72px,1fr) 42px;
+  gap:8px;min-width:0;
+}
+.element-list b{white-space:nowrap}
+.element-list em{
+  min-width:42px;text-align:right;white-space:nowrap;
+  color:var(--ink);font-size:12px;font-weight:850;
+}
+.element-bar{
+  position:relative;display:block;width:100%;height:8px;overflow:hidden;
+  border-radius:999px;background:#edf2ef;
+}
+.element-bar i{
+  display:block;width:0;height:100%;border-radius:inherit;background:var(--jade);
+  transition:width .5s ease;
+}
+
+.pillar-grid span,.result-panel p,.fact-card p,.daeun-meta,.hidden-stems span,
+.reading-cards p,.validation-note p{
+  overflow-wrap:anywhere;word-break:keep-all;
+}
+.pillar-grid [data-pillar-detail]{font-size:10px;line-height:1.45}
+.ten-gods-placeholder span,.fact-chips span{max-width:100%;white-space:normal;line-height:1.35}
+.hidden-stems>div{grid-template-columns:48px minmax(0,1fr)}
+.hidden-stems span{min-width:0}
+
+.reading-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.reading-cards article{min-height:0;padding:24px}
+.reading-cards h3{margin:28px 0 10px;font-size:22px;line-height:1.22}
+.reading-cards p{font-size:13px;line-height:1.72}
+.reading-evidence{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.reading-evidence span{
+  display:inline-flex;padding:6px 8px;border:1px solid rgba(94,136,119,.16);
+  border-radius:999px;background:var(--jade-pale);color:var(--jade-deep);
+  font-size:10px;font-weight:800;line-height:1.25;
+}
+
+.daeun-track>*{min-width:0}
+.fact-main{overflow-wrap:anywhere}
+
+@media(max-width:800px){
+  .reading-cards{grid-template-columns:1fr}
+  .result-preview{overflow:hidden}
+}
+@media(max-width:520px){
+  .site-header,main,footer{width:min(100% - 28px,1180px)}
+  .birth-form,.result-preview{padding:18px}
+  .form-grid{grid-template-columns:minmax(0,1fr)}
+  .field{width:100%;min-width:0;overflow:hidden}
+  .field input{max-width:100%;min-width:0}
+  .calendar-switch,.segmented{max-width:100%;flex-wrap:wrap}
+  .calendar-switch label,.segmented label{min-width:0}
+  .sex-field legend small{display:block;margin:3px 0 0}
+  .pillar-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .pillar-grid article{padding:14px;min-height:150px;overflow:hidden}
+  .pillar-grid strong{font-size:36px}
+  .pillar-grid [data-pillar-detail]{font-size:9.5px;line-height:1.4}
+  .result-panel,.fact-card{padding:18px}
+  .panel-title{align-items:flex-start}
+  .panel-title h3{min-width:0;font-size:19px;line-height:1.25}
+  .element-list>div{grid-template-columns:28px 20px minmax(54px,1fr) 38px;gap:6px}
+  .element-list em{min-width:38px;font-size:11px}
+  .hidden-stem-box>div:first-child{align-items:flex-start;flex-wrap:wrap}
+  .hidden-stems>div{grid-template-columns:42px minmax(0,1fr);padding:8px;font-size:10px}
+  .fact-chips{gap:6px}
+  .fact-chips span{padding:7px 8px;font-size:10px}
+  .daeun-meta{line-height:1.5}
+  .daeun-track{width:100%;max-width:100%;overscroll-behavior-x:contain}
+  .daeun-track>div{flex:0 0 78px;min-width:78px}
+  .reading-cards article{padding:20px}
+  .reading-cards h3{font-size:20px}
+  .validation-note{grid-template-columns:36px minmax(0,1fr);gap:12px;padding:16px}
+  .validation-note .stamp{width:36px;height:36px}
+  .validation-note a{grid-column:2;min-width:0;overflow-wrap:anywhere}
+}
