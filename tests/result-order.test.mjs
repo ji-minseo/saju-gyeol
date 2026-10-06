@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 
-test('result report presents interpretation before technical chart data',async()=>{
+test('result report presents four pillars as a cover before interpretation and technical appendix',async()=>{
   const html=await readFile('site/index.html','utf8');
   const summary=html.indexOf('id="result-summary"');
   const reading=html.indexOf('id="result-reading"');
@@ -13,11 +13,12 @@ test('result report presents interpretation before technical chart data',async()
   const structure=html.indexOf('id="result-structure"');
 
   assert.ok(summary>0);
+  assert.ok(pillars>0);
+  assert.ok(pillars<summary);
   assert.ok(summary<reading);
   assert.ok(reading<flow);
   assert.ok(flow<details);
-  assert.ok(details<pillars);
-  assert.ok(pillars<elements);
+  assert.ok(details<elements);
   assert.ok(elements<structure);
 });
 
