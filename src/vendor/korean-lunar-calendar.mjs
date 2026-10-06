@@ -151,7 +151,7 @@ export class KoreanLunarCalendar {
   accumulateYearDays(
     year,
     cache,
-    perYear: (y) => number,
+    perYear,
   ) {
     const cached = cache.get(year);
     if (cached !== undefined) {
