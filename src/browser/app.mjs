@@ -10,6 +10,7 @@ const errorBox=document.querySelector('#form-error');
 const engineBadge=document.querySelector('#engine-badge');
 const tenGods=document.querySelector('#ten-gods');
 const dayMasterNote=document.querySelector('#day-master-note');
+const hiddenStems=document.querySelector('#hidden-stems');
 const elementNote=document.querySelector('#element-note');
 
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
@@ -27,7 +28,7 @@ const setError=message=>{
   errorBox.hidden=!message;
 };
 
-const renderPillar=(key,pillar,tenGodName)=>{
+const renderPillar=(key,pillar,stemTenGod,branchTenGod)=>{
   const card=document.querySelector(`[data-pillar="${key}"]`);
   const hanja=card.querySelector('[data-pillar-hanja]');
   const detail=card.querySelector('[data-pillar-detail]');
@@ -40,7 +41,9 @@ const renderPillar=(key,pillar,tenGodName)=>{
   card.classList.remove('is-empty');
   hanja.textContent=pillar.hanja;
   const stemMeta=`${pillar.stem.korean}${elementNames[pillar.stem.element]} · ${pillar.stem.polarity==='yang'?'양':'음'}`;
-  detail.textContent=key==='day'?`나를 나타내는 중심 · ${stemMeta}`:`${pillar.korean} · ${tenGodName||''}`.replace(/ · $/,'');
+  detail.textContent=key==='day'
+    ?`나를 나타내는 중심 · ${stemMeta} · 지지 ${branchTenGod}`
+    :`${pillar.korean} · 천간 ${stemTenGod} · 지지 ${branchTenGod}`;
 };
 
 const renderElements=result=>{
@@ -54,16 +57,43 @@ const renderElements=result=>{
 const renderTenGods=result=>{
   tenGods.replaceChildren();
   for(const key of ['year','month','day','hour']){
-    const value=result.tenGods.visibleStems[key];
-    if(value==null) continue;
-    const chip=document.createElement('span');
-    const label=document.createElement('b');
-    label.textContent=tenGodLabels[key];
-    chip.append(label,document.createTextNode(` · ${value}`));
-    tenGods.append(chip);
+    const stemValue=result.tenGods.visibleStems[key];
+    const branchValue=result.tenGods.visibleBranches[key];
+    if(stemValue!=null){
+      const chip=document.createElement('span');
+      const label=document.createElement('b');
+      label.textContent=tenGodLabels[key];
+      chip.append(label,document.createTextNode(` · ${stemValue}`));
+      tenGods.append(chip);
+    }
+    if(branchValue!=null){
+      const chip=document.createElement('span');
+      const label=document.createElement('b');
+      label.textContent=tenGodLabels[key].replace('간','지');
+      chip.append(label,document.createTextNode(` · ${branchValue}`));
+      tenGods.append(chip);
+    }
   }
   const dm=result.dayMaster;
-  dayMasterNote.textContent=`일간 ${dm.hanja}(${dm.korean}) · ${elementNames[dm.element]} · ${dm.polarity==='yang'?'양':'음'} 기준 천간 십성`;
+  dayMasterNote.textContent=`일간 ${dm.hanja}(${dm.korean}) · ${elementNames[dm.element]} · ${dm.polarity==='yang'?'양':'음'} 기준 · 지지는 정기(본기) 대표 십성`;
+};
+
+const renderHiddenStems=result=>{
+  hiddenStems.replaceChildren();
+  const labels={year:'년지',month:'월지',day:'일지',hour:'시지'};
+  const positionLabel={residual:'여',middle:'중',main:'정'};
+  for(const key of ['year','month','day','hour']){
+    const layers=result.hiddenStems.pillars[key];
+    const pillar=result.pillars[key];
+    if(!layers||!pillar) continue;
+    const row=document.createElement('div');
+    const title=document.createElement('b');
+    title.textContent=`${labels[key]} ${pillar.branch.hanja}`;
+    const values=document.createElement('span');
+    values.textContent=layers.map(layer=>layer.stem?`${positionLabel[layer.position]} ${layer.stem.hanja}·${layer.tenGod}`:`${positionLabel[layer.position]} —`).join('  ');
+    row.append(title,values);
+    hiddenStems.append(row);
+  }
 };
 
 const renderSummary=(result,sex)=>{
@@ -74,12 +104,13 @@ const renderSummary=(result,sex)=>{
 };
 
 const showResult=(result,sex)=>{
-  renderPillar('year',result.pillars.year,result.tenGods.visibleStems.year);
-  renderPillar('month',result.pillars.month,result.tenGods.visibleStems.month);
-  renderPillar('day',result.pillars.day,result.tenGods.visibleStems.day);
-  renderPillar('hour',result.pillars.hour,result.tenGods.visibleStems.hour);
+  renderPillar('year',result.pillars.year,result.tenGods.visibleStems.year,result.tenGods.visibleBranches.year);
+  renderPillar('month',result.pillars.month,result.tenGods.visibleStems.month,result.tenGods.visibleBranches.month);
+  renderPillar('day',result.pillars.day,result.tenGods.visibleStems.day,result.tenGods.visibleBranches.day);
+  renderPillar('hour',result.pillars.hour,result.tenGods.visibleStems.hour,result.tenGods.visibleBranches.hour);
   renderElements(result);
   renderTenGods(result);
+  renderHiddenStems(result);
   renderSummary(result,sex);
   preview.hidden=false;
   requestAnimationFrame(()=>preview.classList.add('is-visible'));
