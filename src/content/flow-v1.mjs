@@ -194,10 +194,11 @@ const relationText=item=>{
 const relationBundle=relations=>{
   if(!relations.length) return null;
   const primary=relationText(relations[0]);
-  if(relations.length===1) return primary;
-  const extraLabels=[...new Set(relations.slice(1).map(item=>relationText(item).label))];
+  const labels=[...new Set(relations.map(item=>relationText(item).label))];
+  if(labels.length===1) return primary;
+  const extraLabels=labels.filter(label=>label!==primary.label);
   return {
-    label:[primary.label,...extraLabels].join('·'),
+    label:labels.join('·'),
     body:`${primary.body} 여기에 ${extraLabels.join('·')} 관계도 함께 걸려 있어, 한 가지 신호만으로 흐름을 단정하지 않습니다.`,
     action:primary.action
   };
@@ -252,7 +253,7 @@ const buildAnnual=(result,year,currentYear,index)=>{
       `${year} ${pillar.hanja}`,
       `천간 ${stemGod}`,
       `지지 ${branchGod}`,
-      ...relations.map(relationEvidence)
+      ...[...new Set(relations.map(relationEvidence))]
     ].filter(Boolean),
     isCurrent:year===currentYear,
     confidence:'medium',
@@ -317,7 +318,7 @@ const buildDaeun=(result,target)=>{
       `대운 ${cycle.pillar.hanja}`,
       `천간 ${stemGod}`,
       `지지 ${branchGod}`,
-      ...relations.map(relationEvidence)
+      ...[...new Set(relations.map(relationEvidence))]
     ].filter(Boolean),
     confidence:'medium',
     approximateStart:true,
