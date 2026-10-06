@@ -85,11 +85,17 @@ test('surface element count is exactly eight visible characters for four pillars
   assert.equal(Object.values(counts).reduce((a,b)=>a+b,0),8);
 });
 
-test('Asia/Seoul historical civil offsets come from the runtime IANA tz database',()=>{
-  assert.equal(offsetMinutesAt(Date.parse('1965-01-15T00:00:00Z')),510);
+test('Asia/Seoul post-1970 civil offsets include the 1987-1988 DST era',()=>{
   assert.equal(offsetMinutesAt(Date.parse('1970-01-15T00:00:00Z')),540);
   assert.equal(offsetMinutesAt(Date.parse('1988-07-01T00:00:00Z')),600);
   assert.equal(offsetMinutesAt(Date.parse('1988-12-01T00:00:00Z')),540);
+});
+
+test('v0.1 refuses pre-1970 civil times instead of guessing from truncated runtime tz data',()=>{
+  assert.throws(
+    ()=>resolveSeoulCivilTime({year:1965,month:1,day:15,hour:12,minute:0}),
+    /1970\.\.2100/
+  );
 });
 
 test('a normal modern Seoul civil time resolves to one instant',()=>{
