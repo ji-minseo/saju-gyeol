@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#f5f0e6">
+  <title>계산 기준 · 사주결</title>
+  <meta name="description" content="사주결이 명식 계산 기준을 어떻게 정하고 검증할지 공개합니다.">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  <header class="site-header">
+    <a class="brand" href="../"><span class="brand-seal" aria-hidden="true">結</span><span>사주결<small>SAJU GYEOL</small></span></a>
+    <nav aria-label="주 메뉴"><a href="../#reading">내 사주</a><a href="./" aria-current="page">계산 기준</a></nav>
+  </header>
+  <main id="main" class="method-page">
+    <a class="back-link" href="../">← 사주결 홈</a>
+    <section class="method-hero">
+      <p class="eyebrow">METHODOLOGY · BEFORE INTERPRETATION</p>
+      <h1>정확한 명식이<br>모든 해석보다 먼저입니다.</h1>
+      <p>사주결은 계산 기준을 숨기지 않습니다. 아직 기준이 확정되지 않은 항목은 ‘확정 전’으로 표시하고, 검증이 끝난 계산만 실제 서비스에 연결합니다.</p>
+      <span class="status-pill">v0.1 · 계산 엔진 연결 전</span>
+    </section>
+
+    <section class="method-list">
+      <article>
+        <span class="method-number">01</span>
+        <div><small>CALENDAR</small><h2>달력과 절기 기준</h2><p>양력 입력을 먼저 지원하고, 월주와 연주의 경계에 사용하는 절기 기준을 신뢰할 수 있는 자료와 독립 구현으로 교차 검증한 뒤 확정합니다.</p><b>상태 · 확정 전</b></div>
+      </article>
+      <article>
+        <span class="method-number">02</span>
+        <div><small>DAY BOUNDARY</small><h2>날짜와 자시 경계</h2><p>날짜가 바뀌는 기준과 자시 처리 방식은 결과에 직접 영향을 줍니다. 경계 시각 전후의 정답 케이스를 별도로 만들고 기준을 명시합니다.</p><b>상태 · 확정 전</b></div>
+      </article>
+      <article>
+        <span class="method-number">03</span>
+        <div><small>TIME & PLACE</small><h2>출생시간과 지역</h2><p>한국 출생을 우선 범위로 두고 표준시, 지역 보정, 진태양시 적용 여부를 검토합니다. 해외 출생은 기준이 검증될 때까지 지원 범위에서 제외할 수 있습니다.</p><b>상태 · 검토 예정</b></div>
+      </article>
+      <article>
+        <span class="method-number">04</span>
+        <div><small>TEN GODS</small><h2>오행과 십성</h2><p>사주 네 기둥이 확정된 뒤 일간을 기준으로 오행과 십성을 순수 규칙 함수로 계산합니다. 해석 문장은 이 계산 모듈에 포함하지 않습니다.</p><b>상태 · 엔진 설계 예정</b></div>
+      </article>
+      <article>
+        <span class="method-number">05</span>
+        <div><small>FORTUNE CYCLES</small><h2>대운과 세운</h2><p>방향과 시작 시점을 포함해 기준 차이가 발생하기 쉬운 영역이라 1차 MVP에서 제외합니다. 기본 명식 검증이 끝난 뒤 별도 테스트 세트와 함께 추가합니다.</p><b>상태 · 2차 범위</b></div>
+      </article>
+    </section>
+
+    <section class="test-gate">
+      <div>
+        <p class="eyebrow">RELEASE GATE</p>
+        <h2>이 조건을 통과하기 전에는 계산 결과를 공개하지 않습니다.</h2>
+      </div>
+      <ol>
+        <li><span>01</span>일반 날짜의 사주 네 기둥을 독립된 기준과 대조</li>
+        <li><span>02</span>절기 직전·직후 케이스를 golden test로 고정</li>
+        <li><span>03</span>날짜·자시 경계 케이스를 별도로 검증</li>
+        <li><span>04</span>시간 미상일 때 표시와 해석 범위를 명확히 제한</li>
+        <li><span>05</span>계산 기준과 엔진 버전을 이 페이지에 기록</li>
+      </ol>
+    </section>
+  </main>
+  <footer>
+    <div><strong>사주결</strong><span>정확한 계산 위에 차분한 해석.</span></div>
+    <div class="footer-links"><a href="../">홈</a><span>v0.1 scaffold</span></div>
+  </footer>
+</body>
+</html>
