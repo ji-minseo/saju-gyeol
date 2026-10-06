@@ -1,3 +1,5 @@
+import {withSubject,withCopulaRa} from './korean-particles.mjs';
+
 const CATEGORY_LABELS={
   peer:'비겁',
   output:'식상',
@@ -215,7 +217,7 @@ export function buildReadingV2(result){
   const temperamentOverlay=KIND_CONTEXT[primary]?.temperament;
   const temperamentSituations=[
     counts[primary]>=2
-      ?`${CATEGORY_LABELS[primary]}이 표면에서 ${counts[primary]}번 보여, 이 성향이 한 번의 반응보다 여러 장면에서 반복해서 나타나는 쪽으로 읽습니다.`
+      ?`${withSubject(CATEGORY_LABELS[primary])} 표면에서 ${counts[primary]}번 보여, 이 성향이 한 번의 반응보다 여러 장면에서 반복해서 나타나는 쪽으로 읽습니다.`
       :dm.pressure,
     secondary&&counts[secondary]>=2
       ?`${CATEGORY_LABELS[secondary]}도 반복되어 한 가지 방식만 쓰기보다 ${KIND_CONTEXT[secondary].temperament}`
@@ -240,7 +242,7 @@ export function buildReadingV2(result){
   const careerBody=[
     KIND_CONTEXT[primary]?.career,
     secondary&&counts[secondary]>=1?KIND_CONTEXT[secondary]?.career:null,
-    month? `특히 월지의 대표 십성이 ${monthTenGod(result)}이라, 일상적인 사회 환경에서는 ${KIND_CONTEXT[month]?.career??'역할과 환경의 영향을 함께 보는 편이 자연스럽습니다.'}`:null
+    month? `특히 월지의 대표 십성이 ${withCopulaRa(monthTenGod(result))}, 일상적인 사회 환경에서는 ${KIND_CONTEXT[month]?.career??'역할과 환경의 영향을 함께 보는 편이 자연스럽습니다.'}`:null
   ].filter(Boolean).join(' ');
   const career=makeSection({
     title:careerTitle,
