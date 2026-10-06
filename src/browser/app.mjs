@@ -135,6 +135,12 @@ const renderHiddenStems=result=>{
   }
 };
 
+const formatAgeMonthsLabel=months=>{
+  const years=Math.floor(months/12);
+  const rest=months%12;
+  return rest?`${years}세 ${rest}개월`:`${years}세`;
+};
+
 const renderStructureFacts=result=>{
   const labels={year:'년',month:'월',day:'일',hour:'시'};
 
@@ -186,7 +192,7 @@ const renderStructureFacts=result=>{
     const item=document.createElement('div');
 
     const age=document.createElement('small');
-    age.textContent=`${cycle.startAge}세~`;
+    age.textContent=`약 ${formatAgeMonthsLabel(cycle.startAgeMonths)}~`;
     const pillar=document.createElement('strong');
     pillar.textContent=cycle.pillar.hanja;
     const korean=document.createElement('span');
@@ -200,13 +206,20 @@ const renderStructureFacts=result=>{
 };
 
 const storyLead={temperament:'기질적으로 ',relationship:'관계에서는 ',career:'일에서는 ',money:'돈을 다룰 때는 '};
+const redundantStoryStart={
+  temperament:/^기질/,
+  relationship:/^관계/,
+  career:/^일(?:\s|은|이|에서|을|과|보다|의)/,
+  money:/^돈/
+};
 const toStoryTitle=(key,title)=>{
   const clean=String(title||'').trim().replace(/[.。]+$/,'');
   if(!clean) return '';
-  if(/[요죠니다]$/.test(clean)) return `${storyLead[key]||''}${clean}`;
-  if(/편$/.test(clean)) return `${storyLead[key]||''}${clean}이에요.`;
-  if(/쉬워요$|좋아요$|살아요$|붙어요$|선명해져요$/.test(clean)) return `${storyLead[key]||''}${clean}`;
-  return `${storyLead[key]||''}${clean}이에요.`;
+  const lead=redundantStoryStart[key]?.test(clean)?'':(storyLead[key]||'');
+  if(/[요죠니다]$/.test(clean)) return `${lead}${clean}`;
+  if(/편$/.test(clean)) return `${lead}${clean}이에요.`;
+  if(/쉬워요$|좋아요$|살아요$|붙어요$|선명해져요$/.test(clean)) return `${lead}${clean}`;
+  return `${lead}${clean}이에요.`;
 };
 
 const renderReading=result=>{
