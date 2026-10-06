@@ -13,6 +13,8 @@ const term=(name,monthIndex,localIso)=>({
 });
 
 export const JIE_2026=[
+  // Carry-in boundary from KASI 2025, needed for 2026-01-01 through 소한.
+  term('대설',10,'2025-12-07T06:05:00+09:00'),
   term('소한',11,'2026-01-05T17:23:00+09:00'),
   term('입춘',0,'2026-02-04T05:02:00+09:00'),
   term('경칩',1,'2026-03-05T22:59:00+09:00'),
@@ -43,7 +45,7 @@ export function liChunReachedAt(epochMs,terms=JIE_2026){
 }
 
 export const SOLAR_TERM_DATA_2026={
-  source:'KASI calendar data 2026',
+  source:'KASI calendar data 2026 + 2025 carry-in boundary',
   sourceUrl:'https://astro.kasi.re.kr/kor/life/post/calendarData?search_year=2026',
   zone:'Asia/Seoul',
   precision:'minute',
