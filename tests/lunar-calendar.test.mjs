@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {lunarToSolarDate,solarToLunarDate,LUNAR_SUPPORT} from '../src/engine/lunar-calendar.mjs';
 
 test('Korean lunar conversion support range is explicit',()=>{
-  assert.deepEqual({minYear:LUNAR_SUPPORT.minYear,maxYear:LUNAR_SUPPORT.maxYear},{minYear:1970,maxYear:2050});
+  assert.deepEqual({minYear:LUNAR_SUPPORT.minYear,maxYear:LUNAR_SUPPORT.maxYear},{minYear:1946,maxYear:2050});
 });
 
 test('2026 Seollal converts to 2026-02-17',()=>{
