@@ -649,3 +649,305 @@ footer>div:first-child{gap:12px}footer strong{font-size:13px}.footer-links{font-
   .reading-situations,.reading-guide{padding:13px}
   .reading-situations li,.reading-guide p{font-size:11.5px;line-height:1.72}
 }
+
+
+/* flow v1 — current daeun + three annual cycles */
+.flow-heading{
+  margin-top:52px;
+}
+.flow-heading .eyebrow{
+  margin-bottom:13px;
+  background:#eee7f2;
+  color:#8a6d8a;
+}
+.flow-heading h2{
+  font-size:28px;
+  color:#5e465d;
+}
+.flow-heading>p:last-child{
+  max-width:760px;
+  margin-top:10px;
+  color:#928391;
+  font-size:12px;
+  line-height:1.85;
+}
+.flow-report{
+  display:grid;
+  grid-template-columns:minmax(0,.86fr) minmax(0,1.64fr);
+  gap:18px;
+  margin-top:22px;
+}
+.current-daeun-card{
+  position:relative;
+  min-width:0;
+  padding:28px;
+  border:1px solid #594d63;
+  border-radius:18px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 94% 2%,rgba(232,194,163,.14),transparent 31%),
+    linear-gradient(145deg,#514859,#403a49);
+  color:#f7f0f5;
+  box-shadow:0 12px 30px rgba(72,54,74,.09);
+}
+.current-daeun-card::after{
+  content:"";
+  position:absolute;
+  right:-34px;
+  bottom:-54px;
+  width:180px;
+  height:180px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:50%;
+  box-shadow:0 0 0 24px rgba(255,255,255,.025),0 0 0 54px rgba(255,255,255,.016);
+  pointer-events:none;
+}
+.flow-card-top{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+}
+.flow-card-top>span{
+  padding:6px 9px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:999px;
+  background:rgba(255,255,255,.055);
+  color:#dbcfd9;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.055em;
+}
+.flow-card-top>strong{
+  flex:none;
+  font:500 38px/1 serif;
+  color:#f2d5bf;
+  letter-spacing:.04em;
+}
+.flow-period{
+  position:relative;
+  z-index:1;
+  margin-top:22px;
+  color:#cdbfca;
+  font-size:11px;
+  font-weight:600;
+}
+.current-daeun-card h3{
+  position:relative;
+  z-index:1;
+  margin-top:10px;
+  color:#fff8fb;
+  font-size:23px;
+  line-height:1.45;
+  letter-spacing:-.035em;
+}
+.flow-body{
+  position:relative;
+  z-index:1;
+  margin-top:14px;
+  color:#d6cbd4;
+  font-size:12.5px;
+  line-height:1.9;
+}
+.flow-guide{
+  position:relative;
+  z-index:1;
+  margin-top:18px;
+  padding:14px 15px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(255,255,255,.055);
+}
+.flow-guide b{
+  display:block;
+  margin-bottom:6px;
+  color:#f0c6a8;
+  font-size:10px;
+}
+.flow-guide p{
+  color:#ddd2da;
+  font-size:11.5px;
+  line-height:1.75;
+}
+.flow-evidence{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:16px;
+}
+.flow-evidence span{
+  display:inline-flex;
+  padding:6px 8px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:999px;
+  background:rgba(255,255,255,.055);
+  color:#d8ccd6;
+  font-size:10px;
+  line-height:1.35;
+}
+.current-daeun-card[data-status="needs-sex"],
+.current-daeun-card[data-status="needs-birth-time"],
+.current-daeun-card[data-status="unavailable"],
+.current-daeun-card[data-status="before-first"]{
+  background:linear-gradient(145deg,#655c68,#514b56);
+}
+
+.annual-flow-panel{
+  min-width:0;
+  padding:25px;
+  border:1px solid #e9e1ec;
+  border-radius:18px;
+  background:#fff;
+}
+.annual-flow-heading{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.annual-flow-heading>span{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:#f2e9f1;
+  color:#92728d;
+  font:500 15px serif;
+}
+.annual-flow-heading h3{
+  color:#665063;
+  font-size:18px;
+}
+.annual-flow-heading p{
+  margin-top:3px;
+  color:#a0909e;
+  font-size:10px;
+}
+.annual-flow-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:11px;
+  margin-top:20px;
+}
+.annual-flow-card{
+  --annual:#a47762;
+  --annual-soft:#f4dfd1;
+  min-width:0;
+  padding:18px;
+  border:1px solid #ecdccf;
+  border-radius:14px;
+  background:#fff7ef;
+}
+.annual-flow-card.is-next{
+  --annual:#788eac;
+  --annual-soft:#dfe7f2;
+  border-color:#dfe5ee;
+  background:#f3f6fb;
+}
+.annual-flow-card.is-later{
+  --annual:#7c947d;
+  --annual-soft:#dfe9dc;
+  border-color:#dfe8dc;
+  background:#f3f7f0;
+}
+.annual-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.annual-card-top span{
+  display:inline-flex;
+  padding:5px 7px;
+  border-radius:999px;
+  background:var(--annual-soft);
+  color:var(--annual);
+  font-size:9px;
+  font-weight:750;
+}
+.annual-card-top strong{
+  font:500 29px/1 serif;
+  color:var(--annual);
+}
+.annual-period{
+  margin-top:14px;
+  color:#a2939c;
+  font-size:9.5px;
+}
+.annual-flow-card h4{
+  margin:8px 0 0;
+  color:var(--annual);
+  font-size:17px;
+  line-height:1.45;
+  letter-spacing:-.035em;
+}
+.annual-body{
+  margin-top:11px;
+  color:#7d727a;
+  font-size:11.5px;
+  line-height:1.78;
+}
+.annual-guide{
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid var(--annual-soft);
+}
+.annual-guide b{
+  display:block;
+  margin-bottom:5px;
+  color:var(--annual);
+  font-size:9.5px;
+}
+.annual-guide p{
+  color:#81767e;
+  font-size:10.5px;
+  line-height:1.7;
+}
+.annual-flow-card .flow-evidence{
+  margin-top:12px;
+}
+.annual-flow-card .flow-evidence span{
+  border-color:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.62);
+  color:var(--annual);
+  font-size:9px;
+}
+
+.daeun-track>div.is-current-daeun{
+  border-color:#d5ae92!important;
+  box-shadow:0 0 0 2px rgba(213,174,146,.16);
+}
+.daeun-track>div.is-current-daeun::after{
+  content:"지금";
+  display:inline-flex;
+  align-self:center;
+  margin-top:7px;
+  padding:3px 6px;
+  border-radius:999px;
+  background:#f3dfd1;
+  color:#a36f50;
+  font-size:8px;
+  font-weight:750;
+}
+
+@media(max-width:960px){
+  .flow-report{grid-template-columns:1fr}
+  .annual-flow-grid{grid-template-columns:repeat(3,minmax(190px,1fr));overflow-x:auto;padding-bottom:5px;scroll-snap-type:x proximity}
+  .annual-flow-card{scroll-snap-align:start}
+}
+@media(max-width:520px){
+  .flow-heading{margin-top:37px}
+  .flow-heading h2{font-size:23px;line-height:1.5}
+  .flow-heading>p:last-child{font-size:11px}
+  .current-daeun-card{padding:23px 21px}
+  .flow-card-top>strong{font-size:34px}
+  .current-daeun-card h3{font-size:21px}
+  .flow-body{font-size:12px}
+  .annual-flow-panel{padding:20px 16px}
+  .annual-flow-grid{margin-right:-16px;padding-right:16px}
+  .annual-flow-card{min-width:230px;padding:17px}
+}
