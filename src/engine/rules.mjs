@@ -31,6 +31,23 @@ export const BRANCHES = [
 ];
 
 export const ELEMENT_LABELS={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
+
+// Three-layer 여(餘氣)·중(中氣)·정(正氣) representation used by many Korean manse charts.
+// This is intentionally named as a ruling/display table because hidden-stem tables vary by school.
+export const BRANCH_RULING_STEMS=[
+  {residual:8,middle:null,main:9}, // 子 壬 - 癸
+  {residual:9,middle:7,main:5},   // 丑 癸 辛 己
+  {residual:4,middle:2,main:0},   // 寅 戊 丙 甲
+  {residual:0,middle:null,main:1}, // 卯 甲 - 乙
+  {residual:1,middle:9,main:4},   // 辰 乙 癸 戊
+  {residual:4,middle:6,main:2},   // 巳 戊 庚 丙
+  {residual:2,middle:5,main:3},   // 午 丙 己 丁
+  {residual:3,middle:1,main:5},   // 未 丁 乙 己
+  {residual:4,middle:8,main:6},   // 申 戊 壬 庚
+  {residual:6,middle:null,main:7}, // 酉 庚 - 辛
+  {residual:7,middle:3,main:4},   // 戌 辛 丁 戊
+  {residual:4,middle:0,main:8}    // 亥 戊 甲 壬
+];
 export const mod=(n,m)=>((n%m)+m)%m;
 
 export function sexagenary(index){
@@ -119,6 +136,23 @@ export function tenGod(dayStemIndex,otherStemIndex){
   const relation=['same','output','wealth','officer','resource'][distance];
   const polarity=day.polarity===other.polarity?'same':'opposite';
   return TEN_GODS[relation][polarity];
+}
+
+export function branchMainStemIndex(branchIndex){
+  return BRANCH_RULING_STEMS[mod(branchIndex,12)].main;
+}
+
+export function branchTenGod(dayStemIndex,branchIndex){
+  return tenGod(dayStemIndex,branchMainStemIndex(branchIndex));
+}
+
+export function branchRulingStems(dayStemIndex,branchIndex){
+  const row=BRANCH_RULING_STEMS[mod(branchIndex,12)];
+  return ['residual','middle','main'].map(position=>{
+    const stemIndex=row[position];
+    if(stemIndex==null) return {position,stem:null,tenGod:null};
+    return {position,stemIndex,stem:STEMS[stemIndex],tenGod:tenGod(dayStemIndex,stemIndex)};
+  });
 }
 
 // Counts only the visible 8 characters. It is not a strength/weakness score.
