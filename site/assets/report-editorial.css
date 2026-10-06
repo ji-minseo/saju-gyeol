@@ -783,3 +783,264 @@
   }
   .fact-card{border-radius:12px}
 }
+
+
+/* v3 polish — right-side full-bleed report image, restored annual cards,
+   sans-serif Korean copy, explicit chapter labels. */
+
+/* Result masthead: restore the original full-height right artwork composition. */
+.result-topline{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:181px;
+  padding:35px 34px;
+  background:#eee8f4;
+  border:1px solid #e6daed;
+  border-radius:18px;
+}
+.result-topline>div{
+  position:relative;
+  z-index:1;
+  max-width:70%;
+  min-width:0;
+}
+.result-topline .result-art{
+  position:absolute;
+  inset:0 0 0 auto;
+  width:43%;
+  height:100%;
+  max-width:none;
+  object-fit:cover;
+  object-position:right 43%;
+  border-radius:0;
+  z-index:-1;
+  filter:none;
+  opacity:1;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 34%);
+  mask-image:linear-gradient(90deg,transparent,#000 34%);
+}
+.result-topline .eyebrow{
+  color:#98788f;
+  letter-spacing:.07em;
+  font-family:inherit;
+}
+.result-topline h2{
+  color:#54324d;
+  font-family:inherit;
+  font-size:32px;
+  font-weight:700;
+}
+.result-topline p:last-child{
+  color:#8a6e86;
+  font-family:inherit;
+}
+.result-topline .engine-badge{display:none}
+
+/* Korean UI/copy stays sans-serif. Hanja can retain a serif editorial accent. */
+.result-preview,
+.result-preview h2,
+.result-preview h3,
+.result-preview h4,
+.result-preview p,
+.result-preview strong,
+.result-preview b,
+.result-preview em,
+.result-preview small,
+.result-preview li,
+.result-preview .eyebrow,
+.quick-summary-grid strong,
+.reading-cards h3,
+.reading-cards>article>p,
+.annual-flow-card h4,
+.details-heading h2,
+.panel-title h3{
+  font-family:inherit;
+}
+.chart-cover .pillar-grid strong,
+.chart-cover::before,
+.details-heading::before,
+.panel-title>span,
+.chapter-label i{
+  font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+}
+
+/* Explicit chapter labels: 性 성향 / 緣 관계 / 業 일 / 財 돈 */
+.reading-cards>article>span.chapter-label{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:5px 7px;
+  grid-column:1;
+  grid-row:1 / span 5;
+  margin:0;
+  color:var(--chapter);
+  font-family:inherit;
+  letter-spacing:0;
+}
+.reading-cards>article>span.chapter-label::before,
+.reading-cards>article>span.chapter-label::after{
+  content:none!important;
+}
+.chapter-label small{
+  flex-basis:100%;
+  color:var(--chapter);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.14em;
+}
+.chapter-label i{
+  color:var(--chapter);
+  font-size:34px;
+  font-style:normal;
+  font-weight:700;
+  line-height:1;
+}
+.chapter-label b{
+  color:#5e575d;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+/* Restore the original three colored seun cards, only removing the collision source. */
+.annual-flow-grid{
+  position:static;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:11px;
+  margin-top:20px;
+}
+.annual-flow-grid::before,
+.annual-flow-card::before{
+  content:none!important;
+  display:none!important;
+}
+.annual-flow-card{
+  --annual:#a47762;
+  --annual-soft:#f4dfd1;
+  min-width:0;
+  padding:18px;
+  border:1px solid #ecdccf!important;
+  border-radius:14px;
+  background:#fff7ef!important;
+  overflow:visible;
+}
+.annual-flow-card.is-next{
+  --annual:#788eac;
+  --annual-soft:#dfe7f2;
+  border-color:#dfe5ee!important;
+  background:#f3f6fb!important;
+}
+.annual-flow-card.is-later{
+  --annual:#7c947d;
+  --annual-soft:#dfe9dc;
+  border-color:#dfe8dc!important;
+  background:#f3f7f0!important;
+}
+.annual-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:nowrap;
+}
+.annual-card-top span{
+  position:static!important;
+  display:inline-flex;
+  transform:none!important;
+  margin:0;
+  padding:5px 7px;
+  border-radius:999px;
+  background:var(--annual-soft);
+  color:var(--annual);
+  font-family:inherit;
+  font-size:9px;
+  font-weight:750;
+  white-space:nowrap;
+}
+.annual-card-top strong{
+  position:static!important;
+  transform:none!important;
+  margin:0;
+  color:var(--annual);
+  font:500 29px/1 "Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  white-space:nowrap;
+}
+.annual-flow-card h4{
+  margin:8px 0 0;
+  color:#262228;
+  font-family:inherit;
+  font-size:17px;
+}
+.annual-flow-card .flow-evidence{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.annual-flow-card .flow-evidence span{
+  position:static!important;
+  transform:none!important;
+  margin:0;
+}
+
+/* Technical labels: Korean is sans-serif; only the leading symbolic Hanja stays serif. */
+.result-panel .panel-title h3,
+.fact-card .panel-title h3,
+.daeun-meta,
+.daeun-help,
+.element-list,
+.ten-gods-placeholder,
+.hidden-stem-box,
+.fact-chips,
+.validation-note{
+  font-family:inherit;
+}
+
+@media(max-width:760px){
+  .result-topline{
+    min-height:170px;
+    padding:28px 25px;
+  }
+  .result-topline>div{max-width:80%}
+  .result-topline .result-art{
+    width:45%;
+    height:100%;
+    opacity:.75;
+    border-radius:0;
+  }
+  .result-topline h2{font-size:27px}
+  .engine-badge{display:none}
+
+  .annual-flow-grid{
+    grid-template-columns:repeat(3,minmax(230px,1fr));
+    overflow-x:auto;
+    scroll-snap-type:x proximity;
+    padding-bottom:4px;
+  }
+  .annual-flow-card{scroll-snap-align:start}
+
+  .reading-cards>article,
+  .reading-cards>article[data-reading]{
+    grid-template-columns:66px minmax(0,1fr);
+  }
+  .chapter-label i{font-size:29px}
+  .chapter-label b{font-size:10px}
+}
+@media(max-width:520px){
+  .result-topline{
+    min-height:158px;
+    padding:27px 20px;
+  }
+  .result-topline>div{max-width:90%}
+  .result-topline .result-art{
+    width:48%;
+    height:100%;
+    opacity:.48;
+  }
+  .result-topline h2{font-size:25px}
+}
