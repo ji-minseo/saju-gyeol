@@ -1044,3 +1044,349 @@
   }
   .result-topline h2{font-size:25px}
 }
+
+
+/* v4 report cleanup — white masthead, narrative reading, transit-line flow,
+   document-style technical appendix. */
+
+/* Header: white canvas with the image fading out to white toward the left. */
+.result-topline{
+  min-height:181px;
+  padding:35px 34px;
+  background:#fff!important;
+  border:0!important;
+  border-bottom:1px solid #e6e1e4!important;
+  border-radius:0!important;
+}
+.result-topline .result-art{
+  width:46%;
+  height:100%;
+  opacity:1!important;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.18) 18%,#000 54%,#000 100%)!important;
+  mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.18) 18%,#000 54%,#000 100%)!important;
+}
+.result-topline .eyebrow{
+  background:none!important;
+  padding:0!important;
+  color:#8e858c!important;
+}
+.result-topline h2{color:#2b282b!important}
+.result-topline p:last-child{color:#696269!important}
+
+/* KEY READING: no capsule/background treatment on the eyebrow. */
+.quick-summary-heading .eyebrow,
+.interpretation-heading .eyebrow,
+.flow-heading .eyebrow,
+.details-heading .eyebrow{
+  display:block;
+  width:auto;
+  background:none!important;
+  border:0!important;
+  padding:0!important;
+  box-shadow:none!important;
+}
+
+/* Summary becomes an editorial index, not four cards. */
+.quick-summary{
+  padding:36px 38px 32px;
+  border:0;
+  border-bottom:1px solid #e5e0e3;
+  background:#fff;
+}
+.quick-summary-grid{
+  grid-template-columns:1fr;
+  gap:0;
+  border-top:1px solid #d9d3d7;
+  border-bottom:1px solid #d9d3d7;
+}
+.quick-summary-grid article,
+.quick-summary-grid article[data-summary]{
+  display:grid;
+  grid-template-columns:70px minmax(0,1fr);
+  align-items:start;
+  min-height:auto;
+  padding:17px 0;
+  border:0!important;
+  border-bottom:1px solid #ece8ea!important;
+  background:transparent!important;
+}
+.quick-summary-grid article:last-child{border-bottom:0!important}
+.quick-summary-grid span{
+  margin:2px 0 0;
+  color:#7d737b!important;
+  font-size:10px;
+  letter-spacing:.12em;
+}
+.quick-summary-grid strong{
+  max-width:720px;
+  color:#29262a!important;
+  font-family:inherit!important;
+  font-size:16px;
+  font-weight:750;
+  line-height:1.65;
+}
+
+/* Narrative chapters: remove the left decorative chapter block and let the
+   actual sentence become the hero. */
+.reading-cards>article,
+.reading-cards>article[data-reading]{
+  display:block;
+  padding:34px 0 36px;
+  border:0;
+  border-top:1px solid #ddd7db;
+  background:transparent!important;
+}
+.reading-cards>article:last-child{border-bottom:1px solid #ddd7db}
+.reading-cards .chapter-label{
+  display:none!important;
+}
+.reading-cards h3{
+  max-width:780px;
+  margin:0 0 13px;
+  color:#252226;
+  font-family:inherit!important;
+  font-size:26px;
+  font-weight:800;
+  line-height:1.48;
+  letter-spacing:-.035em;
+}
+.reading-cards>article>p{
+  max-width:760px;
+  color:#565057;
+  font-size:14.5px;
+  line-height:1.9;
+}
+.reading-depth{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:26px;
+  margin-top:22px;
+}
+.reading-situations,
+.reading-guide{
+  margin:0;
+  padding:0 0 0 15px;
+  border:0!important;
+  border-left:2px solid #d8ccd4!important;
+  background:transparent!important;
+}
+.reading-situations>strong,
+.reading-guide>strong{
+  color:#7d596f!important;
+  font-size:11px;
+  letter-spacing:.02em;
+}
+.reading-situations li,
+.reading-guide p{
+  color:#514b51!important;
+  font-size:13px;
+  line-height:1.8;
+}
+.reading-evidence{
+  margin-top:16px;
+}
+.reading-evidence span{
+  padding:3px 0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:#8d848a!important;
+  font-size:9.5px;
+}
+.reading-evidence span+span::before{
+  content:"·";
+  margin:0 7px 0 3px;
+  color:#c2b9bf;
+}
+
+/* Flow: bring back the transit-map idea, but build the line around the cards
+   instead of laying decorative dots over badges. */
+.flow-report{
+  grid-template-columns:minmax(250px,.82fr) minmax(0,1.7fr);
+  gap:28px;
+  padding:0 38px 42px;
+  background:#fbfaf9;
+}
+.annual-flow-panel{
+  position:relative;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.annual-flow-grid{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+  padding-top:34px;
+  overflow:visible;
+}
+.annual-flow-grid::before{
+  content:""!important;
+  display:block!important;
+  position:absolute;
+  left:9%;
+  right:9%;
+  top:18px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#dc9c75 0 33%,#8da8c7 33% 66%,#8dad91 66% 100%);
+}
+.annual-flow-card,
+.annual-flow-card.is-next,
+.annual-flow-card.is-later{
+  position:relative;
+  min-width:0;
+  padding:20px 0 0;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.annual-flow-card::before{
+  content:""!important;
+  display:block!important;
+  position:absolute;
+  left:12px;
+  top:-21px;
+  width:12px;
+  height:12px;
+  border:4px solid #fbfaf9;
+  border-radius:50%;
+  background:var(--annual);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--annual) 45%,white);
+}
+.annual-card-top{
+  min-height:35px;
+  align-items:flex-start;
+}
+.annual-card-top span{
+  padding:4px 8px;
+  background:color-mix(in srgb,var(--annual) 12%,white)!important;
+  color:var(--annual)!important;
+}
+.annual-card-top strong{
+  color:var(--annual)!important;
+}
+.annual-period{margin-top:10px}
+.annual-flow-card h4{
+  color:#2d292d!important;
+  font-size:17px;
+}
+.annual-body{color:#5b545a!important}
+.annual-guide{
+  border-top:1px solid color-mix(in srgb,var(--annual) 18%,#ddd)!important;
+}
+.annual-guide b{color:var(--annual)!important}
+
+/* Technical data: flatter, brighter, document-like. */
+.details-heading{
+  padding:46px 38px 24px;
+  background:#fff!important;
+  border-top:1px solid #d8d1d6;
+  border-bottom:1px solid #e7e2e5;
+}
+.details-heading::before{
+  color:rgba(97,75,95,.03)!important;
+}
+.details-heading::after{
+  width:42px;
+  background:#b18d5c;
+}
+#result-elements,
+.structure-facts{
+  margin-left:38px;
+  margin-right:38px;
+}
+.result-grid,
+.structure-facts{
+  gap:0!important;
+}
+.result-panel,
+.fact-card,
+.fact-card-wide{
+  padding:26px 0!important;
+  border:0!important;
+  border-bottom:1px solid #e3dde1!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.result-panel::before{display:none!important}
+.result-panel .panel-title,
+.fact-card .panel-title{
+  border:0!important;
+  padding:0 0 14px!important;
+}
+.panel-title>span{
+  color:#a06a75!important;
+  font-size:16px!important;
+}
+.panel-title h3{
+  color:#2f2b30!important;
+  font-size:19px!important;
+}
+.element-list>div,
+.ten-gods-placeholder span,
+.hidden-stems>div,
+.fact-chips span,
+.daeun-track>div{
+  background:#fff!important;
+  border-color:#ded7dc!important;
+}
+.element-dot{
+  filter:saturate(1.15);
+}
+.fact-main{color:#4b78a4!important}
+.daeun-track>div.is-current-daeun{
+  border-color:#dfaa82!important;
+  box-shadow:0 0 0 2px rgba(223,170,130,.12)!important;
+}
+.validation-note{
+  margin-top:24px;
+  border:1px solid #e1d9df!important;
+  border-radius:0!important;
+  background:#fcfafc!important;
+}
+
+@media(max-width:760px){
+  .result-topline{
+    min-height:170px;
+    padding:28px 20px;
+  }
+  .result-topline .result-art{
+    width:50%;
+  }
+  .quick-summary{padding:30px 20px 27px}
+  .quick-summary-grid article,
+  .quick-summary-grid article[data-summary]{
+    grid-template-columns:58px minmax(0,1fr);
+  }
+  .reading-depth{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+  .reading-cards h3{font-size:22px}
+  .flow-report{
+    grid-template-columns:1fr;
+    gap:22px;
+    padding:0 20px 34px;
+  }
+  .annual-flow-grid{
+    grid-template-columns:repeat(3,minmax(215px,1fr));
+    overflow-x:auto;
+    padding-top:34px;
+    padding-bottom:8px;
+  }
+  .annual-flow-grid::before{
+    left:28px;
+    right:28px;
+  }
+  .details-heading{padding:40px 20px 20px}
+  #result-elements,
+  .structure-facts,
+  .validation-note{
+    margin-left:20px;
+    margin-right:20px;
+  }
+}
