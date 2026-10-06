@@ -101,3 +101,16 @@ test('KASI 2028 published lunar month starts including leap fifth month match',(
     assert.equal(lunarToSolarDate({year:2028,month,day:1,isLeapMonth}).solarDate,solarDate,`2028 lunar month ${month} ${isLeapMonth?'leap':''}`);
   }
 });
+
+
+test('KASI 2017 official almanac lunar month starts including leap fifth month match',()=>{
+  const fixtures=[
+    [1,false,'2017-01-28'],[2,false,'2017-02-26'],[3,false,'2017-03-28'],
+    [4,false,'2017-04-26'],[5,false,'2017-05-26'],[5,true,'2017-06-24'],
+    [6,false,'2017-07-23'],[7,false,'2017-08-22'],[8,false,'2017-09-20'],
+    [9,false,'2017-10-20'],[10,false,'2017-11-18']
+  ];
+  for(const [month,isLeapMonth,solarDate] of fixtures){
+    assert.equal(lunarToSolarDate({year:2017,month,day:1,isLeapMonth}).solarDate,solarDate,`2017 lunar month ${month} ${isLeapMonth?'leap':''}`);
+  }
+});
