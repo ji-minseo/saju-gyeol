@@ -91,10 +91,10 @@ test('Asia/Seoul post-1970 civil offsets include the 1987-1988 DST era',()=>{
   assert.equal(offsetMinutesAt(Date.parse('1988-12-01T00:00:00Z')),540);
 });
 
-test('v0.1 refuses pre-1970 civil times instead of guessing from truncated runtime tz data',()=>{
+test('historical civil-time support remains closed before 1912',()=>{
   assert.throws(
-    ()=>resolveSeoulCivilTime({year:1965,month:1,day:15,hour:12,minute:0}),
-    /1970\.\.2100/
+    ()=>resolveSeoulCivilTime({year:1911,month:12,day:31,hour:12,minute:0}),
+    /1912\.\.2100/
   );
 });
 
