@@ -1,7 +1,7 @@
 import {SearchSunLongitude} from 'astronomy-engine';
 
 export const SOLAR_TERM_PROVIDER_VERSION='astronomy-engine@2.1.19';
-export const SOLAR_TERM_SUPPORT={minYear:1946,maxYear:2100};
+export const SOLAR_TERM_SUPPORT={minYear:1912,maxYear:2100};
 
 // Saju month boundaries use the 12 節 (jie), not all 24 solar terms.
 // targetLongitude is the Sun's apparent geocentric ecliptic longitude of date.
