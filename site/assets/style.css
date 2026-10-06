@@ -277,3 +277,11 @@ footer strong{font-size:18px;color:var(--ink)}
   html{scroll-behavior:auto}
   *,*:before,*:after{transition:none!important;animation:none!important}
 }
+
+.form-error{margin:12px 0 0;padding:11px 13px;border:1px solid #e4c9c2;border-radius:11px;background:#fff6f3;color:#8a4036;font-size:12px;font-weight:750;line-height:1.55}
+.pillar-grid article.is-empty{background:#f7f8f6}
+.pillar-grid article.is-empty strong,.pillar-grid article.is-empty span{color:#9aa09d}
+.pillar-grid [data-pillar-detail]{line-height:1.5}
+.ten-gods-placeholder:empty:before{content:'계산 후 표시됩니다';color:var(--muted);font-size:12px}
+.ten-gods-placeholder span{display:inline-flex;align-items:center;gap:5px}
+.ten-gods-placeholder span b{font-weight:900;color:var(--jade-deep)}

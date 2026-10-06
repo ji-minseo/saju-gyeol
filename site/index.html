@@ -44,7 +44,7 @@
         <div class="section-heading">
           <p class="eyebrow">01 · YOUR BIRTH DATA</p>
           <h2>태어난 때를 알려주세요.</h2>
-          <p>지금은 서비스 틀을 만드는 단계라 실제 명식 계산은 아직 연결하지 않았어요. 입력값은 브라우저 안에서만 사용합니다.</p>
+          <p>양력 생년월일과 출생시간을 입력하면 검증된 계산 엔진으로 네 기둥을 구성합니다. 입력값은 브라우저 안에서만 사용합니다.</p>
         </div>
 
         <div class="calendar-switch" aria-label="달력 기준">
@@ -55,7 +55,7 @@
         <div class="form-grid">
           <label class="field">
             <span>생년월일</span>
-            <input id="birth-date" name="birthDate" type="date" required>
+            <input id="birth-date" name="birthDate" type="date" min="1970-01-01" max="2100-12-31" required>
           </label>
           <label class="field">
             <span>출생시간</span>
@@ -76,8 +76,9 @@
           </div>
         </fieldset>
 
-        <button class="primary-button" type="submit">내 사주 틀 열어보기 <span aria-hidden="true">→</span></button>
-        <p class="form-foot">정확한 절기·간지·시주 기준을 검증한 뒤 계산 엔진을 연결합니다.</p>
+        <button class="primary-button" type="submit">내 사주 구성 보기 <span aria-hidden="true">→</span></button>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <p class="form-foot">현재 계산 지원 범위 · 1970~2100년 한국 출생 · 양력</p>
       </form>
 
       <section class="result-preview" id="result-preview" aria-live="polite" hidden>
@@ -87,34 +88,33 @@
             <h2>내 사주의 구성</h2>
             <p id="input-summary">입력한 생년월일을 기준으로 명식을 준비합니다.</p>
           </div>
-          <span class="engine-badge">ENGINE · VALIDATION</span>
+          <span class="engine-badge" id="engine-badge">ENGINE · READY</span>
         </div>
 
         <div class="pillar-grid" aria-label="사주 네 기둥">
-          <article><small>YEAR · 년주</small><strong>—</strong><span>—</span></article>
-          <article><small>MONTH · 월주</small><strong>—</strong><span>—</span></article>
-          <article class="day-pillar"><small>DAY · 일주</small><strong>—</strong><span>나를 나타내는 중심</span></article>
-          <article><small>HOUR · 시주</small><strong>—</strong><span>—</span></article>
+          <article data-pillar="year"><small>YEAR · 년주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>—</span></article>
+          <article data-pillar="month"><small>MONTH · 월주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>—</span></article>
+          <article class="day-pillar" data-pillar="day"><small>DAY · 일주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>나를 나타내는 중심</span></article>
+          <article data-pillar="hour"><small>HOUR · 시주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>—</span></article>
         </div>
 
         <div class="result-grid">
           <section class="result-panel">
             <div class="panel-title"><span>五行</span><h3>오행의 균형</h3></div>
             <div class="element-list">
-              <div><span class="element-dot">木</span><b>목</b><em>—</em></div>
-              <div><span class="element-dot">火</span><b>화</b><em>—</em></div>
-              <div><span class="element-dot">土</span><b>토</b><em>—</em></div>
-              <div><span class="element-dot">金</span><b>금</b><em>—</em></div>
-              <div><span class="element-dot">水</span><b>수</b><em>—</em></div>
+              <div data-element="wood"><span class="element-dot">木</span><b>목</b><em data-count>—</em></div>
+              <div data-element="fire"><span class="element-dot">火</span><b>화</b><em data-count>—</em></div>
+              <div data-element="earth"><span class="element-dot">土</span><b>토</b><em data-count>—</em></div>
+              <div data-element="metal"><span class="element-dot">金</span><b>금</b><em data-count>—</em></div>
+              <div data-element="water"><span class="element-dot">水</span><b>수</b><em data-count>—</em></div>
             </div>
+            <p id="element-note">겉으로 드러난 천간·지지의 오행 구성만 표시합니다.</p>
           </section>
 
           <section class="result-panel">
             <div class="panel-title"><span>十星</span><h3>십성의 구성</h3></div>
-            <div class="ten-gods-placeholder">
-              <span>비견</span><span>겁재</span><span>식신</span><span>상관</span><span>재성</span><span>관성</span><span>인성</span>
-            </div>
-            <p>일간과 다른 글자의 관계를 검증된 규칙으로 계산한 뒤 표시합니다.</p>
+            <div class="ten-gods-placeholder" id="ten-gods"></div>
+            <p id="day-master-note">일간을 기준으로 겉으로 드러난 천간의 십성을 표시합니다.</p>
           </section>
         </div>
 
@@ -131,7 +131,7 @@
 
         <aside class="validation-note">
           <span class="stamp" aria-hidden="true">準</span>
-          <div><strong>아직 계산하지 않습니다.</strong><p>틀린 명식을 예쁘게 보여주는 것보다 계산 기준을 먼저 검증하는 것이 사주결의 첫 원칙입니다.</p></div>
+          <div><strong>현재는 명식 계산까지만 보여줍니다.</strong><p>성향·연애·일·돈 해석은 계산값 검증과 해석 규칙 정리가 끝난 뒤 연결합니다.</p></div>
           <a href="./methodology/">계산 기준 보기 →</a>
         </aside>
       </section>
@@ -154,6 +154,6 @@
     <div><strong>사주결</strong><span>태어난 순간의 결을 읽는 시간.</span></div>
     <div class="footer-links"><a href="./methodology/">계산 기준</a><span>v0.1 scaffold</span></div>
   </footer>
-  <script src="./assets/app.js" defer></script>
+  <script src="./assets/engine-app.js" defer></script>
 </body>
 </html>

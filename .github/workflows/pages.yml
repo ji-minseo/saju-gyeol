@@ -29,6 +29,8 @@ jobs:
           node-version: 20
       - name: Install calculation dependencies
         run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Build browser calculator
+        run: npm run build:site
       - name: Test calculation rules
         run: npm test
       - name: Configure Pages
