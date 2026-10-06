@@ -65,3 +65,28 @@ test('flow titles choose Korean 이/가 from the keyword final consonant',()=>{
   assert.match(peer.title,/내 선택 · 독립이 반복해서/);
   assert.doesNotMatch(peer.title,/독립가/);
 });
+
+
+test('daeun timeline exposes a theme for every 10-year cycle',()=>{
+  const result=calculateSaju({birthDate:'1990-08-21',birthTime:'11:20',sex:'female'});
+  const flow=buildCurrentFlow(result,{today:'2026-10-06'});
+  assert.equal(flow.daeunTimeline.length,result.daeun.cycles.length);
+  assert.ok(flow.daeunTimeline.every(item=>item.theme&&item.title&&item.pillar.hanja.length===2));
+});
+
+test('no rendered flow title contains broken Korean particles',()=>{
+  const samples=[
+    {birthDate:'1990-08-21',birthTime:'11:20',sex:'female'},
+    {birthDate:'2001-06-12',birthTime:'14:30',sex:'male'},
+    {birthDate:'2026-10-06',birthTime:'10:10',sex:'female'}
+  ];
+  for(const input of samples){
+    const flow=buildCurrentFlow(calculateSaju(input),{today:'2026-10-06'});
+    const titles=[
+      flow.daeun.title,
+      ...flow.annuals.map(x=>x.title),
+      ...flow.daeunTimeline.map(x=>x.title)
+    ].filter(Boolean).join(' ');
+    assert.doesNotMatch(titles,/루틴가|독립가/);
+  }
+});
