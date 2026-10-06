@@ -1,6 +1,6 @@
 import {KoreanLunarCalendar} from '../vendor/korean-lunar-calendar.mjs';
 
-export const LUNAR_SUPPORT={minYear:1946,maxYear:2050,standard:'Korean lunar calendar / KASI-based table'};
+export const LUNAR_SUPPORT={minYear:1912,maxYear:2050,standard:'Korean lunar calendar / KASI-based table'};
 
 const int=(value,name)=>{
   const n=Number(value);
