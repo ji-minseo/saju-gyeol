@@ -1,6 +1,14 @@
 import {BRANCHES,STEMS,mod} from './rules.mjs';
 
 export const TWELVE_STAGES=['장생','목욕','관대','건록','제왕','쇠','병','사','묘','절','태','양'];
+
+export const BRANCH_RELATION_POLICY={
+  punishment:'pairwise-links',
+  selfPunishment:'duplicate-branch',
+  threeHarmony:'requires-all-three',
+  transformationJudgment:false,
+  auspiciousnessJudgment:false
+};
 const STAGE_START_BRANCH=[11,6,2,9,2,9,5,0,8,3];
 
 export function twelveStage(dayStemIndex,branchIndex){
