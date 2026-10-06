@@ -1,4 +1,4 @@
-import {yearPillar,tenGod,branchTenGod} from '../engine/rules.mjs';
+import {BRANCHES,yearPillar,tenGod,branchTenGod} from '../engine/rules.mjs';
 import {branchRelations} from '../engine/derived-facts.mjs';
 import {getJieTermsForYear} from '../engine/solar-term-provider.mjs';
 import {resolveSeoulCivilTime} from '../engine/korea-time.mjs';
@@ -151,8 +151,7 @@ const flowRelations=(result,branchIndex,key)=>{
       .filter(item=>item.type==='three-harmony')
       .map(item=>item.name)
   );
-  const flowBranchHanja=[...branchRelations([{key,branchIndex},{key:'probe',branchIndex}])]
-    .flatMap(item=>item.branches||[])[0]??null;
+  const flowBranchHanja=BRANCHES[branchIndex]?.hanja??null;
   const items=branchRelations([...natal,{key,branchIndex}]);
   return items
     .filter(item=>{
