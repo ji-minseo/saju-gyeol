@@ -1390,3 +1390,19 @@
     margin-right:20px;
   }
 }
+
+
+/* v4.1 spacing fix — keep the technical appendix flat, but prevent
+   the 五行 and 十星 sections from visually colliding. */
+#result-elements.result-grid{
+  gap:22px!important;
+  align-items:start;
+}
+#result-elements .result-panel{
+  min-width:0;
+}
+@media(max-width:760px){
+  #result-elements.result-grid{
+    gap:18px!important;
+  }
+}
