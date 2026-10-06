@@ -1,5 +1,6 @@
 import {calculateSaju,ENGINE_VERSION} from '../engine/calculator.mjs';
 import {buildReadingV2} from '../content/reading-v2.mjs';
+import {buildCurrentFlow} from '../content/flow-v1.mjs';
 
 const form=document.querySelector('#birth-form');
 const dateInput=document.querySelector('#birth-date');
@@ -19,6 +20,15 @@ const voidSummary=document.querySelector('#void-summary');
 const voidDetail=document.querySelector('#void-detail');
 const daeunMeta=document.querySelector('#daeun-meta');
 const daeunTrack=document.querySelector('#daeun-track');
+const currentDaeunCard=document.querySelector('#current-daeun-card');
+const currentDaeunPillar=document.querySelector('#current-daeun-pillar');
+const currentDaeunPeriod=document.querySelector('#current-daeun-period');
+const currentDaeunTitle=document.querySelector('#current-daeun-title');
+const currentDaeunBody=document.querySelector('#current-daeun-body');
+const currentDaeunGuide=document.querySelector('#current-daeun-guide');
+const currentDaeunEvidence=document.querySelector('#current-daeun-evidence');
+const annualFlow=document.querySelector('#annual-flow');
+const flowAsOf=document.querySelector('#flow-as-of');
 
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
 const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
@@ -224,6 +234,82 @@ const renderReading=result=>{
   }
 };
 
+const addEvidenceChips=(container,items)=>{
+  container.replaceChildren();
+  for(const item of items||[]){
+    const chip=document.createElement('span');
+    chip.textContent=item;
+    container.append(chip);
+  }
+};
+
+const renderFlow=result=>{
+  const flow=buildCurrentFlow(result,{today:new Date()});
+  if(flowAsOf) flowAsOf.textContent=`${flow.asOf.replaceAll('-','.')} 현재`;
+
+  const daeun=flow.daeun;
+  currentDaeunCard.dataset.status=daeun.status;
+  currentDaeunPillar.textContent=daeun.status==='active'?daeun.pillar.hanja:'—';
+  currentDaeunPeriod.textContent=daeun.period||(
+    daeun.status==='needs-sex'?'성별을 선택하면 현재 대운을 계산합니다.':
+    daeun.status==='needs-birth-time'?'출생시간을 입력하면 현재 대운을 계산합니다.':
+    '현재 입력에서는 대운 위치를 표시할 수 없습니다.'
+  );
+  currentDaeunTitle.textContent=daeun.title||'지금의 큰 흐름';
+  currentDaeunBody.textContent=daeun.body||'세운은 아래에서 계속 확인할 수 있어요.';
+  currentDaeunGuide.textContent=daeun.guide||'대운 계산에 필요한 정보를 입력하면 활용 포인트를 함께 보여드립니다.';
+  addEvidenceChips(currentDaeunEvidence,daeun.evidence||[]);
+
+  [...daeunTrack.children].forEach((item,index)=>{
+    item.classList.toggle('is-current-daeun',daeun.status==='active'&&index+1===daeun.order);
+  });
+
+  annualFlow.replaceChildren();
+  for(const annual of flow.annuals){
+    const card=document.createElement('article');
+    card.className=`annual-flow-card is-${annual.position}`;
+    if(annual.isCurrent) card.setAttribute('aria-current','true');
+
+    const top=document.createElement('div');
+    top.className='annual-card-top';
+    const label=document.createElement('span');
+    label.textContent=annual.label;
+    const pillar=document.createElement('strong');
+    pillar.textContent=annual.pillar.hanja;
+    top.append(label,pillar);
+
+    const period=document.createElement('p');
+    period.className='annual-period';
+    period.textContent=annual.period;
+
+    const title=document.createElement('h4');
+    title.textContent=annual.title;
+
+    const body=document.createElement('p');
+    body.className='annual-body';
+    body.textContent=annual.body;
+
+    const guide=document.createElement('div');
+    guide.className='annual-guide';
+    const guideLabel=document.createElement('b');
+    guideLabel.textContent='활용 포인트';
+    const guideText=document.createElement('p');
+    guideText.textContent=annual.guide;
+    guide.append(guideLabel,guideText);
+
+    const evidence=document.createElement('div');
+    evidence.className='flow-evidence';
+    for(const item of annual.evidence){
+      const chip=document.createElement('span');
+      chip.textContent=item;
+      evidence.append(chip);
+    }
+
+    card.append(top,period,title,body,guide,evidence);
+    annualFlow.append(card);
+  }
+};
+
 const renderSummary=(result,sex)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
@@ -242,6 +328,7 @@ const showResult=(result,sex)=>{
   renderHiddenStems(result);
   renderStructureFacts(result);
   renderReading(result);
+  renderFlow(result);
   renderSummary(result,sex);
   preview.hidden=false;
   requestAnimationFrame(()=>preview.classList.add('is-visible'));
