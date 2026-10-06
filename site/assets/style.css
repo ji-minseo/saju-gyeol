@@ -2135,3 +2135,53 @@ body{
   .daeun-track>div em{font-size:9px}
   .daeun-help{font-size:11.5px!important}
 }
+
+
+/* v0.24 lighter purple calculator panel */
+.tool-shell>.birth-form{
+  border-color:rgba(142,121,150,.42);
+  background:
+    radial-gradient(110% 86% at 12% 0%,rgba(210,188,215,.18) 0%,transparent 46%),
+    radial-gradient(86% 74% at 96% 100%,rgba(70,57,75,.22) 0%,transparent 62%),
+    linear-gradient(145deg,#6a596f 0%,#57495e 50%,#463c4d 100%);
+  box-shadow:
+    0 34px 78px rgba(62,48,67,.16),
+    0 12px 30px rgba(58,46,62,.10),
+    inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+.tool-shell>.birth-form::before{
+  background:
+    radial-gradient(
+      520px circle at var(--mx) var(--my),
+      rgba(229,211,234,.18) 0%,
+      rgba(196,168,203,.11) 28%,
+      rgba(145,112,155,.05) 49%,
+      transparent 70%
+    );
+}
+
+.tool-shell>.birth-form.is-tilting{
+  border-color:rgba(170,146,180,.52);
+  box-shadow:
+    0 45px 95px rgba(58,46,62,.18),
+    0 17px 38px rgba(64,49,68,.12),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.tool-shell>.birth-form .field input:focus{
+  border-color:#cdb6d2;
+  box-shadow:0 0 0 3px rgba(205,182,210,.20);
+}
+
+@media(hover:none),(pointer:coarse){
+  .tool-shell>.birth-form::before{
+    background:
+      radial-gradient(
+        360px circle at 50% 8%,
+        rgba(228,210,233,.16),
+        rgba(190,160,198,.08) 45%,
+        transparent 73%
+      );
+  }
+}
