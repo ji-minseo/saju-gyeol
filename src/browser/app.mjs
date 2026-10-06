@@ -1,5 +1,5 @@
 import {calculateSaju,ENGINE_VERSION} from '../engine/calculator.mjs';
-import {buildReading} from '../content/reading-v1.mjs';
+import {buildReadingV2} from '../content/reading-v2.mjs';
 
 const form=document.querySelector('#birth-form');
 const dateInput=document.querySelector('#birth-date');
@@ -177,12 +177,43 @@ const renderStructureFacts=result=>{
 };
 
 const renderReading=result=>{
-  const reading=buildReading(result);
+  const reading=buildReadingV2(result);
   for(const [key,section] of Object.entries(reading)){
     const card=document.querySelector(`[data-reading="${key}"]`);
     if(!card) continue;
     card.querySelector('[data-reading-title]').textContent=section.title;
     card.querySelector('[data-reading-body]').textContent=section.body;
+
+    let depth=card.querySelector('.reading-depth');
+    if(!depth){
+      depth=document.createElement('div');
+      depth.className='reading-depth';
+      const evidenceAnchor=card.querySelector('[data-reading-evidence]');
+      card.insertBefore(depth,evidenceAnchor);
+    }
+    depth.replaceChildren();
+
+    const situations=document.createElement('div');
+    situations.className='reading-situations';
+    const situationsLabel=document.createElement('strong');
+    situationsLabel.textContent='이럴 때 특히 드러나요';
+    const situationsList=document.createElement('ul');
+    for(const item of section.situations){
+      const li=document.createElement('li');
+      li.textContent=item;
+      situationsList.append(li);
+    }
+    situations.append(situationsLabel,situationsList);
+
+    const guide=document.createElement('div');
+    guide.className='reading-guide';
+    const guideLabel=document.createElement('strong');
+    guideLabel.textContent='이렇게 쓰면 좋아요';
+    const guideText=document.createElement('p');
+    guideText.textContent=section.guide;
+    guide.append(guideLabel,guideText);
+    depth.append(situations,guide);
+
     const evidence=card.querySelector('[data-reading-evidence]');
     evidence.replaceChildren();
     for(const item of section.evidence){
