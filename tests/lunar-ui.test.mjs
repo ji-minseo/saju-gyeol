@@ -30,6 +30,6 @@ test('methodology no longer claims lunar conversion is unsupported',async()=>{
   const method=await readFile('site/methodology/index.html','utf8');
   assert.doesNotMatch(method,/음력 변환은 아직 지원하지 않습니다/);
   assert.doesNotMatch(method,/음력 변환은 미지원/);
-  assert.match(method,/음력 1970~2050/);
+  assert.match(method,/음력 1946~2050/);
   assert.match(method,/윤달 지원/);
 });
