@@ -8,7 +8,7 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <title>계산 기준 · 사주결</title>
   <meta name="description" content="사주결의 절기, 한국 표준시, 날짜 경계와 대운 계산 기준을 공개합니다.">
-  <link rel="stylesheet" href="../assets/style.css?v=20261006-flow1">
+  <link rel="stylesheet" href="../assets/style.css?v=20261006-validation1">
 </head>
 <body>
   <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -22,7 +22,7 @@
       <p class="eyebrow">METHODOLOGY · BEFORE INTERPRETATION</p>
       <h1>정확한 명식이<br>모든 해석보다 먼저입니다.</h1>
       <p>사주결은 계산 기준을 함께 보여드립니다. 아래는 현재 서비스에 적용된 방식입니다. 학파에 따라 경계나 보정 방식이 달라 다른 만세력과 결과 차이가 생길 수 있습니다.</p>
-      <span class="status-pill">계산 엔진 v0.5.0 · 양력 · 한국 출생 · 1970~2100년</span>
+      <span class="status-pill">계산 엔진 v0.6.0 · 양력 · 한국 출생 · 1970~2100년</span>
     </section>
 
     <section class="method-list">
@@ -40,7 +40,7 @@
       </article>
       <article>
         <span class="method-number">04</span>
-        <div><small>TEN GODS</small><h2>오행과 십성</h2><p>오행 분포는 겉으로 드러난 천간·지지를 셉니다. 지장간의 가중치나 신강·신약 점수와는 다릅니다. 십성은 일간을 기준으로 천간과 지지 본기를 계산하고, 지장간은 여·중·정으로 표시합니다. 성향·관계·일·돈 해설에는 계산된 구조의 근거를 함께 제시합니다.</p><b>구조 계산 및 해설 제공</b></div>
+        <div><small>TEN GODS</small><h2>오행·십성·지장간</h2><p>오행 분포는 겉으로 드러난 천간·지지를 셉니다. 지장간 가중치나 신강·신약 점수와는 다릅니다. 십성은 일간 기준 10×10 천간 관계표를 사용하고, 지지는 정기(본기)를 대표 십성으로 표시합니다. 지장간은 초·중·정 3층 표기 규칙을 모든 표시 지지에 동일하게 적용합니다. 지장간 구성과 사령 일수는 문헌·학파에 따라 차이가 있으므로, 사주결은 이 선택 규칙을 계산 메타데이터와 테스트에 고정합니다.</p><b>십성 100조합 · 지장간 12지 전수 검증</b></div>
       </article>
       <article>
         <span class="method-number">05</span>
@@ -54,19 +54,21 @@
         <h2>계산 방식과 한계를 함께 확인하세요.</h2>
       </div>
       <ol>
-        <li><span>01</span>일주·시주·십성 규칙을 고정 케이스와 대조</li>
+        <li><span>01</span>십성 10×10 전체 100조합과 지장간 12지 표를 고정 행렬로 검증</li>
         <li><span>02</span>2026년 절기 직전·직후 경계를 회귀 테스트로 검증</li>
         <li><span>03</span>00:00 날짜 경계와 23:00 자시 시작을 별도로 검증</li>
-        <li><span>04</span>시간 미상·절기 경계·표준시 전환을 별도로 처리</li>
-        <li><span>05</span>대운 기산은 3일=1년 환산 기준이며 현재 위치는 개월 단위로 비교</li>
-        <li><span>06</span>세운은 입춘 경계로 바뀌며 특정 사건·길흉을 자동 예언하지 않음</li>
-        <li><span>07</span>한국 출생 기준이며, 해외 출생·음력 변환은 미지원</li>
+        <li><span>04</span>십이운성 10간×12지 120조합·공망 60갑자를 전수 검증</li>
+        <li><span>05</span>합·충·형·파·해의 전체 지지쌍과 삼합·자형 규칙을 고정 테스트</li>
+        <li><span>06</span>1988 서머타임의 존재하지 않는 시각·중복 시각을 별도 검증</li>
+        <li><span>07</span>대운 기산은 3일=1년 환산 기준이며 절기 거리→개월 환산을 경계 fixture로 검증</li>
+        <li><span>08</span>세운은 입춘 경계로 바뀌며 특정 사건·길흉을 자동 예언하지 않음</li>
+        <li><span>09</span>한국 출생 기준이며, 해외 출생·음력 변환은 미지원</li>
       </ol>
     </section>
   </main>
   <footer>
     <div><strong>사주결</strong><span>정확한 계산 위에 차분한 해석.</span></div>
-    <div class="footer-links"><a href="../">홈</a><span>계산 엔진 v0.5.0</span></div>
+    <div class="footer-links"><a href="../">홈</a><span>계산 엔진 v0.6.0</span></div>
   </footer>
 </body>
 </html>
