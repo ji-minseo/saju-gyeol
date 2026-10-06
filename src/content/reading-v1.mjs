@@ -61,7 +61,7 @@ export function buildReading(result){
   const career={
     title:outputStrong?'내 손을 거쳐 달라지는 일이 잘 맞는 편':'역할보다 일하는 방식을 먼저 보는 편',
     body:careerParts.join(' '),
-    evidence:[...(outputStrong?['식신·상관']:[]),...(resourceStrong?['정인·편인']:[]),...(peerStrong?['비견·겁재']:[])]
+    evidence:[...(outputStrong?['식신·상관']:[]),...(resourceStrong?['정인·편인']:[]),...(peerStrong?['비견·겁재']:[]),...(outputStrong||resourceStrong||peerStrong?[]:[`일간 ${result.dayMaster.hanja}`])]
   };
 
   let moneyBody;
@@ -86,7 +86,7 @@ export function buildReading(result){
   const relationship={
     title:(relations.has('clash')||relations.has('punishment'))?'가까워질수록 기준과 속도 차이가 중요':'관계에서는 일관성과 방식의 합이 중요',
     body:loveBody,
-    evidence:[...(relations.has('clash')?['지지 충']:[]),...(relations.has('punishment')?['지지 형']:[]),...(officerVisible?['관성 표출']:[])]
+    evidence:[...(relations.has('clash')?['지지 충']:[]),...(relations.has('punishment')?['지지 형']:[]),...(officerVisible?['관성 표출']:[]),...(relations.has('clash')||relations.has('punishment')||officerVisible?[]:[`일지 ${result.pillars.day.branch.hanja}`])]
   };
 
   return {temperament,relationship,career,money};
