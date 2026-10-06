@@ -15,7 +15,7 @@ test('browser converts lunar date before calling the existing solar Saju engine'
   const app=await readFile('src/browser/app.mjs','utf8');
   assert.match(app,/lunarToSolarDate/);
   assert.match(app,/birthDate=converted\.solarDate/);
-  assert.match(app,/calculateSaju\(\{birthDate,birthTime,sex:sexValue\}\)/);
+  assert.match(app,/calculateSaju\(\{birthDate,birthTime,sex:sexValue\},\{dayBoundary\}\)/);
   assert.match(app,/calendarMeta=\{type:'lunar',\.\.\.converted\.lunar\}/);
 });
 
