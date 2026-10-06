@@ -78,3 +78,44 @@ test('midnight policy advances day pillar at 00:00 while zi-start policy advance
   assert.equal(z.pillars.day.hanja,next.pillars.day.hanja);
   assert.notEqual(z.pillars.day.hanja,b.pillars.day.hanja);
 });
+
+
+test('KASI 2026 published lunar-month-start iljin anchors agree with the day pillar engine',()=>{
+  const fixtures=[
+    ['2026-02-17','壬戌'],['2026-03-19','壬辰'],['2026-04-17','辛酉'],
+    ['2026-05-17','辛卯'],['2026-06-15','庚申'],['2026-07-14','己丑'],
+    ['2026-08-13','己未'],['2026-09-11','戊子'],['2026-10-11','戊午'],
+    ['2026-11-09','丁亥'],['2026-12-09','丁巳'],['2027-01-08','丁亥']
+  ];
+  for(const [date,expected] of fixtures){
+    const [y,m,d]=date.split('-').map(Number);
+    assert.equal(dayPillar(y,m,d).hanja,expected,date);
+  }
+});
+
+test('KASI 2027 published lunar-month-start iljin anchors agree with the day pillar engine',()=>{
+  const fixtures=[
+    ['2027-02-07','丁巳'],['2027-03-08','丙戌'],['2027-04-07','丙辰'],
+    ['2027-05-06','乙酉'],['2027-06-05','乙卯'],['2027-07-04','甲申'],
+    ['2027-08-02','癸丑'],['2027-09-01','癸未'],['2027-09-30','壬子'],
+    ['2027-10-29','辛巳'],['2027-11-28','辛亥'],['2027-12-28','辛巳']
+  ];
+  for(const [date,expected] of fixtures){
+    const [y,m,d]=date.split('-').map(Number);
+    assert.equal(dayPillar(y,m,d).hanja,expected,date);
+  }
+});
+
+test('KASI 2028 published lunar-month-start iljin anchors include leap fifth month',()=>{
+  const fixtures=[
+    ['2028-01-27','辛亥'],['2028-02-25','庚辰'],['2028-03-26','庚戌'],
+    ['2028-04-25','庚辰'],['2028-05-24','己酉'],['2028-06-23','己卯'],
+    ['2028-07-22','戊申'],['2028-08-20','丁丑'],['2028-09-19','丁未'],
+    ['2028-10-18','丙子'],['2028-11-16','乙巳'],['2028-12-16','乙亥'],
+    ['2029-01-15','乙巳']
+  ];
+  for(const [date,expected] of fixtures){
+    const [y,m,d]=date.split('-').map(Number);
+    assert.equal(dayPillar(y,m,d).hanja,expected,date);
+  }
+});
