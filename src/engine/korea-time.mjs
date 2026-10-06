@@ -44,7 +44,7 @@ const sameCivil=(a,b)=>
 const assertCivil=input=>{
   const values=['year','month','day','hour','minute'].map(k=>input[k]);
   if(values.some(v=>!Number.isInteger(v))) throw new TypeError('civil time fields must be integers');
-  if(input.year<1970||input.year>2100) throw new RangeError('v0.1 civil-time support is 1970..2100');
+  if(input.year<1946||input.year>2100) throw new RangeError('civil-time support is 1946..2100');
   if(input.month<1||input.month>12||input.day<1||input.day>31||input.hour<0||input.hour>23||input.minute<0||input.minute>59){
     throw new RangeError('invalid civil time');
   }
