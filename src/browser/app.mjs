@@ -199,19 +199,29 @@ const renderStructureFacts=result=>{
   }
 };
 
+const storyLead={temperament:'기질적으로 ',relationship:'관계에서는 ',career:'일에서는 ',money:'돈을 다룰 때는 '};
+const toStoryTitle=(key,title)=>{
+  const clean=String(title||'').trim().replace(/[.。]+$/,'');
+  if(!clean) return '';
+  if(/[요죠니다]$/.test(clean)) return `${storyLead[key]||''}${clean}`;
+  if(/편$/.test(clean)) return `${storyLead[key]||''}${clean}이에요.`;
+  if(/쉬워요$|좋아요$|살아요$|붙어요$|선명해져요$/.test(clean)) return `${storyLead[key]||''}${clean}`;
+  return `${storyLead[key]||''}${clean}이에요.`;
+};
+
 const renderReading=result=>{
   const reading=buildReadingV2(result);
 
   for(const [key,section] of Object.entries(reading)){
     const summaryCard=document.querySelector(`[data-summary="${key}"]`);
     const summaryTitle=summaryCard?.querySelector('[data-summary-title]');
-    if(summaryTitle) summaryTitle.textContent=section.title;
+    if(summaryTitle) summaryTitle.textContent=toStoryTitle(key,section.title);
   }
 
   for(const [key,section] of Object.entries(reading)){
     const card=document.querySelector(`[data-reading="${key}"]`);
     if(!card) continue;
-    card.querySelector('[data-reading-title]').textContent=section.title;
+    card.querySelector('[data-reading-title]').textContent=toStoryTitle(key,section.title);
     card.querySelector('[data-reading-body]').textContent=section.body;
 
     let depth=card.querySelector('.reading-depth');
