@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#f5f0e6">
+  <meta name="theme-color" content="#f6f2eb">
   <title>사주결 · SAJU GYEOL</title>
   <meta name="description" content="태어난 순간의 네 기둥을 정확한 계산 기준과 차분한 해석으로 읽는 사주 서비스.">
   <link rel="stylesheet" href="./assets/style.css">
@@ -17,17 +17,29 @@
       <span>사주결<small>SAJU GYEOL</small></span>
     </a>
     <nav aria-label="주 메뉴">
+      <a href="#reading" class="nav-reading">내 사주 보기</a>
       <a href="./methodology/">계산 기준</a>
     </nav>
   </header>
 
   <main id="main">
     <section class="reading-shell tool-shell" id="reading">
+      <div class="intro">
+        <p class="intro-kicker"><span></span> 나를 이해하는 또 하나의 방법</p>
+        <h1>타고난 나의 결,<br><em>차분히</em> 읽어보세요.</h1>
+        <p class="intro-lead">태어난 순간의 네 기둥에서 시작해<br>성향과 관계, 일과 돈의 패턴을 살펴봅니다.</p>
+        <div class="gyeol-art" aria-hidden="true">
+          <div class="art-orbit"></div><div class="art-sun"></div>
+          <div class="art-pillars"><span><small>년</small>年<i></i></span><span><small>월</small>月<i></i></span><span><small>일 · 나</small>日<i></i></span><span><small>시</small>時<i></i></span></div>
+          <p>FOUR PILLARS, ONE UNIQUE YOU</p>
+        </div>
+        <div class="intro-trust"><span>가입 없이 무료</span><span>입력 정보 저장 안 함</span></div>
+      </div>
       <form class="birth-form" id="birth-form">
         <div class="section-heading tool-heading">
-          <p class="eyebrow">SAJU GYEOL</p>
+          <p class="eyebrow">나의 사주 시작하기 <span>01 / 02</span></p>
           <h2>내 사주 보기</h2>
-          <p>생년월일시를 입력하면 명식부터 구조 해설까지 바로 보여드려요.</p>
+          <p>태어난 날과 시간을 알려주세요.</p>
         </div>
 
         <div class="calendar-switch" aria-label="달력 기준">
@@ -41,7 +53,7 @@
             <input id="birth-date" name="birthDate" type="date" min="1970-01-01" max="2100-12-31" required>
           </label>
           <label class="field">
-            <span>출생시간</span>
+            <span>출생시간 <small>선택</small></span>
             <input id="birth-time" name="birthTime" type="time">
           </label>
         </div>
@@ -52,7 +64,7 @@
         </label>
 
         <fieldset class="sex-field">
-          <legend>성별 <small>대운 순행·역행 계산에 사용</small></legend>
+          <legend>성별 <small>선택 · 대운 방향 계산에 사용</small></legend>
           <div class="segmented">
             <label><input type="radio" name="sex" value="female"><span>여성</span></label>
             <label><input type="radio" name="sex" value="male"><span>남성</span></label>
@@ -61,14 +73,14 @@
 
         <button class="primary-button" type="submit">사주 풀어보기 <span aria-hidden="true">→</span></button>
         <p class="form-error" id="form-error" role="alert" hidden></p>
-        <p class="form-foot">1970~2100년 한국 출생 · 양력 · 입력값 저장 안 함 · <a href="./methodology/">계산 기준 보기</a></p>
+        <p class="form-foot">1970~2100년 · 한국 출생 · 양력 기준<br>입력 정보는 이 화면에서만 사용해요. · <a href="./methodology/">계산 기준 보기</a></p>
       </form>
 
       <section class="result-preview" id="result-preview" aria-live="polite" hidden>
         <div class="result-topline">
           <div>
-            <p class="eyebrow">02 · YOUR FOUR PILLARS</p>
-            <h2>내 사주의 구성</h2>
+            <p class="eyebrow">02 · 나의 사주 기록</p>
+            <h2>나를 이루는 네 기둥</h2>
             <p id="input-summary">입력한 생년월일을 기준으로 명식을 준비합니다.</p>
           </div>
           <span class="engine-badge" id="engine-badge">ENGINE · READY</span>
@@ -130,7 +142,7 @@
 
         <div class="interpretation-heading">
           <p class="eyebrow">03 · READING</p>
-          <h2>숫자와 한자를, 내 이야기로.</h2>
+          <h2>이제, 나의 이야기로 읽어볼까요.</h2>
         </div>
         <div class="reading-cards">
           <article data-reading="temperament"><span>01</span><h3 data-reading-title>성향</h3><p data-reading-body>계산 후 원국 구조를 바탕으로 구체적인 성향 해설을 보여줍니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
@@ -141,16 +153,34 @@
 
         <aside class="validation-note">
           <span class="stamp" aria-hidden="true">準</span>
-          <div><strong>1차 구조 해설까지 연결되었습니다.</strong><p>성향·관계·일·돈 해설은 실제 명식의 십성·지지 관계·지장간을 근거로 만들고, 대운·세운 상세 해석은 다음 단계에서 확장합니다.</p></div>
+          <div><strong>사주결은 풀이의 근거를 함께 보여드려요.</strong><p>성향·관계·일·돈 해설은 십성·지지 관계·지장간을 바탕으로 합니다. 대운·세운의 상세 해석은 아직 제공하지 않아요.</p></div>
           <a href="./methodology/">계산 기준 보기 →</a>
         </aside>
       </section>
     </section>
 
+    <section class="what-you-read" aria-labelledby="read-heading">
+      <div class="section-intro"><p class="eyebrow">사주결에서 읽을 수 있는 것</p><h2 id="read-heading">어려운 한자 너머,<br>내 일상에 닿는 이야기.</h2><p>명식의 구성부터 풀이의 근거까지,<br>한 흐름으로 이어집니다.</p></div>
+      <div class="scope-grid">
+        <article><span>01 · 命</span><h3>나의 사주 명식</h3><p>네 기둥과 오행의 분포를<br>한눈에 살펴보세요.</p></article>
+        <article><span>02 · 性</span><h3>성향과 관계</h3><p>나의 기질과 사람 사이에서<br>반복되는 패턴을 읽어요.</p></article>
+        <article><span>03 · 業</span><h3>일과 돈의 방식</h3><p>강점을 쓰는 업무 방식과<br>돈을 다루는 태도를 살펴봐요.</p></article>
+        <article><span>04 · 流</span><h3>구조와 대운 흐름</h3><p>십성·지장간·지지 관계와<br>대운의 구성을 확인해요.</p></article>
+      </div>
+    </section>
+    <section class="home-faq" aria-labelledby="faq-heading">
+      <div><p class="eyebrow">시작하기 전에</p><h2 id="faq-heading">궁금한 점이 있나요?</h2><a href="./methodology/">계산 기준 자세히 보기 ↗</a></div>
+      <div class="faq-list">
+        <details><summary>태어난 시간을 몰라도 볼 수 있나요?</summary><p>네. ‘태어난 시간을 몰라요’를 선택하면 시주를 제외한 세 기둥으로 읽어드려요. 다만 절기 경계일에는 년주·월주를 확정하기 위해 시간이 필요할 수 있어요. 대운 시작 시점도 출생시간이 있어야 계산합니다.</p></details>
+        <details><summary>음력 생일도 입력할 수 있나요?</summary><p>현재는 양력 생일만 지원해요. 음력 변환은 준비 중이며, 한국에서 태어난 1970~2100년 출생 정보를 기준으로 계산합니다.</p></details>
+        <details><summary>내 생년월일은 저장되나요?</summary><p>입력값은 서버로 전송하거나 저장하지 않아요. 사주 계산과 해설은 브라우저 안에서 이루어지고, 새로고침하면 입력값과 결과가 사라집니다.</p></details>
+        <details><summary>어떤 기준으로 사주를 풀어주나요?</summary><p>절기와 한국의 표준시를 반영해 명식을 계산하고, 그 구조를 바탕으로 성향·관계·일·돈을 설명해요. 사주는 나를 돌아보는 참고로 읽어주세요. 자세한 적용 기준은 계산 기준 페이지에 공개합니다.</p></details>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <div><strong>사주결</strong><span>SAJU GYEOL</span></div>
+    <div><strong>사주결</strong><span>나를 이해하는 또 하나의 방법.</span></div>
     <div class="footer-links"><a href="./methodology/">계산 기준</a></div>
   </footer>
   <script src="./assets/engine-app.js" defer></script>

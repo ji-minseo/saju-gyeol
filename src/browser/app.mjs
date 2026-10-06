@@ -26,39 +26,6 @@ const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
 engineBadge.textContent=`ENGINE · v${ENGINE_VERSION}`;
 
 
-const canTilt=()=>matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches;
-
-const resetFormTilt=()=>{
-  if(!form) return;
-  form.classList.remove('is-tilting');
-  form.style.setProperty('--rx','0deg');
-  form.style.setProperty('--ry','0deg');
-  form.style.setProperty('--mx','50%');
-  form.style.setProperty('--my','50%');
-};
-
-let tiltFrame=0;
-form?.addEventListener('pointermove',event=>{
-  if(!canTilt()) return;
-  cancelAnimationFrame(tiltFrame);
-  tiltFrame=requestAnimationFrame(()=>{
-    const rect=form.getBoundingClientRect();
-    const px=Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
-    const py=Math.max(0,Math.min(1,(event.clientY-rect.top)/rect.height));
-    const rotateY=(px-.5)*7;
-    const rotateX=(.5-py)*5.5;
-
-    form.classList.add('is-tilting');
-    form.style.setProperty('--rx',`${rotateX.toFixed(2)}deg`);
-    form.style.setProperty('--ry',`${rotateY.toFixed(2)}deg`);
-    form.style.setProperty('--mx',`${(px*100).toFixed(1)}%`);
-    form.style.setProperty('--my',`${(py*100).toFixed(1)}%`);
-  });
-});
-form?.addEventListener('pointerleave',resetFormTilt);
-form?.addEventListener('pointercancel',resetFormTilt);
-window.addEventListener('blur',resetFormTilt);
-
 timeUnknown?.addEventListener('change',()=>{
   timeInput.disabled=timeUnknown.checked;
   if(timeUnknown.checked) timeInput.value='';

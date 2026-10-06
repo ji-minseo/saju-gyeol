@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#f5f0e6">
   <title>계산 기준 · 사주결</title>
-  <meta name="description" content="사주결이 명식 계산 기준을 어떻게 정하고 검증할지 공개합니다.">
+  <meta name="description" content="사주결의 절기, 한국 표준시, 날짜 경계와 대운 계산 기준을 공개합니다.">
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -20,50 +20,50 @@
     <section class="method-hero">
       <p class="eyebrow">METHODOLOGY · BEFORE INTERPRETATION</p>
       <h1>정확한 명식이<br>모든 해석보다 먼저입니다.</h1>
-      <p>사주결은 계산 기준을 숨기지 않습니다. 아직 기준이 확정되지 않은 항목은 ‘확정 전’으로 표시하고, 검증이 끝난 계산만 실제 서비스에 연결합니다.</p>
-      <span class="status-pill">v0.1 · 계산 엔진 연결 전</span>
+      <p>사주결은 계산 기준을 함께 보여드립니다. 아래는 현재 서비스에 적용된 방식입니다. 학파에 따라 경계나 보정 방식이 달라 다른 만세력과 결과 차이가 생길 수 있습니다.</p>
+      <span class="status-pill">계산 엔진 v0.5.0 · 양력 · 한국 출생 · 1970~2100년</span>
     </section>
 
     <section class="method-list">
       <article>
         <span class="method-number">01</span>
-        <div><small>CALENDAR</small><h2>달력과 절기 기준</h2><p>양력 입력을 먼저 지원하고, 월주와 연주의 경계에 사용하는 절기 기준을 신뢰할 수 있는 자료와 독립 구현으로 교차 검증한 뒤 확정합니다.</p><b>상태 · 확정 전</b></div>
+        <div><small>CALENDAR</small><h2>달력과 절기 기준</h2><p>양력 생일을 입력받습니다. 연주는 입춘, 월주는 12절의 경계를 사용합니다. Astronomy Engine 2.1.19의 태양 황경 계산으로 절기 시각을 구하고, 2026년 한국천문연구원 절기 자료를 회귀 테스트 기준으로 대조합니다. 음력 변환은 아직 지원하지 않습니다.</p><b>현재 적용 중</b></div>
       </article>
       <article>
         <span class="method-number">02</span>
-        <div><small>DAY BOUNDARY</small><h2>날짜와 자시 경계</h2><p>날짜가 바뀌는 기준과 자시 처리 방식은 결과에 직접 영향을 줍니다. 경계 시각 전후의 정답 케이스를 별도로 만들고 기준을 명시합니다.</p><b>상태 · 확정 전</b></div>
+        <div><small>DAY BOUNDARY</small><h2>날짜와 자시 경계</h2><p>이 화면은 한국 현지 시각 00:00에 일주 날짜가 바뀌는 기준을 사용합니다. 시지의 자시는 23:00부터 시작합니다. 23:00부터 일주까지 다음 날로 넘기는 방식은 현재 화면에 적용하지 않습니다.</p><b>현재 적용 중</b></div>
       </article>
       <article>
         <span class="method-number">03</span>
-        <div><small>TIME & PLACE</small><h2>출생시간과 지역</h2><p>한국 출생을 우선 범위로 두고 표준시, 지역 보정, 진태양시 적용 여부를 검토합니다. 해외 출생은 기준이 검증될 때까지 지원 범위에서 제외할 수 있습니다.</p><b>상태 · 검토 예정</b></div>
+        <div><small>TIME & PLACE</small><h2>출생시간과 지역</h2><p>Asia/Seoul 시간대 자료를 사용해 당시 한국의 표준시와 서머타임을 반영합니다. 경도 보정과 진태양시 보정은 적용하지 않습니다. 표준시 전환으로 존재하지 않거나 두 번 존재한 시각은 자동 판정하지 않습니다. 출생시간을 모르면 시주를 제외하며, 절기 경계일은 시간이 필요할 수 있습니다.</p><b>현재 적용 중 · 보정 범위 명시</b></div>
       </article>
       <article>
         <span class="method-number">04</span>
-        <div><small>TEN GODS</small><h2>오행과 십성</h2><p>사주 네 기둥이 확정된 뒤 일간을 기준으로 오행과 십성을 순수 규칙 함수로 계산합니다. 해석 문장은 이 계산 모듈에 포함하지 않습니다.</p><b>상태 · 엔진 설계 예정</b></div>
+        <div><small>TEN GODS</small><h2>오행과 십성</h2><p>오행 분포는 겉으로 드러난 천간·지지를 셉니다. 지장간의 가중치나 신강·신약 점수와는 다릅니다. 십성은 일간을 기준으로 천간과 지지 본기를 계산하고, 지장간은 여·중·정으로 표시합니다. 성향·관계·일·돈 해설에는 계산된 구조의 근거를 함께 제시합니다.</p><b>구조 계산 및 해설 제공</b></div>
       </article>
       <article>
         <span class="method-number">05</span>
-        <div><small>FORTUNE CYCLES</small><h2>대운과 세운</h2><p>방향과 시작 시점을 포함해 기준 차이가 발생하기 쉬운 영역이라 1차 MVP에서 제외합니다. 기본 명식 검증이 끝난 뒤 별도 테스트 세트와 함께 추가합니다.</p><b>상태 · 2차 범위</b></div>
+        <div><small>FORTUNE CYCLES</small><h2>대운과 세운</h2><p>연간의 음양과 성별로 순행·역행을 정합니다. 출생 시각과 앞뒤 절기 사이의 간격을 3일=1년 기준으로 환산해 대운 시작 시점을 구합니다. 성별이나 시간이 없으면 필요한 값을 안내합니다. 화면의 시작 나이는 반올림한 값이며, 대운·세운 상세 해석은 아직 제공하지 않습니다.</p><b>대운 구성 제공 · 상세 해석 준비 중</b></div>
       </article>
     </section>
 
     <section class="test-gate">
       <div>
-        <p class="eyebrow">RELEASE GATE</p>
-        <h2>이 조건을 통과하기 전에는 계산 결과를 공개하지 않습니다.</h2>
+        <p class="eyebrow">VALIDATION</p>
+        <h2>계산 방식과 한계를 함께 확인하세요.</h2>
       </div>
       <ol>
-        <li><span>01</span>일반 날짜의 사주 네 기둥을 독립된 기준과 대조</li>
-        <li><span>02</span>절기 직전·직후 케이스를 golden test로 고정</li>
-        <li><span>03</span>날짜·자시 경계 케이스를 별도로 검증</li>
-        <li><span>04</span>시간 미상일 때 표시와 해석 범위를 명확히 제한</li>
-        <li><span>05</span>계산 기준과 엔진 버전을 이 페이지에 기록</li>
+        <li><span>01</span>일주·시주·십성 규칙을 고정 케이스와 대조</li>
+        <li><span>02</span>2026년 절기 직전·직후 경계를 회귀 테스트로 검증</li>
+        <li><span>03</span>00:00 날짜 경계와 23:00 자시 시작을 별도로 검증</li>
+        <li><span>04</span>시간 미상·절기 경계·표준시 전환을 별도로 처리</li>
+        <li><span>05</span>한국 출생 기준이며, 해외 출생·음력 변환은 미지원</li>
       </ol>
     </section>
   </main>
   <footer>
     <div><strong>사주결</strong><span>정확한 계산 위에 차분한 해석.</span></div>
-    <div class="footer-links"><a href="../">홈</a><span>v0.1 scaffold</span></div>
+    <div class="footer-links"><a href="../">홈</a><span>계산 엔진 v0.5.0</span></div>
   </footer>
 </body>
 </html>
