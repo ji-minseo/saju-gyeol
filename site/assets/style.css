@@ -1115,3 +1115,32 @@ footer strong{
     border-color:rgba(225,240,233,.14);
   }
 }
+
+
+/* v0.13 soften hover jade glow */
+.tool-shell>.birth-form::before{
+  background:
+    radial-gradient(
+      520px circle at var(--mx) var(--my),
+      rgba(185,220,204,.16) 0%,
+      rgba(126,178,154,.10) 28%,
+      rgba(76,128,106,.055) 48%,
+      transparent 70%
+    );
+  opacity:.78;
+}
+.tool-shell>.birth-form.is-tilting::before{
+  opacity:.88;
+}
+@media(hover:none),(pointer:coarse){
+  .tool-shell>.birth-form::before{
+    background:
+      radial-gradient(
+        360px circle at 50% 8%,
+        rgba(180,214,198,.14),
+        rgba(101,157,132,.065) 45%,
+        transparent 73%
+      );
+    opacity:.72;
+  }
+}
