@@ -145,11 +145,22 @@ const relationPriority={
 };
 
 const flowRelations=(result,branchIndex,key)=>{
-  const items=branchRelations([...natalBranchEntries(result),{key,branchIndex}]);
+  const natal=natalBranchEntries(result);
+  const natalThreeHarmony=new Set(
+    branchRelations(natal)
+      .filter(item=>item.type==='three-harmony')
+      .map(item=>item.name)
+  );
+  const flowBranchHanja=[...branchRelations([{key,branchIndex},{key:'probe',branchIndex}])]
+    .flatMap(item=>item.branches||[])[0]??null;
+  const items=branchRelations([...natal,{key,branchIndex}]);
   return items
     .filter(item=>{
       if(Array.isArray(item.pillars)) return item.pillars.includes(key);
-      if(item.type==='three-harmony') return item.branches.includes(result.pillars.day?.branch.hanja)||true;
+      if(item.type==='three-harmony'){
+        const includesFlowBranch=flowBranchHanja?item.branches.includes(flowBranchHanja):false;
+        return includesFlowBranch&&!natalThreeHarmony.has(item.name);
+      }
       return false;
     })
     .sort((a,b)=>(relationPriority[a.type]??99)-(relationPriority[b.type]??99));
