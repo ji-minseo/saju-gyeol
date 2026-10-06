@@ -38,13 +38,13 @@ test('time unknown on Li Chun date refuses to guess year/month pillar',()=>{
   assert.equal(result.reason,'solar-term-boundary');
 });
 
-test('exact Li Chun minute changes both year and month pillars',()=>{
+test('Li Chun changes year and month pillars across the astronomical boundary',()=>{
   const before=calculateSaju({birthDate:'2026-02-04',birthTime:'05:01'});
-  const exact=calculateSaju({birthDate:'2026-02-04',birthTime:'05:02'});
+  const after=calculateSaju({birthDate:'2026-02-04',birthTime:'05:03'});
   assert.equal(before.pillars.year.hanja,'乙巳');
   assert.equal(before.pillars.month.hanja,'己丑');
-  assert.equal(exact.pillars.year.hanja,'丙午');
-  assert.equal(exact.pillars.month.hanja,'庚寅');
+  assert.equal(after.pillars.year.hanja,'丙午');
+  assert.equal(after.pillars.month.hanja,'庚寅');
 });
 
 test('2026 January dates before Xiaohan use the 2025 Dashue carry-in boundary',()=>{
@@ -53,11 +53,11 @@ test('2026 January dates before Xiaohan use the 2025 Dashue carry-in boundary',(
   assert.equal(result.pillars.month.hanja,'戊子');
 });
 
-test('exact Hanlu minute changes month pillar',()=>{
+test('Hanlu changes month pillar across the astronomical boundary',()=>{
   const before=calculateSaju({birthDate:'2026-10-08',birthTime:'15:28'});
-  const exact=calculateSaju({birthDate:'2026-10-08',birthTime:'15:29'});
+  const after=calculateSaju({birthDate:'2026-10-08',birthTime:'15:31'});
   assert.equal(before.pillars.month.hanja,'丁酉');
-  assert.equal(exact.pillars.month.hanja,'戊戌');
+  assert.equal(after.pillars.month.hanja,'戊戌');
 });
 
 test('provider supports ordinary dates across the 1970..2100 service range',()=>{
