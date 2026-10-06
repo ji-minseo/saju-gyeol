@@ -184,6 +184,7 @@ const renderSummary=(result,sex)=>{
 };
 
 const showResult=(result,sex)=>{
+  document.body.classList.add('has-result');
   renderPillar('year',result.pillars.year,result.tenGods.visibleStems.year,result.tenGods.visibleBranches.year);
   renderPillar('month',result.pillars.month,result.tenGods.visibleStems.month,result.tenGods.visibleBranches.month);
   renderPillar('day',result.pillars.day,result.tenGods.visibleStems.day,result.tenGods.visibleBranches.day);
