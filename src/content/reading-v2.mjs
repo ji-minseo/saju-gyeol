@@ -8,6 +8,58 @@ const CATEGORY_LABELS={
   resource:'인성'
 };
 
+const ELEMENT_LABELS={
+  wood:'목',
+  fire:'화',
+  earth:'토',
+  metal:'금',
+  water:'수'
+};
+
+const ELEMENT_CONTEXT={
+  wood:{
+    temperament:'표면 오행에서는 목이 상대적으로 두드러져, 시작점을 만들고 방향을 넓혀 가는 움직임을 보조 신호로 봅니다.',
+    situation:'새 일을 처음 잡거나 방향을 정해야 할 때, 일단 뼈대를 세우고 이후에 세부를 붙이는 방식이 편할 수 있습니다.'
+  },
+  fire:{
+    temperament:'표면 오행에서는 화가 상대적으로 두드러져, 생각을 드러내고 반응을 만들며 흐름을 움직이는 힘을 보조 신호로 봅니다.',
+    situation:'아이디어를 오래 묵히기보다 말·화면·글·결과물처럼 눈에 보이는 형태로 꺼낼 때 판단도 빨라질 수 있습니다.'
+  },
+  earth:{
+    temperament:'표면 오행에서는 토가 상대적으로 두드러져, 흩어진 것을 정리하고 유지 가능한 형태로 묶는 힘을 보조 신호로 봅니다.',
+    situation:'해야 할 일이 많을수록 순서와 기준을 먼저 정리해두면 안정적으로 오래 밀고 가기 쉬운 편입니다.'
+  },
+  metal:{
+    temperament:'표면 오행에서는 금이 상대적으로 두드러져, 차이를 구분하고 기준을 세워 정교하게 다듬는 힘을 보조 신호로 봅니다.',
+    situation:'여러 안을 비교하거나 오류를 찾아야 할 때, 무엇을 남기고 무엇을 버릴지 판단하는 속도가 붙기 쉽습니다.'
+  },
+  water:{
+    temperament:'표면 오행에서는 수가 상대적으로 두드러져, 정보를 모으고 흐름을 읽으며 필요하면 경로를 바꾸는 힘을 보조 신호로 봅니다.',
+    situation:'상황이 아직 확정되지 않았을 때도 여러 가능성을 열어두고 정보를 더 모은 뒤 움직이는 편이 자연스러울 수 있습니다.'
+  }
+};
+
+const MONTH_ELEMENT_CONTEXT={
+  wood:'월지가 목이라, 일상적인 환경에서는 변화·확장·새로운 시도를 요구받는 장면을 배경 신호로 함께 봅니다.',
+  fire:'월지가 화라, 일상적인 환경에서는 표현·속도·가시적인 반응이 필요한 장면을 배경 신호로 함께 봅니다.',
+  earth:'월지가 토라, 일상적인 환경에서는 유지·조율·현실적인 정리가 필요한 장면을 배경 신호로 함께 봅니다.',
+  metal:'월지가 금이라, 일상적인 환경에서는 기준·선택·정확도를 요구받는 장면을 배경 신호로 함께 봅니다.',
+  water:'월지가 수라, 일상적인 환경에서는 정보·변화·유동성에 대응해야 하는 장면을 배경 신호로 함께 봅니다.'
+};
+
+const TEMPERAMENT_PAIR_CONTEXT={
+  'officer|output':'표현하고 바꾸려는 힘과 기준을 지키려는 힘이 같이 보여, 자유롭게 움직이되 결과의 책임까지 확인하려는 쪽으로 읽을 수 있습니다.',
+  'officer|peer':'내 판단을 지키려는 힘과 역할·책임을 의식하는 힘이 같이 보여, 권한과 책임의 균형이 맞을 때 가장 안정적으로 힘을 쓰기 쉽습니다.',
+  'officer|resource':'충분히 이해하려는 힘과 기준을 정확히 지키려는 힘이 같이 보여, 납득한 규칙 안에서는 완성도를 높이는 쪽으로 오래 집중하기 쉽습니다.',
+  'officer|wealth':'현실적인 성과를 보려는 힘과 책임 기준이 같이 보여, 목표·기한·성과가 분명할수록 판단이 또렷해지는 쪽으로 읽습니다.',
+  'output|peer':'직접 판단하고 바로 결과로 옮기는 힘이 같이 보여, 간섭이 적고 수정 권한이 있는 환경에서 속도가 붙기 쉽습니다.',
+  'output|resource':'충분히 이해한 뒤 그것을 결과물로 바꾸는 힘이 같이 보여, 조사와 제작이 한 흐름으로 이어질 때 강점이 선명해집니다.',
+  'output|wealth':'만든 것을 실제 가치와 연결하려는 힘이 같이 보여, 결과물이 반응·성과·수익으로 이어질 때 동기가 커지기 쉽습니다.',
+  'peer|resource':'내 기준을 세우는 힘과 충분히 이해하려는 힘이 같이 보여, 남의 답을 그대로 따르기보다 스스로 납득한 방식으로 움직이려는 면이 강해질 수 있습니다.',
+  'peer|wealth':'내 판단과 현실적인 성과 감각이 같이 보여, 선택과 결과의 거리가 가까울수록 몰입이 붙는 쪽으로 읽습니다.',
+  'resource|wealth':'쌓고 이해하는 힘과 현실 가치로 바꾸려는 힘이 같이 보여, 준비를 충분히 한 뒤 실용적인 결과로 연결하려는 흐름이 자연스럽습니다.'
+};
+
 const categoryOf=name=>{
   if(name==='비견'||name==='겁재') return 'peer';
   if(name==='식신'||name==='상관') return 'output';
@@ -144,6 +196,28 @@ const visibleEvidence=(counts,limit=2)=>sortKinds(counts)
   .slice(0,limit)
   .map(kind=>`${CATEGORY_LABELS[kind]} ${counts[kind]}`);
 
+const pairKey=(first,second)=>[first,second].filter(Boolean).sort().join('|');
+
+const elementProfile=result=>{
+  const counts=result.fiveElements?.counts??{};
+  const entries=Object.keys(ELEMENT_LABELS).map(key=>[key,Number(counts[key]??0)]);
+  const total=entries.reduce((sum,[,count])=>sum+count,0);
+  const ranked=entries.sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+  const [dominant,dominantCount]=ranked[0]??['earth',0];
+  const [,secondCount]=ranked[1]??[null,0];
+  return {
+    dominant,
+    dominantCount,
+    total,
+    tied:dominantCount===secondCount,
+    evidence:dominantCount>0
+      ?`표면 오행 ${ELEMENT_LABELS[dominant]} ${dominantCount}/${total}`
+      :null
+  };
+};
+
+const monthElement=result=>result.pillars?.month?.branch?.element??null;
+
 const specificRelations=result=>result.branchRelations.items
   .filter(item=>Array.isArray(item.pillars)&&item.pillars.includes('day'));
 
@@ -208,6 +282,26 @@ const careerPair=(first,second)=>{
     situation:'프리랜스·사이드 프로젝트·작은 사업처럼 선택과 결과의 연결이 가까울수록 몰입이 붙기 쉽습니다.',
     guide:'자율성과 수익을 동시에 보려면 가격·범위·납기를 초기에 명확히 정해두는 편이 좋습니다.'
   };
+  if(pair.has('peer')&&pair.has('resource')) return {
+    title:'내가 납득한 방식으로 깊게 파고드는 일에서 강점이 살아나요',
+    situation:'자료를 충분히 이해한 뒤 내 기준으로 다시 정리하거나, 스스로 방법을 선택해 문제를 푸는 역할에서 집중이 붙기 쉽습니다.',
+    guide:'자율성만 큰 자리보다 필요한 자료와 판단 권한이 함께 주어지는 환경을 고르는 편이 좋습니다.'
+  };
+  if(pair.has('peer')&&pair.has('officer')) return {
+    title:'권한과 책임이 같이 주어질 때 가장 안정적으로 힘을 써요',
+    situation:'내가 결정할 수 있는 범위와 반드시 지켜야 할 기준이 동시에 분명한 프로젝트에서 실행력이 안정되기 쉽습니다.',
+    guide:'책임만 크고 결정권이 없는 자리는 피하고, 맡은 범위 안에서는 스스로 판단할 수 있는지 확인해보세요.'
+  };
+  if(pair.has('output')&&pair.has('officer')) return {
+    title:'만드는 힘에 기준과 마감이 붙을 때 완성도가 올라가요',
+    situation:'디자인·콘텐츠·개발·기획처럼 직접 결과물을 만들되 품질 기준과 마감이 분명한 일에서 강점이 선명해질 수 있습니다.',
+    guide:'자유롭게 만드는 시간과 검수 기준을 따로 두면 표현력과 완성도를 같이 가져가기 좋습니다.'
+  };
+  if(pair.has('resource')&&pair.has('wealth')) return {
+    title:'쌓은 전문성을 실제 가치로 바꾸는 일에 강점이 있어요',
+    situation:'리서치·분석·전문 지식을 서비스, 제안, 상품, 콘텐츠처럼 실제로 쓰이는 형태로 바꾸는 과정에서 만족도가 높아지기 쉽습니다.',
+    guide:'배우고 준비하는 단계에만 오래 머물지 않도록, 일정 시점마다 결과물이나 가격으로 전환하는 마감선을 두는 편이 좋습니다.'
+  };
   return null;
 };
 
@@ -221,6 +315,11 @@ export function buildReadingV2(result){
   const relation=firstUsefulRelation(result);
   const dayRelation=relation&&Array.isArray(relation.pillars)&&relation.pillars.includes('day');
   const month=monthKind(result);
+  const elements=elementProfile(result);
+  const monthEl=monthElement(result);
+  const pairContext=secondary?TEMPERAMENT_PAIR_CONTEXT[pairKey(primary,secondary)]:null;
+  const elementContext=!elements.tied?ELEMENT_CONTEXT[elements.dominant]:null;
+  const monthContext=monthEl?MONTH_ELEMENT_CONTEXT[monthEl]:null;
 
   const temperamentOverlay=KIND_CONTEXT[primary]?.temperament;
   const temperamentSituations=[
@@ -229,14 +328,26 @@ export function buildReadingV2(result){
       :dm.pressure,
     secondary&&counts[secondary]>=2
       ?`${CATEGORY_LABELS[secondary]}도 반복되어, ${stripKindRepeatLead(secondary,KIND_CONTEXT[secondary].temperament)}`
-      :dm.pressure
+      :elementContext?.situation??monthContext??KIND_CONTEXT[primary]?.temperament
   ];
   const temperament=makeSection({
     title:dm.title,
-    body:`${dm.body} ${counts[primary]>=2?temperamentOverlay:''}`.trim(),
+    body:uniqueParts([
+      dm.body,
+      counts[primary]>=2?temperamentOverlay:null,
+      pairContext,
+      elementContext?.temperament,
+      monthContext
+    ]).join(' '),
     situations:temperamentSituations,
     guide:dm.guide,
-    evidence:[`일간 ${result.dayMaster.hanja}`,...visibleEvidence(counts,2),monthTenGod(result)?`월지 ${monthTenGod(result)}`:null]
+    evidence:[
+      `일간 ${result.dayMaster.hanja}`,
+      ...visibleEvidence(counts,2),
+      elements.evidence,
+      monthEl?`월지 오행 ${ELEMENT_LABELS[monthEl]}`:null,
+      monthTenGod(result)?`월지 ${monthTenGod(result)}`:null
+    ]
   });
 
   const pair=careerPair(primary,secondary);
