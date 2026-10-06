@@ -5,11 +5,11 @@ import {calculateSaju} from '../src/engine/calculator.mjs';
 import {getJieTermsForYear} from '../src/engine/solar-term-provider.mjs';
 import {lunarToSolarDate,solarToLunarDate,LUNAR_SUPPORT} from '../src/engine/lunar-calendar.mjs';
 
-test('v0.7 historical support begins at 1946',()=>{
-  assert.deepEqual(LUNAR_SUPPORT,{minYear:1946,maxYear:2050,standard:'Korean lunar calendar / KASI-based table'});
-  assert.equal(getJieTermsForYear(1946).length,13);
-  assert.equal(calculateSaju({birthDate:'1946-01-01',birthTime:'12:00'}).status,'ok');
-  assert.throws(()=>calculateSaju({birthDate:'1945-12-31',birthTime:'12:00'}),/1946\.\.2100/);
+test('v0.8 historical support begins at 1912',()=>{
+  assert.deepEqual(LUNAR_SUPPORT,{minYear:1912,maxYear:2050,standard:'Korean lunar calendar / KASI-based table'});
+  assert.equal(getJieTermsForYear(1912).length,13);
+  assert.equal(calculateSaju({birthDate:'1912-01-01',birthTime:'12:00'}).status,'ok');
+  assert.throws(()=>calculateSaju({birthDate:'1911-12-31',birthTime:'12:00'}),/1912\.\.2100/);
 });
 
 test('1946 lunar dates round-trip through the Korean lunar converter',()=>{
