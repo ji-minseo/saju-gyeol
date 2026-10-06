@@ -1,6 +1,7 @@
 import {
   yearPillar,monthPillar,dayPillar,effectiveDayDate,
-  hourBranchIndex,hourPillar,tenGod,branchTenGod,branchRulingStems,surfaceElementCounts,ELEMENT_LABELS
+  hourBranchIndex,hourPillar,tenGod,branchTenGod,branchRulingStems,surfaceElementCounts,
+  ELEMENT_LABELS,HIDDEN_STEM_POLICY
 } from './rules.mjs';
 import {resolveSeoulCivilTime,KOREA_TIME_POLICY} from './korea-time.mjs';
 import {
@@ -9,10 +10,10 @@ import {
 import {
   getJieTermsForYear,SOLAR_TERM_PROVIDER_METADATA,SOLAR_TERM_SUPPORT
 } from './solar-term-provider.mjs';
-import {twelveStage,branchRelations,dayVoid} from './derived-facts.mjs';
+import {twelveStage,branchRelations,dayVoid,BRANCH_RELATION_POLICY} from './derived-facts.mjs';
 import {calculateDaeun} from './fortune-cycles.mjs';
 
-export const ENGINE_VERSION='0.5.0';
+export const ENGINE_VERSION='0.6.0';
 export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
 
 const parseDate=value=>{
@@ -172,6 +173,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
     },
     hiddenStems:{
       method:'three-layer-ruling-stems',
+      policy:HIDDEN_STEM_POLICY,
       positions:['residual','middle','main'],
       pillars:rulingStemLayers
     },
@@ -181,6 +183,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
     },
     branchRelations:{
       method:'fixed-earthly-branch-relations',
+      policy:BRANCH_RELATION_POLICY,
       items:relations
     },
     void:{
@@ -195,6 +198,8 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
       timeSource:KOREA_TIME_POLICY.source,
       longitudeCorrection:KOREA_TIME_POLICY.longitudeCorrection,
       equationOfTime:KOREA_TIME_POLICY.equationOfTime,
+      hiddenStemPolicy:HIDDEN_STEM_POLICY.scheme,
+      branchRelationPunishmentPolicy:BRANCH_RELATION_POLICY.punishment,
       solarTermSource:SOLAR_TERM_PROVIDER_METADATA.engine,
       solarTermProvider:SOLAR_TERM_PROVIDER_METADATA.packageVersion,
       solarTermMethod:SOLAR_TERM_PROVIDER_METADATA.method,
