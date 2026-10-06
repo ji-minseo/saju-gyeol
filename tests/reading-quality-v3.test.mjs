@@ -33,6 +33,11 @@ test('reading V3 avoids duplicate body sentences and repeated situations across 
         section.situations.length,
         `${input.birthDate} ${key} has duplicate situations`
       );
+      assert.equal(
+        section.situations.length,
+        2,
+        `${input.birthDate} ${key} should keep two distinct situations`
+      );
     }
 
     const all=JSON.stringify(reading);
@@ -86,4 +91,19 @@ test('methodology explicitly documents that half-harmony and directional harmony
   const method=await readFile('site/methodology/index.html','utf8');
   assert.match(method,/반합·방합은 현재 자동 판정하지 않습니다/);
   assert.match(method,/한 지지에 여러 관계가 동시에 성립하면 모두 표시합니다/);
+});
+
+
+test('temperament reading cross-checks day master, ten gods, visible elements and month branch',()=>{
+  for(const input of samples){
+    const result=calculateSaju(input);
+    const temperament=buildReadingV2(result).temperament;
+    assert.ok(temperament.evidence.some(x=>x===`일간 ${result.dayMaster.hanja}`),input.birthDate);
+    assert.ok(temperament.evidence.some(x=>x.startsWith('표면 오행 ')),input.birthDate);
+    assert.ok(temperament.evidence.some(x=>x.startsWith('월지 오행 ')),input.birthDate);
+    assert.ok(
+      temperament.evidence.some(x=>/^비겁 |^식상 |^재성 |^관성 |^인성 /.test(x)),
+      `${input.birthDate} should expose visible ten-god evidence`
+    );
+  }
 });
