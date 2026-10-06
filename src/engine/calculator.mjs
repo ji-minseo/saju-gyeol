@@ -1,6 +1,6 @@
 import {
   yearPillar,monthPillar,dayPillar,effectiveDayDate,
-  hourBranchIndex,hourPillar,tenGod,surfaceElementCounts,ELEMENT_LABELS
+  hourBranchIndex,hourPillar,tenGod,branchTenGod,branchRulingStems,surfaceElementCounts,ELEMENT_LABELS
 } from './rules.mjs';
 import {resolveSeoulCivilTime,KOREA_TIME_POLICY} from './korea-time.mjs';
 import {
@@ -10,7 +10,7 @@ import {
   getJieTermsForYear,SOLAR_TERM_PROVIDER_METADATA,SOLAR_TERM_SUPPORT
 } from './solar-term-provider.mjs';
 
-export const ENGINE_VERSION='0.3.0';
+export const ENGINE_VERSION='0.4.0';
 export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
 
 const parseDate=value=>{
@@ -90,6 +90,27 @@ const buildResult=({date,time,instant,state,dayBoundary,terms})=>{
     day:'일간',
     hour:hour?tenGod(day.stemIndex,hour.stemIndex):null
   };
+  const visibleBranchTenGods={
+    year:branchTenGod(day.stemIndex,year.branchIndex),
+    month:branchTenGod(day.stemIndex,month.branchIndex),
+    day:branchTenGod(day.stemIndex,day.branchIndex),
+    hour:hour?branchTenGod(day.stemIndex,hour.branchIndex):null
+  };
+  const rulingStemLayers=Object.fromEntries(
+    [['year',year],['month',month],['day',day],['hour',hour]].map(([key,pillar])=>[
+      key,
+      pillar?branchRulingStems(day.stemIndex,pillar.branchIndex).map(entry=>({
+        position:entry.position,
+        stem:entry.stem?{
+          hanja:entry.stem.hanja,
+          korean:entry.stem.ko,
+          element:entry.stem.element,
+          polarity:entry.stem.polarity
+        }:null,
+        tenGod:entry.tenGod
+      })):null
+    ])
+  );
 
   return {
     status:time?'ok':'partial',
@@ -112,9 +133,16 @@ const buildResult=({date,time,instant,state,dayBoundary,terms})=>{
       labels:ELEMENT_LABELS
     },
     tenGods:{
-      method:'visible-heavenly-stems-relative-to-day-master',
+      method:'visible-stems-and-branch-main-qi-relative-to-day-master',
       visibleStems:visibleStemTenGods,
-      hiddenStemsIncluded:false
+      visibleBranches:visibleBranchTenGods,
+      branchRepresentative:'main-qi',
+      hiddenStemsIncluded:true
+    },
+    hiddenStems:{
+      method:'three-layer-ruling-stems',
+      positions:['residual','middle','main'],
+      pillars:rulingStemLayers
     },
     metadata:{
       engineVersion:ENGINE_VERSION,
