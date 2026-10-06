@@ -32,6 +32,14 @@ export const BRANCHES = [
 
 export const ELEMENT_LABELS={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
 
+export const HIDDEN_STEM_POLICY={
+  scheme:'three-layer-initial-middle-main',
+  positions:['residual','middle','main'],
+  appliesTo:'all-displayed-branches',
+  weightedDays:false,
+  schoolVariance:true
+};
+
 // Three-layer 여(餘氣)·중(中氣)·정(正氣) representation used by many Korean manse charts.
 // This is intentionally named as a ruling/display table because hidden-stem tables vary by school.
 export const BRANCH_RULING_STEMS=[
