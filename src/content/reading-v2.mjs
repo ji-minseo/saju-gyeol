@@ -158,12 +158,20 @@ const firstUsefulRelation=result=>{
 const monthTenGod=result=>result.tenGods.visibleBranches.month;
 const monthKind=result=>categoryOf(monthTenGod(result));
 
+const uniqueParts=parts=>[...new Set(parts.filter(Boolean))];
+
+const stripKindRepeatLead=(kind,text)=>{
+  const lead=`${withSubject(CATEGORY_LABELS[kind])} 반복되면 `;
+  const value=String(text||'');
+  return value.startsWith(lead)?value.slice(lead.length):value;
+};
+
 const makeSection=({title,body,situations,guide,evidence})=>({
   title,
   body,
-  situations:situations.filter(Boolean).slice(0,2),
+  situations:uniqueParts(situations).slice(0,2),
   guide,
-  evidence:[...new Set(evidence.filter(Boolean))].slice(0,5),
+  evidence:uniqueParts(evidence).slice(0,5),
   confidence:'medium',
   methodId:'reading-v2-structural'
 });
@@ -220,7 +228,7 @@ export function buildReadingV2(result){
       ?`${withSubject(CATEGORY_LABELS[primary])} 표면에서 ${counts[primary]}번 보여, 이 성향이 한 번의 반응보다 여러 장면에서 반복해서 나타나는 쪽으로 읽습니다.`
       :dm.pressure,
     secondary&&counts[secondary]>=2
-      ?`${CATEGORY_LABELS[secondary]}도 반복되어 한 가지 방식만 쓰기보다 ${KIND_CONTEXT[secondary].temperament}`
+      ?`${CATEGORY_LABELS[secondary]}도 반복되어, ${stripKindRepeatLead(secondary,KIND_CONTEXT[secondary].temperament)}`
       :dm.pressure
   ];
   const temperament=makeSection({
@@ -239,11 +247,13 @@ export function buildReadingV2(result){
     primary==='wealth'?'결과가 눈에 보이는 일이 잘 맞아요':
     '기준과 책임이 분명한 일이 잘 맞아요'
   );
-  const careerBody=[
+  const careerBody=uniqueParts([
     KIND_CONTEXT[primary]?.career,
     secondary&&counts[secondary]>=1?KIND_CONTEXT[secondary]?.career:null,
-    month? `특히 월지의 대표 십성이 ${withCopulaRa(monthTenGod(result))}, 일상적인 사회 환경에서는 ${KIND_CONTEXT[month]?.career??'역할과 환경의 영향을 함께 보는 편이 자연스럽습니다.'}`:null
-  ].filter(Boolean).join(' ');
+    month&&month!==primary&&month!==secondary
+      ?`특히 월지의 대표 십성이 ${withCopulaRa(monthTenGod(result))}, 일상적인 사회 환경에서는 ${KIND_CONTEXT[month]?.career??'역할과 환경의 영향을 함께 보는 편이 자연스럽습니다.'}`
+      :null
+  ]).join(' ');
   const career=makeSection({
     title:careerTitle,
     body:careerBody,
@@ -286,7 +296,7 @@ export function buildReadingV2(result){
   }
   const money=makeSection({
     title:moneyTitle,
-    body:moneyBody+(outputVisible?' 식상이 함께 보이면 “잘하는 것”을 남이 살 수 있는 형태로 묶는 과정이 특히 중요합니다.':''),
+    body:moneyBody+(outputVisible&&!wealthVisible?' 식상이 함께 보이면 “잘하는 것”을 남이 살 수 있는 형태로 묶는 과정이 특히 중요합니다.':''),
     situations:[
       wealthVisible?'가격, 예산, 계약 조건처럼 숫자가 분명해지면 판단도 빨라지는 편으로 읽을 수 있습니다.':
       wealthHidden?'실력은 쌓였는데 가격을 붙이거나 제안서를 만드는 순간이 늦어져 수익화가 뒤로 밀릴 수 있습니다.':
