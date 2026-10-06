@@ -21,7 +21,7 @@
   <meta name="twitter:description" content="생년월일과 출생시간으로 나의 사주 흐름을 차분하게 읽어보세요.">
   <meta name="twitter:image" content="https://saju.everytinytool.com/assets/saju-hero.webp">
   <link rel="stylesheet" href="./assets/style.css?v=20261006-v08">
-  <link rel="stylesheet" href="./assets/report-editorial.css?v=20261006-1">
+  <link rel="stylesheet" href="./assets/report-editorial.css?v=20261006-2">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -95,6 +95,20 @@
           <input id="time-unknown" type="checkbox">
           <span>태어난 시간을 몰라요</span>
         </label>
+
+        <details class="advanced-settings">
+          <summary>고급 설정 <span>날짜 경계 기준</span></summary>
+          <div class="advanced-settings-body">
+            <fieldset class="boundary-field">
+              <legend>일주 날짜 경계</legend>
+              <div class="segmented boundary-options">
+                <label><input type="radio" name="dayBoundary" value="midnight" checked><span>00:00 일자 변경 <small>기본</small></span></label>
+                <label><input type="radio" name="dayBoundary" value="zi-start"><span>23:00 자시 시작</span></label>
+              </div>
+              <p>명리 기준에 따라 날짜 경계를 다르게 보기도 해요. 23:00~23:59 출생자는 선택한 기준에 따라 일주·시주가 달라질 수 있습니다.</p>
+            </fieldset>
+          </div>
+        </details>
 
         <fieldset class="sex-field">
           <legend>성별 <small><b class="optional-label">선택</b> · 대운 방향 계산에 사용</small></legend>
