@@ -818,3 +818,57 @@ footer strong{font-size:18px;color:var(--ink)}
     border-radius:22px;
   }
 }
+
+
+/* v0.9 viewport-centered wide calculator */
+body{overflow-x:clip}
+.tool-shell{
+  width:100vw;
+  max-width:none;
+  margin-left:calc(50% - 50vw);
+  padding:24px max(24px,calc((100vw - 1180px)/2));
+  justify-items:center;
+  align-items:center;
+}
+.tool-shell>.birth-form{
+  width:min(1040px,calc(100vw - 64px));
+  max-width:none;
+  margin-inline:auto;
+  justify-self:center;
+}
+.tool-shell>.result-preview{
+  width:min(1180px,calc(100vw - 64px));
+  max-width:none;
+  margin-left:auto;
+  margin-right:auto;
+}
+.has-result .tool-shell>.birth-form{
+  width:min(1040px,calc(100vw - 64px));
+  max-width:none;
+  margin-left:auto;
+  margin-right:auto;
+}
+@media(max-width:800px){
+  .tool-shell{
+    padding-left:18px;
+    padding-right:18px;
+  }
+  .tool-shell>.birth-form,
+  .has-result .tool-shell>.birth-form{
+    width:min(100%,calc(100vw - 36px));
+  }
+  .tool-shell>.result-preview{
+    width:min(100%,calc(100vw - 36px));
+  }
+}
+@media(max-width:520px){
+  .tool-shell{
+    padding-left:14px;
+    padding-right:14px;
+  }
+  .tool-shell>.birth-form,
+  .has-result .tool-shell>.birth-form,
+  .tool-shell>.result-preview{
+    width:calc(100vw - 28px);
+  }
+}
