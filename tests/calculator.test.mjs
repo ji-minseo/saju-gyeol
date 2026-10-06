@@ -13,6 +13,16 @@ test('2026-10-06 10:10 KST composes four pillars into one result',()=>{
   assert.equal(result.tenGods.visibleStems.year,'정재');
   assert.equal(result.tenGods.visibleStems.month,'편재');
   assert.equal(result.tenGods.visibleStems.hour,'편재');
+  assert.deepEqual(result.tenGods.visibleBranches,{
+    year:'편재',
+    month:'편인',
+    day:'편관',
+    hour:'정재'
+  });
+  assert.deepEqual(
+    result.hiddenStems.pillars.day.map(layer=>layer.stem?.hanja??null),
+    ['癸','辛','己']
+  );
   assert.deepEqual(result.fiveElements.counts,{
     wood:0,fire:5,earth:1,metal:1,water:1
   });
@@ -61,7 +71,7 @@ test('Hanlu changes month pillar across the astronomical boundary',()=>{
 });
 
 test('provider supports ordinary dates across the 1970..2100 service range',()=>{
-  for(const birthDate of ['1970-06-15','1995-10-13','2008-03-22','2050-11-03','2100-01-20']){
+  for(const birthDate of ['1970-06-15','1996-04-17','2008-03-22','2050-11-03','2100-01-20']){
     const result=calculateSaju({birthDate,birthTime:'12:00'});
     assert.equal(result.status,'ok');
     assert.ok(result.pillars.year.hanja);
