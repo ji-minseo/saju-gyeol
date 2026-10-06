@@ -8,7 +8,7 @@
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <title>사주결 · SAJU GYEOL</title>
   <meta name="description" content="태어난 순간의 네 기둥을 정확한 계산 기준과 차분한 해석으로 읽는 사주 서비스.">
-  <link rel="stylesheet" href="./assets/style.css?v=20261006-validation1">
+  <link rel="stylesheet" href="./assets/style.css?v=20261006-order4">
 </head>
 <body class="home-page">
   <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -76,14 +76,81 @@
         <div class="result-topline">
           <img class="result-art" src="./assets/saju-hero.webp" alt="" loading="lazy">
           <div>
-            <p class="eyebrow">02 · 나의 사주 기록</p>
-            <h2>나를 이루는 네 기둥</h2>
+            <p class="eyebrow">02 · RESULT</p>
+            <h2>나의 사주 리포트</h2>
             <p id="input-summary">입력한 생년월일을 기준으로 명식을 준비합니다.</p>
           </div>
           <span class="engine-badge" id="engine-badge">ENGINE · READY</span>
         </div>
 
-        <div class="pillar-grid" aria-label="사주 네 기둥">
+        
+        <section class="quick-summary" id="result-summary" aria-labelledby="quick-summary-title">
+          <div class="quick-summary-heading">
+            <p class="eyebrow">03 · KEY READING</p>
+            <h2 id="quick-summary-title">한눈에 보는 핵심 해석</h2>
+            <p>먼저 가장 중요한 결만 짧게 보고, 아래에서 근거와 실제 상황을 자세히 풀어볼게요.</p>
+          </div>
+          <div class="quick-summary-grid">
+            <article data-summary="temperament"><span>성향</span><strong data-summary-title>계산 후 핵심 성향이 표시됩니다.</strong></article>
+            <article data-summary="relationship"><span>관계</span><strong data-summary-title>계산 후 관계의 핵심 기준이 표시됩니다.</strong></article>
+            <article data-summary="career"><span>일</span><strong data-summary-title>계산 후 잘 맞는 일의 방식이 표시됩니다.</strong></article>
+            <article data-summary="money"><span>돈</span><strong data-summary-title>계산 후 돈을 다루는 흐름이 표시됩니다.</strong></article>
+          </div>
+        </section>
+
+<div class="interpretation-heading" id="result-reading">
+          <p class="eyebrow">04 · READING</p>
+          <h2>성향부터 일과 관계까지, 조금 더 깊게 읽어요.</h2>
+        </div>
+        <div class="reading-cards">
+          <article data-reading="temperament"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="9"/><path d="M16 3v4m0 18v4M3 16h4m18 0h4m-9-19 3 3M7 25l3-3m-3-15 3 3m12 12 3 3"/></svg></div><span>01</span><h3 data-reading-title>성향</h3><p data-reading-body>계산 후 원국 구조를 바탕으로 구체적인 성향 해설을 보여줍니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+          <article data-reading="relationship"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 26 5 15C-1 6 10 1 16 10c6-9 17-4 11 5Z"/></svg></div><span>02</span><h3 data-reading-title>관계</h3><p data-reading-body>계산 후 관계에서 반복되기 쉬운 패턴과 기준을 풀어봅니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+          <article data-reading="career"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="24" height="17" rx="4"/><path d="M11 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3M4 16c8 6 16 6 24 0m-12 1v5"/></svg></div><span>03</span><h3 data-reading-title>일</h3><p data-reading-body>계산 후 어떤 업무 방식에서 강점을 쓰기 쉬운지 구체적으로 설명합니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+          <article data-reading="money"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><path d="m9 10 4 12 3-9 3 9 4-12M8 16h16"/></svg></div><span>04</span><h3 data-reading-title>돈</h3><p data-reading-body>계산 후 재성·식상·지장간의 연결을 바탕으로 돈을 다루는 방식을 읽습니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
+        </div>
+
+        <div class="flow-heading" id="result-flow">
+          <p class="eyebrow">05 · FLOW</p>
+          <h2>지금, 어떤 흐름 위에 있을까요.</h2>
+          <p>대운은 약 10년의 큰 흐름, 세운은 입춘을 기준으로 바뀌는 해의 흐름으로 읽습니다. 사건을 예언하기보다 그 시기에 앞에 오기 쉬운 주제를 보여드려요.</p>
+        </div>
+
+        <section class="flow-report" aria-label="현재 대운과 세운">
+          <article class="current-daeun-card" id="current-daeun-card">
+            <div class="flow-card-top">
+              <span>大運 · 지금의 10년</span>
+              <strong id="current-daeun-pillar">—</strong>
+            </div>
+            <p class="flow-period" id="current-daeun-period">성별과 출생시간을 입력하면 현재 대운을 계산합니다.</p>
+            <h3 id="current-daeun-title">지금의 큰 흐름</h3>
+            <p class="flow-body" id="current-daeun-body">대운의 천간·지지와 원국의 관계를 함께 읽습니다.</p>
+            <div class="flow-guide">
+              <b>활용 포인트</b>
+              <p id="current-daeun-guide">계산 후 현재 흐름을 어떻게 활용할지 보여드립니다.</p>
+            </div>
+            <div class="flow-evidence" id="current-daeun-evidence"></div>
+          </article>
+
+          <div class="annual-flow-panel">
+            <div class="annual-flow-heading">
+              <span>歲運</span>
+              <div>
+                <h3>올해부터 3년의 흐름</h3>
+                <p><span id="flow-as-of">현재</span> 기준 · 입춘에서 다음 입춘까지</p>
+              </div>
+            </div>
+            <div class="annual-flow-grid" id="annual-flow"></div>
+          </div>
+        </section>
+
+        
+        <div class="details-heading" id="result-details">
+          <p class="eyebrow">06 · DETAILS</p>
+          <h2>자세한 명식 데이터</h2>
+          <p>위 해석의 근거가 된 네 기둥과 오행·십성·지장간·십이운성·공망·대운 배열을 확인할 수 있어요.</p>
+        </div>
+
+<div class="pillar-grid" aria-label="사주 네 기둥">
           <article data-pillar="year"><small>YEAR · 년주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>—</span></article>
           <article data-pillar="month"><small>MONTH · 월주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>—</span></article>
           <article class="day-pillar" data-pillar="day"><small>DAY · 일주</small><strong data-pillar-hanja>—</strong><span data-pillar-detail>나를 나타내는 중심</span></article>
@@ -138,51 +205,6 @@
           </section>
         </div>
 
-        <div class="interpretation-heading" id="result-reading">
-          <p class="eyebrow">03 · READING</p>
-          <h2>이제, 나의 이야기로 읽어볼까요.</h2>
-        </div>
-        <div class="reading-cards">
-          <article data-reading="temperament"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="9"/><path d="M16 3v4m0 18v4M3 16h4m18 0h4m-9-19 3 3M7 25l3-3m-3-15 3 3m12 12 3 3"/></svg></div><span>01</span><h3 data-reading-title>성향</h3><p data-reading-body>계산 후 원국 구조를 바탕으로 구체적인 성향 해설을 보여줍니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
-          <article data-reading="relationship"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 26 5 15C-1 6 10 1 16 10c6-9 17-4 11 5Z"/></svg></div><span>02</span><h3 data-reading-title>관계</h3><p data-reading-body>계산 후 관계에서 반복되기 쉬운 패턴과 기준을 풀어봅니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
-          <article data-reading="career"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="24" height="17" rx="4"/><path d="M11 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3M4 16c8 6 16 6 24 0m-12 1v5"/></svg></div><span>03</span><h3 data-reading-title>일</h3><p data-reading-body>계산 후 어떤 업무 방식에서 강점을 쓰기 쉬운지 구체적으로 설명합니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
-          <article data-reading="money"><div class="reading-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><path d="m9 10 4 12 3-9 3 9 4-12M8 16h16"/></svg></div><span>04</span><h3 data-reading-title>돈</h3><p data-reading-body>계산 후 재성·식상·지장간의 연결을 바탕으로 돈을 다루는 방식을 읽습니다.</p><div class="reading-evidence" data-reading-evidence></div></article>
-        </div>
-
-        <div class="flow-heading" id="result-flow">
-          <p class="eyebrow">04 · FLOW</p>
-          <h2>지금, 어떤 흐름 위에 있을까요.</h2>
-          <p>대운은 약 10년의 큰 흐름, 세운은 입춘을 기준으로 바뀌는 해의 흐름으로 읽습니다. 사건을 예언하기보다 그 시기에 앞에 오기 쉬운 주제를 보여드려요.</p>
-        </div>
-
-        <section class="flow-report" aria-label="현재 대운과 세운">
-          <article class="current-daeun-card" id="current-daeun-card">
-            <div class="flow-card-top">
-              <span>大運 · 지금의 10년</span>
-              <strong id="current-daeun-pillar">—</strong>
-            </div>
-            <p class="flow-period" id="current-daeun-period">성별과 출생시간을 입력하면 현재 대운을 계산합니다.</p>
-            <h3 id="current-daeun-title">지금의 큰 흐름</h3>
-            <p class="flow-body" id="current-daeun-body">대운의 천간·지지와 원국의 관계를 함께 읽습니다.</p>
-            <div class="flow-guide">
-              <b>활용 포인트</b>
-              <p id="current-daeun-guide">계산 후 현재 흐름을 어떻게 활용할지 보여드립니다.</p>
-            </div>
-            <div class="flow-evidence" id="current-daeun-evidence"></div>
-          </article>
-
-          <div class="annual-flow-panel">
-            <div class="annual-flow-heading">
-              <span>歲運</span>
-              <div>
-                <h3>올해부터 3년의 흐름</h3>
-                <p><span id="flow-as-of">현재</span> 기준 · 입춘에서 다음 입춘까지</p>
-              </div>
-            </div>
-            <div class="annual-flow-grid" id="annual-flow"></div>
-          </div>
-        </section>
-
         <aside class="validation-note">
           <span class="stamp" aria-hidden="true">準</span>
           <div><strong>사주결은 결과만 말하지 않고, 어떻게 나타나는지도 함께 풀어요.</strong><p>성향·관계·일·돈 해설은 일간·십성 반복·지장간·지지 관계를 함께 보고, 실제 상황과 활용법까지 연결합니다. 현재 대운과 3년 세운은 시기의 구조적 주제를 보여주며 특정 사건을 단정하지 않습니다.</p></div>
@@ -197,6 +219,6 @@
     <div><span>© SAJU GYEOL</span></div>
     <div class="footer-links"><a href="./methodology/">계산 기준</a></div>
   </footer>
-  <script src="./assets/engine-app.js?v=20261006-validation1" defer></script>
+  <script src="./assets/engine-app.js?v=20261006-order4" defer></script>
 </body>
 </html>
