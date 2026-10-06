@@ -52,3 +52,16 @@ test('flow v1 exposes themes and guidance without guaranteed event claims',()=>{
     assert.equal(text.includes(forbidden),false,forbidden);
   }
 });
+
+
+test('flow titles choose Korean 이/가 from the keyword final consonant',()=>{
+  const sikshinChart=calculateSaju({birthDate:'2026-10-05',birthTime:'12:00',sex:'female'}); // 壬 day
+  const sikshin=buildCurrentFlow(sikshinChart,{today:'2034-10-06'}).annuals[0];
+  assert.match(sikshin.title,/생산 · 루틴이 반복해서/);
+  assert.doesNotMatch(sikshin.title,/루틴가/);
+
+  const peerChart=calculateSaju({birthDate:'2026-10-07',birthTime:'12:00',sex:'female'}); // 甲 day
+  const peer=buildCurrentFlow(peerChart,{today:'2034-10-06'}).annuals[0];
+  assert.match(peer.title,/내 선택 · 독립이 반복해서/);
+  assert.doesNotMatch(peer.title,/독립가/);
+});
