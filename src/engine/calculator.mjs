@@ -9,8 +9,10 @@ import {
 import {
   getJieTermsForYear,SOLAR_TERM_PROVIDER_METADATA,SOLAR_TERM_SUPPORT
 } from './solar-term-provider.mjs';
+import {twelveStage,branchRelations,dayVoid} from './derived-facts.mjs';
+import {calculateDaeun} from './fortune-cycles.mjs';
 
-export const ENGINE_VERSION='0.4.0';
+export const ENGINE_VERSION='0.5.0';
 export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
 
 const parseDate=value=>{
@@ -31,6 +33,12 @@ const parseTime=value=>{
   const hour=Number(match[1]),minute=Number(match[2]);
   if(hour<0||hour>23||minute<0||minute>59) throw new RangeError('invalid birthTime');
   return {hour,minute};
+};
+
+const parseSex=value=>{
+  if(value==null||value==='') return null;
+  if(value!=='female'&&value!=='male') throw new RangeError('sex must be female, male or null');
+  return value;
 };
 
 const onlyInstant=resolution=>{
@@ -71,7 +79,7 @@ const pillarSummary=pillar=>pillar?({
   cycleIndex:pillar.index
 }):null;
 
-const buildResult=({date,time,instant,state,dayBoundary,terms})=>{
+const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
   const year=yearPillar(date.year,{afterLiChun:state.afterLiChun});
   if(state.monthIndex==null) throw new RangeError('solar-term boundary data is incomplete for this instant');
   const month=monthPillar(year.stemIndex,state.monthIndex);
@@ -112,12 +120,35 @@ const buildResult=({date,time,instant,state,dayBoundary,terms})=>{
     ])
   );
 
+  const branchEntries=[
+    {key:'year',branchIndex:year.branchIndex},
+    {key:'month',branchIndex:month.branchIndex},
+    {key:'day',branchIndex:day.branchIndex},
+    hour?{key:'hour',branchIndex:hour.branchIndex}:null
+  ].filter(Boolean);
+
+  const twelveStages=Object.fromEntries(
+    [['year',year],['month',month],['day',day],['hour',hour]].map(([key,pillar])=>[
+      key,pillar?twelveStage(day.stemIndex,pillar.branchIndex):null
+    ])
+  );
+  const relations=branchRelations(branchEntries);
+  const voidInfo=dayVoid(day.index,branchEntries);
+  const daeun=calculateDaeun({
+    birthYear:date.year,
+    birthInstantMs:instant?.epochMs??null,
+    yearStemIndex:year.stemIndex,
+    monthCycleIndex:month.index,
+    sex
+  });
+
   return {
     status:time?'ok':'partial',
     input:{
       birthDate:`${String(date.year).padStart(4,'0')}-${String(date.month).padStart(2,'0')}-${String(date.day).padStart(2,'0')}`,
       birthTime:time?`${String(time.hour).padStart(2,'0')}:${String(time.minute).padStart(2,'0')}`:null,
-      timeKnown:Boolean(time)
+      timeKnown:Boolean(time),
+      sex
     },
     pillars:{
       year:pillarSummary(year),
@@ -144,6 +175,19 @@ const buildResult=({date,time,instant,state,dayBoundary,terms})=>{
       positions:['residual','middle','main'],
       pillars:rulingStemLayers
     },
+    twelveStages:{
+      method:'day-master-growth-cycle',
+      pillars:twelveStages
+    },
+    branchRelations:{
+      method:'fixed-earthly-branch-relations',
+      items:relations
+    },
+    void:{
+      method:'day-pillar-xun',
+      ...voidInfo
+    },
+    daeun,
     metadata:{
       engineVersion:ENGINE_VERSION,
       dayBoundary,
@@ -165,6 +209,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms})=>{
 export function calculateSaju(input,{dayBoundary='midnight'}={}){
   const date=parseDate(input?.birthDate);
   const time=parseTime(input?.birthTime);
+  const sex=parseSex(input?.sex);
 
   if(date.year<SUPPORTED_SOLAR_TERM_YEARS.minYear||date.year>SUPPORTED_SOLAR_TERM_YEARS.maxYear){
     throw new RangeError(`solar-term provider supports ${SUPPORTED_SOLAR_TERM_YEARS.minYear}..${SUPPORTED_SOLAR_TERM_YEARS.maxYear}`);
@@ -179,7 +224,8 @@ export function calculateSaju(input,{dayBoundary='midnight'}={}){
       date,time,instant,
       state:boundaryState(instant.epochMs,terms),
       dayBoundary,
-      terms
+      terms,
+      sex
     });
   }
 
@@ -194,7 +240,7 @@ export function calculateSaju(input,{dayBoundary='midnight'}={}){
     return {
       status:'needs-birth-time',
       reason:'solar-term-boundary',
-      input:{birthDate:input.birthDate,birthTime:null,timeKnown:false},
+      input:{birthDate:input.birthDate,birthTime:null,timeKnown:false,sex},
       metadata:{
         engineVersion:ENGINE_VERSION,
         dayBoundary,
@@ -206,6 +252,6 @@ export function calculateSaju(input,{dayBoundary='midnight'}={}){
   }
 
   return buildResult({
-    date,time:null,instant:null,state:startState,dayBoundary,terms
+    date,time:null,instant:null,state:startState,dayBoundary,terms,sex
   });
 }
