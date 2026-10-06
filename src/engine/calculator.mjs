@@ -4,11 +4,14 @@ import {
 } from './rules.mjs';
 import {resolveSeoulCivilTime,KOREA_TIME_POLICY} from './korea-time.mjs';
 import {
-  JIE_2026,monthIndexAtInstant,liChunReachedAt,SOLAR_TERM_DATA_2026
+  monthIndexAtInstant,liChunReachedAt
 } from './data/solar-terms-2026.mjs';
+import {
+  getJieTermsForYear,SOLAR_TERM_PROVIDER_METADATA,SOLAR_TERM_SUPPORT
+} from './solar-term-provider.mjs';
 
-export const ENGINE_VERSION='0.2.0';
-export const SUPPORTED_SOLAR_TERM_YEARS=[2026];
+export const ENGINE_VERSION='0.3.0';
+export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
 
 const parseDate=value=>{
   const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value||''));
@@ -40,9 +43,9 @@ const onlyInstant=resolution=>{
   return resolution.matches[0];
 };
 
-const boundaryState=epochMs=>({
-  afterLiChun:liChunReachedAt(epochMs,JIE_2026),
-  monthIndex:monthIndexAtInstant(epochMs,JIE_2026)
+const boundaryState=(epochMs,terms)=>({
+  afterLiChun:liChunReachedAt(epochMs,terms),
+  monthIndex:monthIndexAtInstant(epochMs,terms)
 });
 
 const sameBoundaryState=(a,b)=>a.afterLiChun===b.afterLiChun&&a.monthIndex===b.monthIndex;
@@ -68,7 +71,7 @@ const pillarSummary=pillar=>pillar?({
   cycleIndex:pillar.index
 }):null;
 
-const buildResult=({date,time,instant,state,dayBoundary})=>{
+const buildResult=({date,time,instant,state,dayBoundary,terms})=>{
   const year=yearPillar(date.year,{afterLiChun:state.afterLiChun});
   if(state.monthIndex==null) throw new RangeError('solar-term boundary data is incomplete for this instant');
   const month=monthPillar(year.stemIndex,state.monthIndex);
@@ -120,8 +123,11 @@ const buildResult=({date,time,instant,state,dayBoundary})=>{
       timeSource:KOREA_TIME_POLICY.source,
       longitudeCorrection:KOREA_TIME_POLICY.longitudeCorrection,
       equationOfTime:KOREA_TIME_POLICY.equationOfTime,
-      solarTermSource:SOLAR_TERM_DATA_2026.source,
-      solarTermPrecision:SOLAR_TERM_DATA_2026.precision,
+      solarTermSource:SOLAR_TERM_PROVIDER_METADATA.engine,
+      solarTermProvider:SOLAR_TERM_PROVIDER_METADATA.packageVersion,
+      solarTermMethod:SOLAR_TERM_PROVIDER_METADATA.method,
+      solarTermValidation:SOLAR_TERM_PROVIDER_METADATA.validation,
+      solarTermBoundaries:terms.map(t=>({name:t.name,epochMs:t.epochMs,utcIso:t.utcIso})),
       resolvedInstant:instant?instant.utcIso:null,
       utcOffsetMinutes:instant?instant.offsetMinutes:null
     }
@@ -132,17 +138,20 @@ export function calculateSaju(input,{dayBoundary='midnight'}={}){
   const date=parseDate(input?.birthDate);
   const time=parseTime(input?.birthTime);
 
-  if(!SUPPORTED_SOLAR_TERM_YEARS.includes(date.year)){
-    throw new RangeError(`solar-term provider for ${date.year} is not installed; currently supported: ${SUPPORTED_SOLAR_TERM_YEARS.join(', ')}`);
+  if(date.year<SUPPORTED_SOLAR_TERM_YEARS.minYear||date.year>SUPPORTED_SOLAR_TERM_YEARS.maxYear){
+    throw new RangeError(`solar-term provider supports ${SUPPORTED_SOLAR_TERM_YEARS.minYear}..${SUPPORTED_SOLAR_TERM_YEARS.maxYear}`);
   }
+
+  const terms=getJieTermsForYear(date.year);
 
   if(time){
     const resolution=resolveSeoulCivilTime({...date,...time});
     const instant=onlyInstant(resolution);
     return buildResult({
       date,time,instant,
-      state:boundaryState(instant.epochMs),
-      dayBoundary
+      state:boundaryState(instant.epochMs,terms),
+      dayBoundary,
+      terms
     });
   }
 
@@ -150,8 +159,8 @@ export function calculateSaju(input,{dayBoundary='midnight'}={}){
   // lies on the same side of all relevant solar-term boundaries.
   const start=onlyInstant(resolveSeoulCivilTime({...date,hour:0,minute:0}));
   const end=onlyInstant(resolveSeoulCivilTime({...date,hour:23,minute:59}));
-  const startState=boundaryState(start.epochMs);
-  const endState=boundaryState(end.epochMs);
+  const startState=boundaryState(start.epochMs,terms);
+  const endState=boundaryState(end.epochMs,terms);
 
   if(!sameBoundaryState(startState,endState)){
     return {
@@ -162,12 +171,13 @@ export function calculateSaju(input,{dayBoundary='midnight'}={}){
         engineVersion:ENGINE_VERSION,
         dayBoundary,
         timezone:KOREA_TIME_POLICY.zone,
-        solarTermSource:SOLAR_TERM_DATA_2026.source
+        solarTermSource:SOLAR_TERM_PROVIDER_METADATA.engine,
+        solarTermProvider:SOLAR_TERM_PROVIDER_METADATA.packageVersion
       }
     };
   }
 
   return buildResult({
-    date,time:null,instant:null,state:startState,dayBoundary
+    date,time:null,instant:null,state:startState,dayBoundary,terms
   });
 }

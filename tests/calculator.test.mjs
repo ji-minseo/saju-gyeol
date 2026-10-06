@@ -60,10 +60,21 @@ test('exact Hanlu minute changes month pillar',()=>{
   assert.equal(exact.pillars.month.hanja,'戊戌');
 });
 
-test('unsupported solar-term years fail loudly rather than approximate',()=>{
+test('provider supports ordinary dates across the 1970..2100 service range',()=>{
+  for(const birthDate of ['1970-06-15','1995-10-13','2008-03-22','2050-11-03','2100-01-20']){
+    const result=calculateSaju({birthDate,birthTime:'12:00'});
+    assert.equal(result.status,'ok');
+    assert.ok(result.pillars.year.hanja);
+    assert.ok(result.pillars.month.hanja);
+    assert.ok(result.pillars.day.hanja);
+    assert.ok(result.pillars.hour.hanja);
+  }
+});
+
+test('out-of-range years fail loudly rather than approximate',()=>{
   assert.throws(
-    ()=>calculateSaju({birthDate:'1995-10-13',birthTime:'10:10'}),
-    /provider for 1995 is not installed/
+    ()=>calculateSaju({birthDate:'1969-10-13',birthTime:'10:10'}),
+    /supports 1970\.\.2100/
   );
 });
 
