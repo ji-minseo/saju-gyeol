@@ -1469,3 +1469,145 @@ body{
   .annual-body{font-size:12.5px}
   .result-topline h2{font-size:28px}
 }
+
+
+/* v0.17 neutral text hierarchy — accents belong to UI, not reading copy */
+:root{
+  --text-strong:#2f2a31;
+  --text:#4e4850;
+  --text-soft:#625b64;
+}
+
+/* global readable copy */
+body,
+.result-preview,
+.quick-summary,
+.annual-flow-panel,
+.result-panel,
+.fact-card{
+  color:var(--text);
+}
+.intro-copy h1,
+.result-topline h2,
+.quick-summary-heading h2,
+.interpretation-heading h2,
+.flow-heading h2,
+.details-heading h2,
+.panel-title h3,
+.annual-flow-heading h3{
+  color:var(--text-strong);
+}
+.intro-kicker,
+.intro-lead,
+.service-strip,
+.service-strip small,
+.result-topline p:last-child,
+.quick-summary-heading>p:last-child,
+.flow-heading>p:last-child,
+.details-heading>p:last-child{
+  color:var(--text-soft);
+}
+
+/* quick summary: category colors only on tiny labels */
+.quick-summary-grid strong{
+  color:var(--text-strong);
+}
+.quick-summary-grid span{
+  color:var(--quick);
+}
+
+/* reading cards: all reading copy stays neutral */
+.reading-cards h3{
+  color:var(--text-strong);
+}
+.reading-cards p,
+.reading-situations li,
+.reading-guide p{
+  color:#514b53;
+}
+.reading-cards>article>span,
+.reading-icon,
+.reading-situations>strong,
+.reading-guide>strong,
+.reading-evidence span{
+  color:var(--topic);
+}
+
+/* annual cards: title/body neutral; year/pills keep category accents */
+.annual-flow-card h4{
+  color:var(--text-strong);
+}
+.annual-body,
+.annual-guide p,
+.annual-period{
+  color:#554f57;
+}
+.annual-card-top span,
+.annual-card-top strong,
+.annual-guide b,
+.annual-flow-card .flow-evidence span{
+  color:var(--annual);
+}
+
+/* technical data: neutral text with isolated symbolic accents */
+.pillar-grid small,
+.pillar-grid [data-pillar-detail],
+.result-panel>p,
+.fact-card>p,
+.element-list b,
+.element-list em,
+.ten-gods-placeholder span,
+.hidden-stem-box>div:first-child>span,
+.hidden-stems span,
+.hidden-stem-box>p,
+.daeun-meta,
+.daeun-track small,
+.daeun-track span{
+  color:#544e56!important;
+}
+.panel-title h3,
+.validation-note strong{
+  color:var(--text-strong);
+}
+.validation-note p{
+  color:#59525b;
+}
+.validation-note a{
+  color:#59405a;
+}
+
+/* keep only true accents colored */
+.ten-gods-placeholder span b,
+.fact-chips span b,
+.hidden-stems b,
+.hidden-stem-box small{
+  color:#624b61;
+}
+.fact-main{
+  color:#4d6882;
+}
+
+/* dark flow card stays high contrast, never skin-toned body copy */
+.current-daeun-card,
+.current-daeun-card h3{
+  color:#fff;
+}
+.flow-card-top>span,
+.flow-period,
+.flow-body,
+.flow-guide p,
+.current-daeun-card .flow-evidence span{
+  color:#f4edf2;
+}
+.flow-guide b{
+  color:#ffcba8;
+}
+.flow-card-top>strong{
+  color:#ffd8bd;
+}
+
+/* selected controls remain the one obvious orange interaction accent */
+.tool-shell>.birth-form .calendar-switch input:checked+span,
+.tool-shell>.birth-form .segmented input:checked+span{
+  color:#fff4ec;
+}
