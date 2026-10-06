@@ -13,7 +13,7 @@ import {
 import {twelveStage,branchRelations,dayVoid,BRANCH_RELATION_POLICY} from './derived-facts.mjs';
 import {calculateDaeun} from './fortune-cycles.mjs';
 
-export const ENGINE_VERSION='0.6.0';
+export const ENGINE_VERSION='0.7.0';
 export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
 
 const parseDate=value=>{
