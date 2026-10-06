@@ -19,8 +19,8 @@ test('astronomical provider reproduces every KASI 2026 jie boundary to the publi
   }
 });
 
-test('provider spans the full v0.7 year range and preserves chronological boundaries',()=>{
-  for(const year of [1946,1955,1961,1970,1990,2000,2030,2100]){
+test('provider spans the full v0.8 year range and preserves chronological boundaries',()=>{
+  for(const year of [1912,1946,1955,1961,1970,1990,2000,2030,2100]){
     const terms=getJieTermsForYear(year);
     assert.equal(terms.length,13);
     for(let i=1;i<terms.length;i++) assert.ok(terms[i].epochMs>terms[i-1].epochMs);
