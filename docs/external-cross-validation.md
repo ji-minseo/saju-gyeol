@@ -27,10 +27,23 @@ The following Korean lunar New Year fixtures match:
 - 2027-02-07
 - 2028-01-27
 
-### Existing KASI 2026 fixture
-- 12 Jie boundaries already covered by the solar-term provider regression suite: 12 / 12 matched to the published minute tolerance.
+### KASI 2017 official almanac
+- Korean lunar month starts through lunar month 10, including leap fifth month: 11 / 11 matched.
 
-External assertions currently locked in CI: 54.
+### KASI 2026 fixture and calendar data
+- 12 Jie boundaries already covered by the solar-term provider regression suite: 12 / 12 matched to the published minute tolerance.
+- 12 Korean lunar month starts: 12 / 12 matched.
+- The published iljin on those 12 lunar month starts: 12 / 12 matched.
+
+### KASI 2027 calendar data
+- 12 Korean lunar month starts: 12 / 12 matched.
+- The published iljin on those 12 lunar month starts: 12 / 12 matched.
+
+### KASI 2028 calendar data
+- 13 Korean lunar month starts, including leap fifth month: 13 / 13 matched.
+- The published iljin on those 13 lunar month starts: 13 / 13 matched.
+
+External assertions currently locked in CI: 139.
 This number counts explicit independently sourced assertions, not generated internal cases.
 
 ## Internal invariant / exhaustive coverage
@@ -60,6 +73,7 @@ Not counted as external cross-validation:
 
 - KASI 2000 월력요항: 24절기, 음력-양력 대조표, 각월 1일 일진.
 - KASI 2001 월력요항: 윤4월 대조표.
-- KASI calendar data / 2026 fixtures.
+- KASI official 2017 almanac.
+- KASI calendar data / 2026-2028 fixtures.
 - KASI notice on Korea/China lunar-date divergence.
 - Korea Astronomy and Space Science Institute lunar/solar OpenAPI metadata.
