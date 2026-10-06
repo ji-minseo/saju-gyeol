@@ -15,7 +15,7 @@
   <meta property="og:title" content="사주 계산 기준 · 사주결">
   <meta property="og:description" content="사주결의 절기, 표준시, 십성, 지장간, 대운 계산 기준과 검증 범위를 확인하세요.">
   <meta property="og:url" content="https://saju.everytinytool.com/methodology/">
-  <link rel="stylesheet" href="../assets/style.css?v=20261006-lunar1">
+  <link rel="stylesheet" href="../assets/style.css?v=20261006-verify1">
 </head>
 <body>
   <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -35,7 +35,7 @@
     <section class="method-list">
       <article>
         <span class="method-number">01</span>
-        <div><small>CALENDAR</small><h2>달력과 절기 기준</h2><p>양력과 한국 음력 생일을 입력받습니다. 음력은 평달/윤달을 구분해 먼저 양력 날짜로 변환한 뒤, 동일한 사주 계산 엔진에 전달합니다. 음력 변환은 한국천문연구원 기준 데이터를 따르는 오프라인 변환표를 사용하며 현재 1970~2050년을 지원합니다. 연주는 입춘, 월주는 12절의 경계를 사용합니다. Astronomy Engine 2.1.19의 태양 황경 계산으로 절기 시각을 구하고, 2026년 한국천문연구원 절기 자료를 회귀 테스트 기준으로 대조합니다.</p><b>양력 1970~2100 · 음력 1970~2050 · 윤달 지원</b></div>
+        <div><small>CALENDAR</small><h2>달력과 절기 기준</h2><p>양력과 한국 음력 생일을 입력받습니다. 음력은 평달/윤달을 구분해 먼저 양력 날짜로 변환한 뒤, 동일한 사주 계산 엔진에 전달합니다. 음력 변환은 한국천문연구원 기준 데이터를 따르는 오프라인 변환표를 사용하며 현재 1970~2050년을 지원합니다. 연주는 입춘, 월주는 12절의 경계를 사용합니다. Astronomy Engine 2.1.19의 태양 황경 계산으로 절기 시각을 구하고, 한국천문연구원(KASI)의 2000·2001·2026 공식 달력 자료와 한국 고유 음력 경계 사례를 독립 fixture로 대조합니다.</p><b>양력 1970~2100 · 음력 1970~2050 · 윤달 지원</b></div>
       </article>
       <article>
         <span class="method-number">02</span>
@@ -62,14 +62,14 @@
       </div>
       <ol>
         <li><span>01</span>십성 10×10 전체 100조합과 지장간 12지 표를 고정 행렬로 검증</li>
-        <li><span>02</span>2026년 절기 직전·직후 경계를 회귀 테스트로 검증</li>
+        <li><span>02</span>KASI 공식 자료와 외부 교차검증 54개 assertion 일치 · 2000년 12절 입기시각·매월 1일 일진·음력 월초, 2001년 윤4월, 한국 특수 음력일 포함</li>
         <li><span>03</span>00:00 날짜 경계와 23:00 자시 시작을 별도로 검증</li>
         <li><span>04</span>십이운성 10간×12지 120조합·공망 60갑자를 전수 검증</li>
         <li><span>05</span>합·충·형·파·해의 전체 지지쌍과 삼합·자형 규칙을 고정 테스트</li>
         <li><span>06</span>1988 서머타임의 존재하지 않는 시각·중복 시각을 별도 검증</li>
         <li><span>07</span>대운 기산은 3일=1년 환산 기준이며 절기 거리→개월 환산을 경계 fixture로 검증</li>
         <li><span>08</span>세운은 입춘 경계로 바뀌며 특정 사건·길흉을 자동 예언하지 않음</li>
-        <li><span>09</span>한국 출생 기준 · 음력 평달/윤달 변환 fixture 검증 · 해외 출생은 미지원</li>
+        <li><span>09</span>외부 검증과 자체 전수 테스트를 구분해 관리 · 한국 출생 기준 · 해외 출생은 미지원</li>
       </ol>
     </section>
   </main>
