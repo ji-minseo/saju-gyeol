@@ -1222,15 +1222,8 @@
   overflow:visible;
 }
 .annual-flow-grid::before{
-  content:""!important;
-  display:block!important;
-  position:absolute;
-  left:9%;
-  right:9%;
-  top:18px;
-  height:2px;
-  border-radius:999px;
-  background:linear-gradient(90deg,#dc9c75 0 33%,#8da8c7 33% 66%,#8dad91 66% 100%);
+  content:none!important;
+  display:none!important;
 }
 .annual-flow-card,
 .annual-flow-card.is-next,
@@ -1255,6 +1248,24 @@
   border-radius:50%;
   background:var(--annual);
   box-shadow:0 0 0 1px color-mix(in srgb,var(--annual) 45%,white);
+}
+.annual-flow-card:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:18px;
+  top:-16px;
+  width:calc(100% + 22px);
+  height:2px;
+  border-radius:999px;
+  pointer-events:none;
+  background:linear-gradient(90deg,#dc9c75,#8da8c7);
+}
+.annual-flow-card.is-next:not(:last-child)::after{
+  background:linear-gradient(90deg,#8da8c7,#8dad91);
+}
+.annual-flow-card::before{
+  z-index:1;
 }
 .annual-card-top{
   min-height:35px;
