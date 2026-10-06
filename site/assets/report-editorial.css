@@ -1406,3 +1406,14 @@
     gap:18px!important;
   }
 }
+
+
+/* v4.2 increase separation between 五行 and 十星 without reintroducing cards */
+#result-elements.result-grid{
+  gap:34px!important;
+}
+@media(max-width:760px){
+  #result-elements.result-grid{
+    gap:26px!important;
+  }
+}
