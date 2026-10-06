@@ -2006,3 +2006,50 @@ body{
       );
   }
 }
+
+
+/* v0.21 calendar labels — stronger contrast on dark calculator */
+.tool-shell>.birth-form .calendar-switch{
+  background:rgba(255,255,255,.075);
+  border:1px solid rgba(255,255,255,.09);
+}
+
+.tool-shell>.birth-form .calendar-switch span{
+  color:#f7f2f6;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:-.01em;
+  background:rgba(255,255,255,.045);
+  border-color:rgba(255,255,255,.12);
+  text-shadow:0 1px 1px rgba(0,0,0,.18);
+}
+
+.tool-shell>.birth-form .calendar-switch input:checked+span{
+  color:#ffffff;
+  font-weight:850;
+  background:linear-gradient(180deg,rgba(230,119,57,.52),rgba(184,74,35,.40));
+  border-color:rgba(255,157,96,.92);
+  box-shadow:
+    0 0 0 1px rgba(255,191,151,.12),
+    0 7px 18px rgba(129,53,23,.18);
+}
+
+.tool-shell>.birth-form .calendar-switch .is-disabled{
+  opacity:1;
+}
+
+.tool-shell>.birth-form .calendar-switch .is-disabled span{
+  color:#d9ced8;
+  background:rgba(255,255,255,.025);
+  border-color:rgba(255,255,255,.07);
+}
+
+.tool-shell>.birth-form .calendar-switch small{
+  color:#c7bac7;
+  font-size:10px;
+  font-weight:650;
+}
+
+.tool-shell>.birth-form .calendar-switch input:checked+span small{
+  color:#fff3eb;
+}
