@@ -15,6 +15,7 @@ const leapMonthRow=document.querySelector('#leap-month-row');
 const calendarInputs=[...document.querySelectorAll('input[name="calendar"]')];
 const timeInput=document.querySelector('#birth-time');
 const timeUnknown=document.querySelector('#time-unknown');
+const dayBoundaryInputs=[...document.querySelectorAll('input[name="dayBoundary"]')];
 const preview=document.querySelector('#result-preview');
 const summary=document.querySelector('#input-summary');
 const errorBox=document.querySelector('#form-error');
@@ -47,6 +48,8 @@ engineBadge.textContent=`ENGINE · v${ENGINE_VERSION}`;
 
 
 const selectedCalendar=()=>form.elements.calendar?.value||'solar';
+const selectedDayBoundary=()=>form.elements.dayBoundary?.value||'midnight';
+const dayBoundaryLabel=value=>value==='zi-start'?'23:00 자시 시작':'00:00 일자 변경';
 
 const syncCalendarFields=()=>{
   const lunar=selectedCalendar()==='lunar';
@@ -386,10 +389,11 @@ const renderSummary=(result,sex,calendarMeta=null)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
   const status=result.status==='partial'?' · 시주 제외':'';
+  const boundary=`일자 기준 ${dayBoundaryLabel(result.metadata?.dayBoundary)}`;
   const dateLabel=calendarMeta?.type==='lunar'
     ?`음력 ${calendarMeta.year}년 ${calendarMeta.month}월 ${calendarMeta.day}일${calendarMeta.isLeapMonth?' · 윤달':''} → 양력 ${y}년 ${Number(m)}월 ${Number(d)}일`
     :`${y}년 ${Number(m)}월 ${Number(d)}일`;
-  summary.textContent=`${dateLabel} · ${time} · ${sex}${status}`;
+  summary.textContent=`${dateLabel} · ${time} · ${sex}${status} · ${boundary}`;
 };
 
 const showResult=(result,sex,calendarMeta=null)=>{
@@ -446,8 +450,9 @@ form?.addEventListener('submit',event=>{
   const sexValue=form.elements.sex?.value||null;
   const sex=sexValue==='female'?'여성':sexValue==='male'?'남성':'성별 미선택';
   const birthTime=timeUnknown.checked?null:(timeInput.value||null);
+  const dayBoundary=selectedDayBoundary();
   try{
-    const result=calculateSaju({birthDate,birthTime,sex:sexValue});
+    const result=calculateSaju({birthDate,birthTime,sex:sexValue},{dayBoundary});
     if(result.status==='needs-birth-time'){
       setError('이 날짜는 절기 경계가 바뀌는 날이라 정확한 년주·월주 판정을 위해 출생시간이 필요해요.');
       preview.hidden=true;
