@@ -186,15 +186,22 @@ const hasFinalConsonant=text=>{
 
 const subjectParticle=text=>hasFinalConsonant(text)?'이':'가';
 
+const normalizeFlowTitle=text=>String(text)
+  .replaceAll('생산 · 루틴가','생산 · 루틴이')
+  .replaceAll('내 선택 · 독립가','내 선택 · 독립이');
+
 const godPairSummary=(stemGod,branchGod)=>{
   const stem=GOD_FLOW[stemGod];
   const branch=GOD_FLOW[branchGod];
   return {
-    title:stemGod===branchGod
-      ?`${stem.keyword}${subjectParticle(stem.keyword)} 반복해서 앞에 오는 흐름`
-      :`${stem.keyword}와 ${branch.keyword}${subjectParticle(branch.keyword)} 함께 움직이는 흐름`,
+    title:normalizeFlowTitle(
+      stemGod===branchGod
+        ?`${stem.keyword}${subjectParticle(stem.keyword)} 반복해서 앞에 오는 흐름`
+        :`${stem.keyword}와 ${branch.keyword}${subjectParticle(branch.keyword)} 함께 움직이는 흐름`
+    ),
     body:`겉으로 드러나는 주제는 ${stemGod}의 ${stem.keyword}, 생활 속 바탕에는 ${branchGod}의 ${branch.keyword}가 놓입니다. ${stem.body}`,
-    guide:stemGod===branchGod?stem.action:`${stem.action} 동시에 ${branch.action}`
+    guide:stemGod===branchGod?stem.action:`${stem.action} 동시에 ${branch.action}`,
+    keywords:stemGod===branchGod?stem.keyword:`${stem.keyword} · ${branch.keyword}`
   };
 };
 
@@ -299,6 +306,25 @@ const buildDaeun=(result,target)=>{
   };
 };
 
+const buildDaeunTimeline=result=>{
+  if(result.daeun.status!=='ok') return [];
+  return result.daeun.cycles.map(cycle=>{
+    const stemGod=tenGod(result.pillars.day.stemIndex,cycle.pillar.stemIndex);
+    const branchGod=branchTenGod(result.pillars.day.stemIndex,cycle.pillar.branchIndex);
+    const pair=godPairSummary(stemGod,branchGod);
+    return {
+      order:cycle.order,
+      startAge:cycle.startAge,
+      startAgeMonths:cycle.startAgeMonths,
+      pillar:cycle.pillar,
+      stemTenGod:stemGod,
+      branchTenGod:branchGod,
+      theme:pair.keywords,
+      title:pair.title
+    };
+  });
+};
+
 export function buildCurrentFlow(result,{today=new Date()}={}){
   const target=dateFromValue(today);
   const currentYear=sajuYearAt(target);
@@ -306,6 +332,7 @@ export function buildCurrentFlow(result,{today=new Date()}={}){
     asOf:`${target.year}-${String(target.month).padStart(2,'0')}-${String(target.day).padStart(2,'0')}`,
     currentSajuYear:currentYear,
     daeun:buildDaeun(result,target),
+    daeunTimeline:buildDaeunTimeline(result),
     annuals:[0,1,2].map(offset=>buildAnnual(result,currentYear+offset,currentYear,offset)),
     policy:{
       yearBoundary:'li-chun',
