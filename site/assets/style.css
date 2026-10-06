@@ -2306,3 +2306,88 @@ body{
   .lunar-date-fields input{padding-left:10px!important;padding-right:24px!important}
   .lunar-date-fields small{right:8px}
 }
+
+
+/* v0.9 selectable day-boundary advanced setting */
+.advanced-settings{
+  margin-top:18px;
+  border-top:1px solid rgba(255,255,255,.12);
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.advanced-settings>summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 2px;
+  color:rgba(247,241,238,.92);
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  list-style:none;
+}
+.advanced-settings>summary::-webkit-details-marker{display:none}
+.advanced-settings>summary::after{
+  content:"+";
+  flex:0 0 auto;
+  color:rgba(247,241,238,.64);
+  font-size:17px;
+  font-weight:500;
+  line-height:1;
+}
+.advanced-settings[open]>summary::after{content:"−"}
+.advanced-settings>summary span{
+  margin-left:auto;
+  color:rgba(240,233,230,.58);
+  font-size:10px;
+  font-weight:650;
+}
+.advanced-settings-body{
+  padding:2px 0 17px;
+}
+.boundary-field{
+  margin:0;
+  padding:0;
+  border:0;
+}
+.boundary-field legend{
+  margin-bottom:9px;
+  color:#f3ece7;
+  font-size:12px;
+  font-weight:800;
+}
+.boundary-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:0!important;
+}
+.boundary-options label{min-width:0}
+.boundary-options span{
+  min-height:43px;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:10px 12px!important;
+  text-align:center;
+}
+.boundary-options small{
+  padding:2px 5px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  font-size:8px;
+  line-height:1.2;
+}
+.boundary-field>p{
+  margin-top:10px;
+  color:rgba(240,233,230,.64);
+  font-size:10.5px;
+  line-height:1.65;
+}
+@media(max-width:520px){
+  .advanced-settings>summary{padding:13px 0}
+  .advanced-settings>summary span{display:none}
+  .boundary-options{grid-template-columns:1fr}
+  .boundary-options span{justify-content:flex-start;text-align:left}
+}
