@@ -12,6 +12,12 @@ const tenGods=document.querySelector('#ten-gods');
 const dayMasterNote=document.querySelector('#day-master-note');
 const hiddenStems=document.querySelector('#hidden-stems');
 const elementNote=document.querySelector('#element-note');
+const twelveStages=document.querySelector('#twelve-stages');
+const branchRelationsBox=document.querySelector('#branch-relations');
+const voidSummary=document.querySelector('#void-summary');
+const voidDetail=document.querySelector('#void-detail');
+const daeunMeta=document.querySelector('#daeun-meta');
+const daeunTrack=document.querySelector('#daeun-track');
 
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
 const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
@@ -96,6 +102,58 @@ const renderHiddenStems=result=>{
   }
 };
 
+const renderStructureFacts=result=>{
+  const labels={year:'년',month:'월',day:'일',hour:'시'};
+
+  twelveStages.replaceChildren();
+  for(const key of ['year','month','day','hour']){
+    const item=result.twelveStages.pillars[key];
+    if(!item) continue;
+    const chip=document.createElement('span');
+    chip.innerHTML=`<b>${labels[key]}</b> · ${item.name}`;
+    twelveStages.append(chip);
+  }
+
+  branchRelationsBox.replaceChildren();
+  if(result.branchRelations.items.length===0){
+    const empty=document.createElement('span');
+    empty.textContent='주요 관계 없음';
+    branchRelationsBox.append(empty);
+  }else{
+    for(const relation of result.branchRelations.items){
+      const chip=document.createElement('span');
+      const branches=relation.branches.join('·');
+      chip.innerHTML=`<b>${relation.label}</b> · ${branches}`;
+      branchRelationsBox.append(chip);
+    }
+  }
+
+  voidSummary.textContent=result.void.branches.map(x=>x.hanja).join(' · ');
+  voidDetail.textContent=result.void.occupiedPillars.length
+    ?`현재 명식에서 공망 지지와 겹치는 자리 · ${result.void.occupiedPillars.map(k=>labels[k]+'지').join(' · ')}`
+    :'현재 명식의 년·월·시지에는 해당 공망이 없습니다.';
+
+  daeunTrack.replaceChildren();
+  if(result.daeun.status==='needs-sex'){
+    daeunMeta.textContent='성별을 선택하면 대운 방향과 배열을 계산합니다.';
+    return;
+  }
+  if(result.daeun.status==='needs-birth-time'){
+    daeunMeta.textContent='출생시간을 알아야 대운 기산 시점을 계산할 수 있습니다.';
+    return;
+  }
+  if(result.daeun.status!=='ok'){
+    daeunMeta.textContent='현재 입력에서는 대운 경계를 계산할 수 없습니다.';
+    return;
+  }
+  daeunMeta.textContent=`${result.daeun.direction==='forward'?'순행':'역행'} · 대운수 약 ${result.daeun.startAgeYearsRounded} · ${result.daeun.boundary.name} 절입 기준`;
+  for(const cycle of result.daeun.cycles){
+    const item=document.createElement('div');
+    item.innerHTML=`<small>${cycle.startAge}세~</small><strong>${cycle.pillar.hanja}</strong><span>${cycle.pillar.korean}</span>`;
+    daeunTrack.append(item);
+  }
+};
+
 const renderSummary=(result,sex)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
@@ -111,6 +169,7 @@ const showResult=(result,sex)=>{
   renderElements(result);
   renderTenGods(result);
   renderHiddenStems(result);
+  renderStructureFacts(result);
   renderSummary(result,sex);
   preview.hidden=false;
   requestAnimationFrame(()=>preview.classList.add('is-visible'));
@@ -121,10 +180,11 @@ form?.addEventListener('submit',event=>{
   event.preventDefault();
   setError('');
   if(!dateInput.value){dateInput.focus();return;}
-  const sex=form.elements.sex?.value==='female'?'여성':form.elements.sex?.value==='male'?'남성':'성별 미선택';
+  const sexValue=form.elements.sex?.value||null;
+  const sex=sexValue==='female'?'여성':sexValue==='male'?'남성':'성별 미선택';
   const birthTime=timeUnknown.checked?null:(timeInput.value||null);
   try{
-    const result=calculateSaju({birthDate:dateInput.value,birthTime});
+    const result=calculateSaju({birthDate:dateInput.value,birthTime,sex:sexValue});
     if(result.status==='needs-birth-time'){
       setError('이 날짜는 절기 경계가 바뀌는 날이라 정확한 년주·월주 판정을 위해 출생시간이 필요해요.');
       preview.hidden=true;
