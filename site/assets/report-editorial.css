@@ -1,0 +1,522 @@
+/* Saju Gyeol — editorial result hierarchy
+   Purpose: make the generated result feel like a personal printed report,
+   without changing calculation or reading logic. */
+
+.result-preview{
+  --report-ink:#262326;
+  --report-muted:#716a70;
+  --report-line:#d9d2d7;
+  --report-plum:#624c62;
+  --report-jade:#55766f;
+  --report-gold:#9b8152;
+  overflow:hidden;
+}
+
+/* 1. RESULT MASTHEAD */
+.result-topline{
+  position:relative;
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr) auto;
+  gap:24px;
+  align-items:center;
+  padding:34px 38px 30px;
+  background:
+    linear-gradient(180deg,#fff 0%,#fbfaf8 100%);
+  border-bottom:0;
+}
+.result-topline::after{
+  content:"";
+  position:absolute;
+  left:38px;
+  right:38px;
+  bottom:0;
+  height:1px;
+  background:linear-gradient(90deg,var(--report-gold),rgba(155,129,82,.18) 26%,rgba(217,210,215,.7) 70%,transparent);
+}
+.result-topline .result-art{
+  width:92px;
+  height:92px;
+  object-fit:cover;
+  border-radius:2px;
+  filter:saturate(.78) contrast(.96);
+}
+.result-topline .eyebrow{
+  color:var(--report-gold);
+  letter-spacing:.16em;
+}
+.result-topline h2{
+  margin-top:4px;
+  font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  font-size:34px;
+  font-weight:700;
+  letter-spacing:-.045em;
+}
+.engine-badge{
+  align-self:start;
+  margin-top:3px;
+  border:1px solid #d8d0d5;
+  background:#fff;
+  color:#777078;
+  font-size:9px;
+  letter-spacing:.08em;
+}
+
+/* 2. FOUR PILLARS AS THE REPORT COVER */
+.chart-cover{
+  position:relative;
+  margin:0;
+  padding:36px 38px 42px;
+  background:
+    linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.96)),
+    repeating-linear-gradient(0deg,rgba(73,61,66,.024) 0,rgba(73,61,66,.024) 1px,transparent 1px,transparent 5px);
+  border-bottom:1px solid var(--report-line);
+}
+.chart-cover::before{
+  content:"命";
+  position:absolute;
+  top:11px;
+  right:30px;
+  color:rgba(98,76,98,.045);
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:132px;
+  line-height:1;
+  pointer-events:none;
+}
+.chart-cover-copy{
+  position:relative;
+  z-index:1;
+  display:flex;
+  justify-content:space-between;
+  gap:28px;
+  align-items:end;
+  margin-bottom:24px;
+}
+.chart-cover-copy .eyebrow{
+  flex:0 0 auto;
+  color:var(--report-gold);
+  font-size:10px;
+  letter-spacing:.14em;
+}
+.chart-cover-copy>div{
+  max-width:560px;
+}
+.chart-cover-copy h3{
+  margin:0;
+  color:var(--report-ink);
+  font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  font-size:25px;
+  letter-spacing:-.04em;
+}
+.chart-cover-copy p{
+  margin:7px 0 0;
+  color:#655f64;
+  font-size:12.5px;
+  line-height:1.7;
+}
+.chart-cover-copy b{
+  color:var(--report-plum);
+}
+.chart-cover .pillar-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  margin:0;
+  border-top:1px solid #bdb4ba;
+  border-bottom:1px solid #bdb4ba;
+  background:transparent;
+}
+.chart-cover .pillar-grid article,
+.chart-cover .pillar-grid article:last-child{
+  min-height:176px;
+  padding:20px 14px 18px;
+  border:0!important;
+  border-right:1px solid #d7d0d5!important;
+  border-radius:0;
+  background:transparent!important;
+  text-align:center;
+}
+.chart-cover .pillar-grid article:last-child{
+  border-right:0!important;
+}
+.chart-cover .pillar-grid small{
+  display:block;
+  color:#787078!important;
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.12em;
+}
+.chart-cover .pillar-grid strong{
+  display:block;
+  margin:18px 0 13px;
+  color:#2e292e!important;
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:42px;
+  font-weight:700;
+  line-height:1;
+}
+.chart-cover .pillar-grid [data-pillar-detail]{
+  display:block;
+  color:#716970!important;
+  font-size:11px;
+  line-height:1.6;
+}
+.chart-cover .pillar-grid .day-pillar{
+  position:relative;
+  background:#5b4c5f!important;
+}
+.chart-cover .pillar-grid .day-pillar::before{
+  content:"日主";
+  position:absolute;
+  top:-10px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:2px 8px;
+  background:#fffdfb;
+  border:1px solid #aa8f61;
+  color:#8a6f43;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.14em;
+}
+.chart-cover .pillar-grid .day-pillar small,
+.chart-cover .pillar-grid .day-pillar strong,
+.chart-cover .pillar-grid .day-pillar [data-pillar-detail]{
+  color:#fff!important;
+}
+.chart-cover-note{
+  margin:13px 0 0;
+  color:#777078;
+  font-size:10.5px;
+  text-align:right;
+}
+
+/* 3. QUICK SUMMARY — concise index rather than four equal cards */
+.quick-summary{
+  padding:36px 38px 30px;
+  border:0;
+  border-bottom:1px solid var(--report-line);
+  border-radius:0;
+  background:#fff;
+}
+.quick-summary-heading{
+  display:grid;
+  grid-template-columns:170px minmax(0,1fr);
+  column-gap:28px;
+  align-items:start;
+}
+.quick-summary-heading .eyebrow{grid-row:1 / span 2;color:var(--report-gold)}
+.quick-summary-heading h2{
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:27px;
+}
+.quick-summary-heading>p:last-child{
+  margin-top:5px;
+}
+.quick-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  margin-top:24px;
+  border-top:1px solid #cbc4c9;
+  border-bottom:1px solid #cbc4c9;
+}
+.quick-summary-grid article,
+.quick-summary-grid article[data-summary]{
+  min-height:124px;
+  padding:18px 18px 20px;
+  border:0;
+  border-right:1px solid #e1dce0;
+  border-radius:0;
+  background:#fff;
+}
+.quick-summary-grid article:last-child{border-right:0}
+.quick-summary-grid span{
+  display:block;
+  margin-bottom:11px;
+  color:var(--quick);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+.quick-summary-grid strong{
+  color:#2b282b;
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:15px;
+  line-height:1.55;
+}
+
+/* 4. READING — four editorial chapters */
+.interpretation-heading{
+  padding:46px 38px 16px;
+  border:0;
+}
+.interpretation-heading .eyebrow{color:var(--report-gold)}
+.interpretation-heading h2{
+  max-width:680px;
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:30px;
+}
+.reading-cards{
+  display:block;
+  margin:0;
+  padding:0 38px 36px;
+}
+.reading-cards>article,
+.reading-cards>article[data-reading]{
+  --chapter:var(--topic);
+  position:relative;
+  display:grid;
+  grid-template-columns:86px minmax(0,1fr);
+  column-gap:26px;
+  padding:28px 0 30px;
+  border:0;
+  border-top:1px solid #d8d1d6;
+  border-radius:0;
+  background:transparent;
+}
+.reading-cards>article:last-child{border-bottom:1px solid #d8d1d6}
+.reading-cards .reading-icon{display:none}
+.reading-cards>article>span{
+  grid-column:1;
+  grid-row:1 / span 5;
+  align-self:start;
+  margin:0;
+  color:var(--chapter);
+  font-family:Georgia,serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.14em;
+}
+.reading-cards>article>span::after{
+  display:block;
+  margin-top:8px;
+  color:var(--chapter);
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:38px;
+  line-height:1;
+}
+.reading-cards>article[data-reading="temperament"]>span::after{content:"性"}
+.reading-cards>article[data-reading="relationship"]>span::after{content:"緣"}
+.reading-cards>article[data-reading="career"]>span::after{content:"業"}
+.reading-cards>article[data-reading="money"]>span::after{content:"財"}
+.reading-cards h3{
+  grid-column:2;
+  margin:0 0 8px;
+  color:#242124;
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:24px;
+}
+.reading-cards>article>p{
+  grid-column:2;
+  max-width:760px;
+  margin:0;
+  color:#484247;
+  font-size:15px;
+  line-height:1.85;
+}
+.reading-situations,
+.reading-guide,
+.reading-evidence{
+  grid-column:2;
+}
+.reading-situations,
+.reading-guide{
+  margin-top:16px;
+  padding:14px 16px;
+  border:0;
+  border-left:2px solid color-mix(in srgb,var(--chapter) 55%,white);
+  border-radius:0;
+  background:#faf9f8;
+}
+.reading-evidence{
+  margin-top:12px;
+}
+.reading-evidence span{
+  border-color:#ddd6db;
+  background:#fff;
+  color:#716770;
+}
+
+/* 5. FLOW — clearly separate editorial spread */
+.flow-heading{
+  margin:0;
+  padding:48px 38px 20px;
+  border-top:0;
+  background:#f7f5f3;
+}
+.flow-heading .eyebrow{color:var(--report-gold)}
+.flow-heading h2{
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:30px;
+}
+.flow-report{
+  display:grid;
+  grid-template-columns:minmax(260px,.86fr) minmax(0,1.6fr);
+  gap:0;
+  padding:0 38px 42px;
+  background:#f7f5f3;
+}
+.current-daeun-card{
+  border-radius:0;
+  min-height:100%;
+  box-shadow:none;
+}
+.annual-flow-panel{
+  border-radius:0;
+  border-left:0;
+  box-shadow:none;
+}
+.annual-flow-grid{
+  position:relative;
+  gap:0;
+}
+.annual-flow-grid::before{
+  content:"";
+  position:absolute;
+  left:16px;
+  right:16px;
+  top:31px;
+  height:1px;
+  background:#cfc7cd;
+}
+.annual-flow-card{
+  position:relative;
+  border:0;
+  border-radius:0;
+  background:transparent!important;
+}
+.annual-flow-card::before{
+  content:"";
+  position:absolute;
+  top:27px;
+  left:22px;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--annual);
+  box-shadow:0 0 0 4px #fff;
+}
+
+/* 6. DETAILS — technical appendix */
+.details-heading{
+  margin:0;
+  padding:42px 38px 16px;
+  border-top:1px solid #c9c1c7;
+  background:#fff;
+}
+.details-heading .eyebrow{color:#7a7379}
+.details-heading h2{
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:27px;
+}
+#result-elements,
+.structure-facts{
+  margin-left:38px;
+  margin-right:38px;
+}
+.result-panel,
+.fact-card{
+  border-radius:0;
+  box-shadow:none;
+}
+.result-panel .panel-title,
+.fact-card .panel-title{
+  border-bottom:1px solid #e2dde1;
+  padding-bottom:11px;
+}
+.panel-title>span{
+  border-radius:0;
+  background:transparent;
+  padding:0;
+  color:#766d75;
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+}
+.validation-note{
+  margin-left:38px;
+  margin-right:38px;
+  border-radius:0;
+  background:#f8f7f5;
+  box-shadow:none;
+}
+
+@media(max-width:760px){
+  .result-topline{
+    grid-template-columns:62px minmax(0,1fr);
+    gap:15px;
+    padding:25px 20px 22px;
+  }
+  .result-topline::after{left:20px;right:20px}
+  .result-topline .result-art{width:62px;height:62px}
+  .engine-badge{grid-column:2;margin-top:2px;justify-self:start}
+  .result-topline h2{font-size:28px}
+
+  .chart-cover{padding:28px 20px 32px}
+  .chart-cover::before{font-size:92px;right:10px}
+  .chart-cover-copy{display:block}
+  .chart-cover-copy .eyebrow{margin-bottom:10px}
+  .chart-cover-copy h3{font-size:22px}
+  .chart-cover .pillar-grid strong{font-size:34px}
+  .chart-cover .pillar-grid article,
+  .chart-cover .pillar-grid article:last-child{
+    min-height:154px;
+    padding:17px 8px 15px;
+  }
+  .chart-cover .pillar-grid small{font-size:8px;letter-spacing:.06em}
+  .chart-cover .pillar-grid [data-pillar-detail]{font-size:9.5px}
+  .chart-cover-note{text-align:left}
+
+  .quick-summary{padding:30px 20px 26px}
+  .quick-summary-heading{display:block}
+  .quick-summary-heading .eyebrow{margin-bottom:9px}
+  .quick-summary-grid{
+    grid-template-columns:1fr 1fr;
+    border-bottom:0;
+  }
+  .quick-summary-grid article,
+  .quick-summary-grid article[data-summary]{
+    border-right:1px solid #e1dce0;
+    border-bottom:1px solid #e1dce0;
+    min-height:112px;
+    padding:15px;
+  }
+  .quick-summary-grid article:nth-child(2n){border-right:0}
+
+  .interpretation-heading{padding:38px 20px 12px}
+  .interpretation-heading h2{font-size:25px}
+  .reading-cards{padding:0 20px 30px}
+  .reading-cards>article,
+  .reading-cards>article[data-reading]{
+    grid-template-columns:54px minmax(0,1fr);
+    column-gap:14px;
+    padding:24px 0;
+  }
+  .reading-cards>article>span::after{font-size:29px}
+  .reading-cards h3{font-size:21px}
+  .reading-cards>article>p{font-size:14px;line-height:1.8}
+
+  .flow-heading{padding:38px 20px 18px}
+  .flow-heading h2{font-size:25px}
+  .flow-report{
+    grid-template-columns:1fr;
+    padding:0 20px 34px;
+  }
+  .annual-flow-panel{border-left:1px solid #d4cdd7;border-top:0}
+
+  .details-heading{padding:36px 20px 14px}
+  #result-elements,
+  .structure-facts,
+  .validation-note{
+    margin-left:20px;
+    margin-right:20px;
+  }
+}
+
+@media(max-width:430px){
+  .chart-cover .pillar-grid strong{font-size:29px}
+  .chart-cover .pillar-grid article,
+  .chart-cover .pillar-grid article:last-child{padding-left:5px;padding-right:5px}
+  .chart-cover .pillar-grid [data-pillar-detail]{font-size:9px;word-break:keep-all}
+  .quick-summary-grid{grid-template-columns:1fr}
+  .quick-summary-grid article,
+  .quick-summary-grid article[data-summary]{border-right:0}
+}
