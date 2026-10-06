@@ -15,7 +15,7 @@
   <meta property="og:title" content="사주 계산 기준 · 사주결">
   <meta property="og:description" content="사주결의 절기, 표준시, 십성, 지장간, 대운 계산 기준과 검증 범위를 확인하세요.">
   <meta property="og:url" content="https://saju.everytinytool.com/methodology/">
-  <link rel="stylesheet" href="../assets/style.css?v=20261006-readingv3">
+  <link rel="stylesheet" href="../assets/style.css?v=20261006-lunar1">
 </head>
 <body>
   <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -29,13 +29,13 @@
       <p class="eyebrow">METHODOLOGY · BEFORE INTERPRETATION</p>
       <h1>정확한 명식이<br>모든 해석보다 먼저입니다.</h1>
       <p>사주결은 계산 기준을 함께 보여드립니다. 아래는 현재 서비스에 적용된 방식입니다. 학파에 따라 경계나 보정 방식이 달라 다른 만세력과 결과 차이가 생길 수 있습니다.</p>
-      <span class="status-pill">계산 엔진 v0.6.0 · 양력 · 한국 출생 · 1970~2100년</span>
+      <span class="status-pill">계산 엔진 v0.6.0 · 양력/음력 · 한국 출생</span>
     </section>
 
     <section class="method-list">
       <article>
         <span class="method-number">01</span>
-        <div><small>CALENDAR</small><h2>달력과 절기 기준</h2><p>양력 생일을 입력받습니다. 연주는 입춘, 월주는 12절의 경계를 사용합니다. Astronomy Engine 2.1.19의 태양 황경 계산으로 절기 시각을 구하고, 2026년 한국천문연구원 절기 자료를 회귀 테스트 기준으로 대조합니다. 음력 변환은 아직 지원하지 않습니다.</p><b>현재 적용 중</b></div>
+        <div><small>CALENDAR</small><h2>달력과 절기 기준</h2><p>양력과 한국 음력 생일을 입력받습니다. 음력은 평달/윤달을 구분해 먼저 양력 날짜로 변환한 뒤, 동일한 사주 계산 엔진에 전달합니다. 음력 변환은 한국천문연구원 기준 데이터를 따르는 오프라인 변환표를 사용하며 현재 1970~2050년을 지원합니다. 연주는 입춘, 월주는 12절의 경계를 사용합니다. Astronomy Engine 2.1.19의 태양 황경 계산으로 절기 시각을 구하고, 2026년 한국천문연구원 절기 자료를 회귀 테스트 기준으로 대조합니다.</p><b>양력 1970~2100 · 음력 1970~2050 · 윤달 지원</b></div>
       </article>
       <article>
         <span class="method-number">02</span>
@@ -69,7 +69,7 @@
         <li><span>06</span>1988 서머타임의 존재하지 않는 시각·중복 시각을 별도 검증</li>
         <li><span>07</span>대운 기산은 3일=1년 환산 기준이며 절기 거리→개월 환산을 경계 fixture로 검증</li>
         <li><span>08</span>세운은 입춘 경계로 바뀌며 특정 사건·길흉을 자동 예언하지 않음</li>
-        <li><span>09</span>한국 출생 기준이며, 해외 출생·음력 변환은 미지원</li>
+        <li><span>09</span>한국 출생 기준 · 음력 평달/윤달 변환 fixture 검증 · 해외 출생은 미지원</li>
       </ol>
     </section>
   </main>
