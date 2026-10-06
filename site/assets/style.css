@@ -2185,3 +2185,72 @@ body{
       );
   }
 }
+
+
+/* v0.25 exact sage restore + requested text-only contrast */
+.tool-shell>.birth-form{
+  border-color:rgba(111,151,148,.48);
+  background:
+    radial-gradient(110% 88% at 12% 0%,rgba(183,216,210,.20) 0%,transparent 46%),
+    radial-gradient(85% 72% at 96% 100%,rgba(48,72,70,.20) 0%,transparent 62%),
+    linear-gradient(145deg,#4f7472 0%,#486966 48%,#3f5755 100%);
+  box-shadow:
+    0 34px 78px rgba(48,70,68,.17),
+    0 12px 30px rgba(45,67,65,.11),
+    inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+.tool-shell>.birth-form::before{
+  background:
+    radial-gradient(
+      520px circle at var(--mx) var(--my),
+      rgba(221,239,234,.20) 0%,
+      rgba(183,215,207,.12) 28%,
+      rgba(126,173,163,.055) 49%,
+      transparent 70%
+    );
+}
+
+.tool-shell>.birth-form.is-tilting{
+  border-color:rgba(156,195,188,.58);
+  box-shadow:
+    0 45px 95px rgba(45,66,64,.20),
+    0 17px 38px rgba(48,70,68,.13),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.tool-shell>.birth-form .field input:focus{
+  border-color:#b8d5cf;
+  box-shadow:0 0 0 3px rgba(184,213,207,.22);
+}
+
+/* only these requested labels become near-white */
+.tool-shell>.birth-form .tool-heading>.eyebrow{
+  color:#fbfdfc!important;
+}
+
+.tool-shell>.birth-form .calendar-switch .is-disabled span,
+.tool-shell>.birth-form .calendar-switch .is-disabled small{
+  color:#f5f8f7!important;
+}
+
+.tool-shell>.birth-form .optional-label{
+  color:#f8fbfa!important;
+  font-weight:750;
+}
+
+.tool-shell>.birth-form .sex-field legend small .optional-label{
+  color:#f8fbfa!important;
+}
+
+@media(hover:none),(pointer:coarse){
+  .tool-shell>.birth-form::before{
+    background:
+      radial-gradient(
+        360px circle at 50% 8%,
+        rgba(220,239,233,.18),
+        rgba(168,205,196,.09) 45%,
+        transparent 73%
+      );
+  }
+}
