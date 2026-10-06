@@ -70,5 +70,5 @@ export const SOLAR_TERM_PROVIDER_METADATA={
   packageVersion:'2.1.19',
   method:'SearchSunLongitude apparent geocentric ecliptic longitude of date',
   support:SOLAR_TERM_SUPPORT,
-  validation:'KASI 2026 regression fixture'
+  validation:'KASI 2000 and 2026 published Jie regression fixtures'
 };
