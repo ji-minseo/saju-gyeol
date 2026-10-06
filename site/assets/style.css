@@ -1611,3 +1611,327 @@ body,
 .tool-shell>.birth-form .segmented input:checked+span{
   color:#fff4ec;
 }
+
+
+/* v0.18 crisp contrast — near-white canvas + vivid accents */
+:root{
+  --page:#fdfcfb;
+  --surface:#ffffff;
+  --surface-soft:#faf9f8;
+  --text-strong:#211f23;
+  --text:#343037;
+  --text-soft:#55505a;
+  --line-strong:#cfc7d1;
+
+  --accent-orange:#d86f32;
+  --accent-rose:#b93f63;
+  --accent-green:#3f7a4e;
+  --accent-blue:#426ea8;
+  --accent-purple:#7653a4;
+}
+
+html,body{
+  background:#fdfcfb;
+}
+
+body{
+  color:var(--text);
+  background-image:
+    radial-gradient(circle at 18% 9%,rgba(216,111,50,.028),transparent 24%),
+    radial-gradient(circle at 82% 24%,rgba(66,110,168,.024),transparent 25%);
+}
+
+.home-page .tool-shell::before{
+  background:
+    radial-gradient(circle at 50% 44%,rgba(255,255,255,.98) 0%,rgba(252,250,247,.9) 40%,transparent 72%);
+  filter:none;
+}
+
+.site-header{
+  background:rgba(255,255,255,.94);
+  border-bottom-color:#d9d4dc;
+}
+.site-header nav a{
+  color:#2f2b31;
+}
+.site-header nav a:hover,
+.site-header nav a[aria-current="page"]{
+  color:#111013;
+}
+
+.intro-kicker{
+  color:#5d4561;
+}
+.intro-lead{
+  color:#474149;
+}
+.service-strip{
+  color:#443d46;
+  border-top-color:#ddd7df;
+}
+.service-strip small{
+  color:#625a65;
+}
+.service-strip i{
+  color:#6f3f7d;
+  background:#f2e8f6;
+}
+
+/* calculator keeps its ink-jade identity, but controls become cleaner */
+.tool-shell>.birth-form{
+  border-color:rgba(196,225,218,.24);
+  background:
+    radial-gradient(105% 82% at 14% 0%,rgba(83,129,122,.15) 0%,transparent 46%),
+    radial-gradient(85% 72% at 96% 100%,rgba(12,39,39,.52) 0%,transparent 60%),
+    linear-gradient(145deg,#142f2e 0%,#1f403d 50%,#102726 100%);
+}
+.tool-shell>.birth-form .field input{
+  background:#fffdfa;
+  color:#1f1d1f;
+  border-color:rgba(255,255,255,.22);
+}
+.tool-shell>.birth-form .calendar-switch span,
+.tool-shell>.birth-form .segmented span{
+  color:#f8f5f3;
+  border-color:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.055);
+}
+.tool-shell>.birth-form .calendar-switch input:checked+span,
+.tool-shell>.birth-form .segmented input:checked+span{
+  border-color:rgba(255,151,89,.88);
+  background:linear-gradient(180deg,rgba(229,119,55,.42),rgba(189,76,35,.32));
+  color:#fff;
+  box-shadow:0 0 0 1px rgba(255,175,124,.10),0 7px 18px rgba(151,70,27,.16);
+}
+.tool-shell>.birth-form .calendar-switch input:checked+span::before,
+.tool-shell>.birth-form .segmented input:checked+span::before{
+  background:#ff9456;
+  box-shadow:0 0 0 3px rgba(255,148,86,.17);
+}
+
+/* main result canvas */
+.result-preview{
+  background:#ffffff;
+  border-color:#d3cdd6;
+  box-shadow:0 22px 60px rgba(47,41,49,.08);
+}
+.result-topline{
+  background:#fbfafb;
+  border-color:#d4cdd7;
+}
+.result-topline h2,
+.quick-summary-heading h2,
+.interpretation-heading h2,
+.flow-heading h2,
+.details-heading h2,
+.panel-title h3,
+.annual-flow-heading h3{
+  color:#211f23;
+}
+.result-topline p:last-child,
+.quick-summary-heading>p:last-child,
+.flow-heading>p:last-child,
+.details-heading>p:last-child{
+  color:#4a454d;
+}
+
+/* quick summary — brighter cards and stronger category colors */
+.quick-summary{
+  background:#fff;
+  border-color:#d4cdd6;
+}
+.quick-summary-grid article{
+  --quick:#c65b20;
+  border-color:#e9bd9f;
+  background:#fff5ee;
+}
+.quick-summary-grid article[data-summary="relationship"]{
+  --quick:#b6315a;
+  border-color:#e7b6c5;
+  background:#fff2f6;
+}
+.quick-summary-grid article[data-summary="career"]{
+  --quick:#337247;
+  border-color:#bcd9c4;
+  background:#f1f9f3;
+}
+.quick-summary-grid article[data-summary="money"]{
+  --quick:#3f69a5;
+  border-color:#bfd0e8;
+  background:#f1f6fd;
+}
+.quick-summary-grid span{
+  color:var(--quick);
+}
+.quick-summary-grid strong{
+  color:#242126;
+}
+
+/* reading cards — vivid accents, neutral copy */
+.reading-cards article{
+  --topic:#c65b20;
+  --topic-soft:#ffd9c3;
+  border-color:#e8b897;
+  background:#fff5ec;
+}
+.reading-cards article[data-reading="relationship"]{
+  --topic:#b6315a;
+  --topic-soft:#f6cbd7;
+  border-color:#e5afbf;
+  background:#fff1f5;
+}
+.reading-cards article[data-reading="career"]{
+  --topic:#337247;
+  --topic-soft:#cfe8d5;
+  border-color:#b9d9c1;
+  background:#eff8f1;
+}
+.reading-cards article[data-reading="money"]{
+  --topic:#3f69a5;
+  --topic-soft:#d0ddf1;
+  border-color:#b7cce8;
+  background:#eef4fc;
+}
+.reading-cards h3{
+  color:#262228;
+}
+.reading-cards p,
+.reading-situations li,
+.reading-guide p{
+  color:#49434b;
+}
+.reading-icon{
+  background:var(--topic-soft);
+  color:var(--topic);
+}
+.reading-cards>article>span,
+.reading-situations>strong,
+.reading-guide>strong,
+.reading-evidence span{
+  color:var(--topic);
+}
+.reading-situations,
+.reading-guide{
+  border-color:color-mix(in srgb,var(--topic) 24%,white);
+  background:rgba(255,255,255,.82);
+}
+.reading-evidence span{
+  background:#fff;
+  border-color:color-mix(in srgb,var(--topic) 18%,white);
+}
+
+/* flow — stronger purple/peach contrast */
+.current-daeun-card{
+  border-color:#493c54;
+  background:
+    radial-gradient(circle at 92% 3%,rgba(255,141,84,.20),transparent 28%),
+    linear-gradient(145deg,#4c3f56,#352e3e);
+}
+.flow-card-top>strong{
+  color:#ffbe8d;
+}
+.flow-guide b{
+  color:#ffb985;
+}
+.annual-flow-panel{
+  background:#fff;
+  border-color:#d4cdd7;
+}
+.annual-flow-card{
+  --annual:#c35a22;
+  --annual-soft:#ffd8bf;
+  border-color:#e8b897;
+  background:#fff4eb;
+}
+.annual-flow-card.is-next{
+  --annual:#416aa5;
+  --annual-soft:#cddcf1;
+  border-color:#b8cbe5;
+  background:#eff4fb;
+}
+.annual-flow-card.is-later{
+  --annual:#3f774d;
+  --annual-soft:#cfe5d4;
+  border-color:#b9d6c0;
+  background:#f0f8f1;
+}
+.annual-flow-card h4{
+  color:#262228;
+}
+.annual-body,
+.annual-guide p,
+.annual-period{
+  color:#4a454c;
+}
+
+/* technical details — white surfaces, stronger dividers */
+.details-heading{
+  border-top-color:#cbc4ce;
+}
+.pillar-grid article,
+.pillar-grid article:last-child,
+.result-panel,
+.fact-card{
+  background:#fff;
+  border-color:#d1cad4;
+}
+.pillar-grid .day-pillar{
+  background:#4a3d52;
+  border-color:#4a3d52;
+}
+.pillar-grid small,
+.pillar-grid [data-pillar-detail],
+.result-panel>p,
+.fact-card>p,
+.element-list b,
+.element-list em,
+.ten-gods-placeholder span,
+.hidden-stem-box>div:first-child>span,
+.hidden-stems span,
+.hidden-stem-box>p,
+.daeun-meta,
+.daeun-track small,
+.daeun-track span{
+  color:#454047!important;
+}
+.ten-gods-placeholder span,
+.fact-chips span,
+.hidden-stems>div,
+.daeun-track>div{
+  background:#faf9fb;
+  border-color:#d7d0da;
+}
+.ten-gods-placeholder span b,
+.fact-chips span b,
+.hidden-stems b,
+.hidden-stem-box small{
+  color:#5c3c62;
+}
+.panel-title>span{
+  background:#f1e7f4;
+  color:#714c7a;
+}
+.fact-main{
+  color:#315f8a;
+}
+.validation-note{
+  background:#f8f4fb;
+  border-color:#d8cde0;
+}
+.validation-note strong{
+  color:#3e3441;
+}
+.validation-note p{
+  color:#514955;
+}
+.validation-note a{
+  color:#5b3c65;
+}
+
+/* charts: more saturated */
+.element-bar{
+  background:#e5e1e6;
+}
+.element-bar i{
+  background:linear-gradient(90deg,#2f6d59,#4f8f77);
+}
