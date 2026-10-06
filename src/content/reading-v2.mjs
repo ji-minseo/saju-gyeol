@@ -215,7 +215,7 @@ export function buildReadingV2(result){
   const temperamentOverlay=KIND_CONTEXT[primary]?.temperament;
   const temperamentSituations=[
     counts[primary]>=2
-      ?`${CATEGORY_LABELS[primary]}이 표면에서 ${counts[primary]}번 보여, ${KIND_CONTEXT[primary].temperament.replace(/^[^.]+\./,'').trim()}`
+      ?`${CATEGORY_LABELS[primary]}이 표면에서 ${counts[primary]}번 보여, 이 성향이 한 번의 반응보다 여러 장면에서 반복해서 나타나는 쪽으로 읽습니다.`
       :dm.pressure,
     secondary&&counts[secondary]>=2
       ?`${CATEGORY_LABELS[secondary]}도 반복되어 한 가지 방식만 쓰기보다 ${KIND_CONTEXT[secondary].temperament}`
