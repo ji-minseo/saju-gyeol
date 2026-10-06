@@ -70,8 +70,8 @@ test('Hanlu changes month pillar across the astronomical boundary',()=>{
   assert.equal(after.pillars.month.hanja,'戊戌');
 });
 
-test('provider supports ordinary dates across the 1970..2100 service range',()=>{
-  for(const birthDate of ['1970-06-15','1996-04-17','2008-03-22','2050-11-03','2100-01-20']){
+test('provider supports ordinary dates across the 1912..2100 service range',()=>{
+  for(const birthDate of ['1912-06-15','1946-06-15','1970-06-15','1996-04-17','2008-03-22','2050-11-03','2100-01-20']){
     const result=calculateSaju({birthDate,birthTime:'12:00'});
     assert.equal(result.status,'ok');
     assert.ok(result.pillars.year.hanja);
@@ -83,8 +83,8 @@ test('provider supports ordinary dates across the 1970..2100 service range',()=>
 
 test('out-of-range years fail loudly rather than approximate',()=>{
   assert.throws(
-    ()=>calculateSaju({birthDate:'1969-10-13',birthTime:'10:10'}),
-    /supports 1970\.\.2100/
+    ()=>calculateSaju({birthDate:'1911-12-31',birthTime:'10:10'}),
+    /supports 1912\.\.2100/
   );
 });
 
