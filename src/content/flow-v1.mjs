@@ -2,6 +2,7 @@ import {BRANCHES,yearPillar,tenGod,branchTenGod} from '../engine/rules.mjs';
 import {branchRelations} from '../engine/derived-facts.mjs';
 import {getJieTermsForYear} from '../engine/solar-term-provider.mjs';
 import {resolveSeoulCivilTime} from '../engine/korea-time.mjs';
+import {withSubject,withComitative} from './korean-particles.mjs';
 
 const GOD_FLOW={
   비견:{
@@ -176,30 +177,14 @@ const relationText=item=>{
   };
 };
 
-const hasFinalConsonant=text=>{
-  const chars=[...String(text).trim()];
-  const last=chars.at(-1);
-  if(!last) return false;
-  const code=last.charCodeAt(0);
-  return code>=0xac00&&code<=0xd7a3&&(code-0xac00)%28!==0;
-};
-
-const subjectParticle=text=>hasFinalConsonant(text)?'이':'가';
-
-const normalizeFlowTitle=text=>String(text)
-  .replaceAll('생산 · 루틴가','생산 · 루틴이')
-  .replaceAll('내 선택 · 독립가','내 선택 · 독립이');
-
 const godPairSummary=(stemGod,branchGod)=>{
   const stem=GOD_FLOW[stemGod];
   const branch=GOD_FLOW[branchGod];
   return {
-    title:normalizeFlowTitle(
-      stemGod===branchGod
-        ?`${stem.keyword}${subjectParticle(stem.keyword)} 반복해서 앞에 오는 흐름`
-        :`${stem.keyword}와 ${branch.keyword}${subjectParticle(branch.keyword)} 함께 움직이는 흐름`
-    ),
-    body:`겉으로 드러나는 주제는 ${stemGod}의 ${stem.keyword}, 생활 속 바탕에는 ${branchGod}의 ${branch.keyword}가 놓입니다. ${stem.body}`,
+    title:stemGod===branchGod
+      ?`${withSubject(stem.keyword)} 반복해서 앞에 오는 흐름`
+      :`${withComitative(stem.keyword)} ${withSubject(branch.keyword)} 함께 움직이는 흐름`,
+    body:`겉으로 드러나는 주제는 ${stemGod}의 ${stem.keyword}, 생활 속 바탕에는 ${branchGod}의 ${withSubject(branch.keyword)} 놓입니다. ${stem.body}`,
     guide:stemGod===branchGod?stem.action:`${stem.action} 동시에 ${branch.action}`,
     keywords:stemGod===branchGod?stem.keyword:`${stem.keyword} · ${branch.keyword}`
   };
