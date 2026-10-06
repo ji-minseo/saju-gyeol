@@ -437,7 +437,7 @@ form?.addEventListener('submit',event=>{
     }catch(error){
       const message=String(error?.message||error);
       if(message.includes('not a leap month')) setError('선택한 해의 이 달은 윤달이 아니에요. 윤달 체크를 해제하거나 날짜를 다시 확인해 주세요.');
-      else if(message.includes('1970..2050')) setError('현재 음력 변환 지원 범위는 1970년부터 2050년까지예요.');
+      else if(message.includes('1946..2050')) setError('현재 음력 변환 지원 범위는 1946년부터 2050년까지예요.');
       else setError('존재하지 않는 음력 날짜예요. 음력 날짜와 윤달 여부를 다시 확인해 주세요.');
       return;
     }
@@ -458,7 +458,7 @@ form?.addEventListener('submit',event=>{
     const message=String(error?.message||error);
     if(message.includes('did not exist')) setError('입력한 시각은 당시 한국의 표준시 전환 때문에 존재하지 않았던 시각이에요. 출생기록을 다시 확인해 주세요.');
     else if(message.includes('ambiguous')) setError('입력한 시각은 당시 표준시 전환으로 두 번 존재했던 시각이에요. 현재 버전에서는 자동 선택하지 않습니다.');
-    else if(message.includes('1970..2100')||message.includes('1970~2100')) setError('현재 계산 지원 범위는 1970년부터 2100년까지예요.');
+    else if(message.includes('1946..2100')||message.includes('1946~2100')) setError('현재 계산 지원 범위는 1946년부터 2100년까지예요.');
     else setError('계산 중 확인이 필요한 값이 발견됐어요. 입력값을 다시 확인해 주세요.');
     preview.hidden=true;
   }
