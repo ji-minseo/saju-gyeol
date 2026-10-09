@@ -39,6 +39,12 @@ const currentDaeunGuide=document.querySelector('#current-daeun-guide');
 const currentDaeunEvidence=document.querySelector('#current-daeun-evidence');
 const annualFlow=document.querySelector('#annual-flow');
 const flowAsOf=document.querySelector('#flow-as-of');
+const saveResultImageButton=document.querySelector('#save-result-image');
+const shareResultButton=document.querySelector('#share-result');
+const resultActionStatus=document.querySelector('#result-action-status');
+
+let latestShareState=null;
+let resultActionStatusTimer=null;
 
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
 const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
@@ -385,6 +391,330 @@ const renderFlow=result=>{
   }
 };
 
+
+const SHARE_CARD={
+  width:1080,
+  height:1350,
+  pad:76,
+  url:'saju.everytinytool.com'
+};
+
+const shareFonts={
+  sans:'"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif',
+  serif:'"Noto Serif KR","Nanum Myeongjo","AppleMyungjo",serif'
+};
+
+const elementShareColors={
+  wood:'#6f8f73',
+  fire:'#b77768',
+  earth:'#a88a61',
+  metal:'#7d8290',
+  water:'#657b91'
+};
+
+const shareCategoryLabels={
+  temperament:'성향',
+  relationship:'관계',
+  career:'일',
+  money:'돈'
+};
+
+const shareElementLabels={
+  wood:'목',
+  fire:'화',
+  earth:'토',
+  metal:'금',
+  water:'수'
+};
+
+const roundRectPath=(ctx,x,y,width,height,radius)=>{
+  const r=Math.min(radius,width/2,height/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+width,y,x+width,y+height,r);
+  ctx.arcTo(x+width,y+height,x,y+height,r);
+  ctx.arcTo(x,y+height,x,y,r);
+  ctx.arcTo(x,y,x+width,y,r);
+  ctx.closePath();
+};
+
+const wrapCanvasText=(ctx,text,maxWidth,maxLines=2)=>{
+  const chars=[...String(text||'')];
+  const lines=[];
+  let line='';
+  for(const char of chars){
+    const next=line+char;
+    if(line&&ctx.measureText(next).width>maxWidth){
+      lines.push(line.trim());
+      line=char===' '?'':char;
+      if(lines.length===maxLines) break;
+    }else{
+      line=next;
+    }
+  }
+  if(lines.length<maxLines&&line.trim()) lines.push(line.trim());
+  if(lines.length===maxLines){
+    const rendered=lines.join('');
+    const original=chars.join('').replaceAll(' ','');
+    if(rendered.replaceAll(' ','').length<original.length){
+      let last=lines[maxLines-1];
+      while(last&&ctx.measureText(last+'…').width>maxWidth) last=last.slice(0,-1);
+      lines[maxLines-1]=last.replace(/[ ,·]+$/,'')+'…';
+    }
+  }
+  return lines;
+};
+
+const drawCanvasLines=(ctx,lines,x,y,lineHeight)=>{
+  lines.forEach((line,index)=>ctx.fillText(line,x,y+index*lineHeight));
+  return y+Math.max(0,lines.length-1)*lineHeight;
+};
+
+const buildShareCanvas=async result=>{
+  if(document.fonts?.ready) await document.fonts.ready;
+  const reading=buildReadingV2(result);
+  const canvas=document.createElement('canvas');
+  canvas.width=SHARE_CARD.width;
+  canvas.height=SHARE_CARD.height;
+  const ctx=canvas.getContext('2d');
+  const {width,height,pad}=SHARE_CARD;
+
+  ctx.fillStyle='#fbf8f6';
+  ctx.fillRect(0,0,width,height);
+
+  ctx.fillStyle='#5f4d5d';
+  ctx.font=`700 62px ${shareFonts.serif}`;
+  ctx.fillText('사주결',pad,112);
+
+  ctx.fillStyle='#9a7e55';
+  ctx.font=`700 18px ${shareFonts.sans}`;
+  ctx.letterSpacing='3px';
+  ctx.fillText('SAJU GYEOL · PERSONAL READING',pad,154);
+  ctx.letterSpacing='0px';
+
+  ctx.fillStyle='#70666f';
+  ctx.font=`500 24px ${shareFonts.sans}`;
+  ctx.fillText('나를 만나는 사주, 사주결',pad,198);
+
+  ctx.strokeStyle='#d7cfd4';
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(pad,232);
+  ctx.lineTo(width-pad,232);
+  ctx.stroke();
+
+  const pillarKeys=['year','month','day','hour'];
+  const pillarLabels=['년주','월주','일주','시주'];
+  const pillarGap=14;
+  const pillarW=(width-pad*2-pillarGap*3)/4;
+  const pillarY=280;
+  const pillarH=188;
+
+  pillarKeys.forEach((key,index)=>{
+    const x=pad+index*(pillarW+pillarGap);
+    const isDay=key==='day';
+    roundRectPath(ctx,x,pillarY,pillarW,pillarH,22);
+    ctx.fillStyle=isDay?'#615061':'#ffffff';
+    ctx.fill();
+    ctx.strokeStyle=isDay?'#615061':'#ded6db';
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    ctx.fillStyle=isDay?'rgba(255,255,255,.72)':'#8b8188';
+    ctx.font=`700 17px ${shareFonts.sans}`;
+    ctx.textAlign='center';
+    ctx.fillText(pillarLabels[index],x+pillarW/2,pillarY+42);
+
+    ctx.fillStyle=isDay?'#fff':'#312b31';
+    ctx.font=`700 58px ${shareFonts.serif}`;
+    ctx.fillText(result.pillars[key]?.hanja||'—',x+pillarW/2,pillarY+119);
+
+    ctx.fillStyle=isDay?'rgba(255,255,255,.76)':'#81777f';
+    ctx.font=`600 15px ${shareFonts.sans}`;
+    const stemGod=result.tenGods.visibleStems[key];
+    const branchGod=result.tenGods.visibleBranches[key];
+    ctx.fillText(key==='day'?'나의 중심':(stemGod&&branchGod?`${stemGod} · ${branchGod}`:'출생시간 미상'),x+pillarW/2,pillarY+154);
+  });
+  ctx.textAlign='left';
+
+  ctx.fillStyle='#9a7e55';
+  ctx.font=`800 17px ${shareFonts.sans}`;
+  ctx.fillText('KEY READING',pad,528);
+
+  const cardGap=18;
+  const cardW=(width-pad*2-cardGap)/2;
+  const cardH=174;
+  const cardStartY=554;
+  Object.entries(reading).forEach(([key,section],index)=>{
+    const col=index%2;
+    const row=Math.floor(index/2);
+    const x=pad+col*(cardW+cardGap);
+    const y=cardStartY+row*(cardH+cardGap);
+    roundRectPath(ctx,x,y,cardW,cardH,20);
+    ctx.fillStyle='#fff';
+    ctx.fill();
+    ctx.strokeStyle='#dfd8dc';
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    ctx.fillStyle='#a06a75';
+    ctx.font=`800 18px ${shareFonts.sans}`;
+    ctx.fillText(shareCategoryLabels[key]||key,x+24,y+36);
+
+    ctx.fillStyle='#322c31';
+    ctx.font=`700 25px ${shareFonts.sans}`;
+    const lines=wrapCanvasText(ctx,section.title,cardW-48,3);
+    drawCanvasLines(ctx,lines,x+24,y+76,36);
+  });
+
+  const elementY=940;
+  ctx.fillStyle='#9a7e55';
+  ctx.font=`800 17px ${shareFonts.sans}`;
+  ctx.fillText('FIVE ELEMENTS',pad,elementY);
+
+  const counts=result.fiveElements.counts;
+  const total=Math.max(1,Object.values(counts).reduce((sum,value)=>sum+value,0));
+  const keys=['wood','fire','earth','metal','water'];
+  const barX=pad+68;
+  const barW=width-pad*2-160;
+  keys.forEach((key,index)=>{
+    const y=elementY+42+index*47;
+    ctx.fillStyle='#6f666d';
+    ctx.font=`700 18px ${shareFonts.sans}`;
+    ctx.fillText(shareElementLabels[key],pad,y+7);
+
+    roundRectPath(ctx,barX,y-10,barW,16,8);
+    ctx.fillStyle='#ebe6e8';
+    ctx.fill();
+
+    const value=Number(counts[key]||0);
+    if(value>0){
+      roundRectPath(ctx,barX,y-10,Math.max(16,barW*(value/total)),16,8);
+      ctx.fillStyle=elementShareColors[key];
+      ctx.fill();
+    }
+
+    ctx.fillStyle='#766d73';
+    ctx.font=`700 16px ${shareFonts.sans}`;
+    ctx.textAlign='right';
+    ctx.fillText(String(value),width-pad,y+6);
+    ctx.textAlign='left';
+  });
+
+  ctx.strokeStyle='#d7cfd4';
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(pad,1234);
+  ctx.lineTo(width-pad,1234);
+  ctx.stroke();
+
+  ctx.fillStyle='#5f4d5d';
+  ctx.font=`800 21px ${shareFonts.sans}`;
+  ctx.fillText(SHARE_CARD.url,pad,1282);
+
+  ctx.fillStyle='#887e85';
+  ctx.font=`600 16px ${shareFonts.sans}`;
+  ctx.textAlign='right';
+  ctx.fillText(`절기 기준 · 한국 표준시 · ${dayBoundaryLabel(result.metadata?.dayBoundary)}`,width-pad,1282);
+  ctx.textAlign='left';
+
+  return canvas;
+};
+
+const canvasToPngBlob=canvas=>new Promise((resolve,reject)=>{
+  canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('image export failed')),'image/png');
+});
+
+const setResultActionStatus=(message,{error=false}={})=>{
+  if(!resultActionStatus) return;
+  clearTimeout(resultActionStatusTimer);
+  resultActionStatus.textContent=message;
+  resultActionStatus.dataset.state=error?'error':'ok';
+  resultActionStatusTimer=setTimeout(()=>{
+    resultActionStatus.textContent='';
+    delete resultActionStatus.dataset.state;
+  },3200);
+};
+
+const shareSummaryText=result=>{
+  const reading=buildReadingV2(result);
+  return `사주결 · ${reading.temperament.title}\n${reading.career.title}\nhttps://saju.everytinytool.com/`;
+};
+
+const saveLatestResultImage=async()=>{
+  if(!latestShareState) return;
+  saveResultImageButton?.setAttribute('aria-busy','true');
+  try{
+    const canvas=await buildShareCanvas(latestShareState.result);
+    const blob=await canvasToPngBlob(canvas);
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.href=url;
+    link.download='saju-gyeol-result.png';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    setResultActionStatus('공유용 결과 이미지를 저장했어요.');
+  }catch(error){
+    console.error(error);
+    setResultActionStatus('이미지 저장 중 문제가 생겼어요.',{error:true});
+  }finally{
+    saveResultImageButton?.removeAttribute('aria-busy');
+  }
+};
+
+const shareLatestResult=async()=>{
+  if(!latestShareState) return;
+  shareResultButton?.setAttribute('aria-busy','true');
+  try{
+    const canvas=await buildShareCanvas(latestShareState.result);
+    const blob=await canvasToPngBlob(canvas);
+    const file=new File([blob],'saju-gyeol-result.png',{type:'image/png'});
+    const url='https://saju.everytinytool.com/';
+    const text=shareSummaryText(latestShareState.result);
+
+    if(navigator.share&&navigator.canShare?.({files:[file]})){
+      await navigator.share({
+        title:'사주결 · 나의 사주 리포트',
+        text:'사주결에서 확인한 나의 사주 리포트',
+        url,
+        files:[file]
+      });
+      setResultActionStatus('공유 창을 열었어요.');
+      return;
+    }
+
+    if(navigator.share){
+      await navigator.share({
+        title:'사주결 · 나의 사주 리포트',
+        text,
+        url
+      });
+      setResultActionStatus('공유 창을 열었어요.');
+      return;
+    }
+
+    await navigator.clipboard.writeText(text);
+    setResultActionStatus('핵심 결과와 링크를 복사했어요.');
+  }catch(error){
+    if(error?.name!=='AbortError'){
+      console.error(error);
+      try{
+        await navigator.clipboard.writeText(shareSummaryText(latestShareState.result));
+        setResultActionStatus('공유 대신 핵심 결과와 링크를 복사했어요.');
+      }catch{
+        setResultActionStatus('공유 기능을 사용할 수 없는 브라우저예요.',{error:true});
+      }
+    }
+  }finally{
+    shareResultButton?.removeAttribute('aria-busy');
+  }
+};
+
+saveResultImageButton?.addEventListener('click',saveLatestResultImage);
+shareResultButton?.addEventListener('click',shareLatestResult);
+
 const renderSummary=(result,sex,calendarMeta=null)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
@@ -398,6 +728,7 @@ const renderSummary=(result,sex,calendarMeta=null)=>{
 
 const showResult=(result,sex,calendarMeta=null)=>{
   document.body.classList.add('has-result');
+  latestShareState={result,sex,calendarMeta};
   renderPillar('year',result.pillars.year,result.tenGods.visibleStems.year,result.tenGods.visibleBranches.year);
   renderPillar('month',result.pillars.month,result.tenGods.visibleStems.month,result.tenGods.visibleBranches.month);
   renderPillar('day',result.pillars.day,result.tenGods.visibleStems.day,result.tenGods.visibleBranches.day);
