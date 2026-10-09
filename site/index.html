@@ -21,7 +21,7 @@
   <meta name="twitter:description" content="생년월일과 출생시간으로 나의 사주 흐름을 차분하게 읽어보세요.">
   <meta name="twitter:image" content="https://saju.everytinytool.com/assets/saju-hero.webp">
   <link rel="stylesheet" href="./assets/style.css?v=20261006-v09">
-  <link rel="stylesheet" href="./assets/report-editorial.css?v=20261006-2">
+  <link rel="stylesheet" href="./assets/report-editorial.css?v=20261010-share1">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -133,6 +133,16 @@
             <p id="input-summary">입력한 생년월일을 기준으로 명식을 준비합니다.</p>
           </div>
           <span class="engine-badge" id="engine-badge">ENGINE · READY</span>
+        </div>
+
+        <div class="result-actions" aria-label="결과 저장 및 공유">
+          <button type="button" class="result-action-button" id="save-result-image">
+            <span aria-hidden="true">↓</span> 이미지 저장
+          </button>
+          <button type="button" class="result-action-button is-primary" id="share-result">
+            <span aria-hidden="true">↗</span> 결과 공유
+          </button>
+          <p class="result-action-status" id="result-action-status" role="status" aria-live="polite"></p>
         </div>
 
         <section class="chart-cover" aria-labelledby="chart-cover-title">
@@ -282,6 +292,6 @@
     <div><span>© SAJU GYEOL</span></div>
     <div class="footer-links"><a href="./methodology/">계산 기준</a></div>
   </footer>
-  <script src="./assets/engine-app.js?v=20261006-v08" defer></script>
+  <script src="./assets/engine-app.js?v=20261010-share1" defer></script>
 </body>
 </html>
