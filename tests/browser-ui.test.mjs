@@ -24,3 +24,32 @@ test('browser UI exposes day-boundary choice with midnight as the default',async
   assert.match(source,/calculateSaju\(\{birthDate,birthTime,sex:sexValue\},\{dayBoundary\}\)/);
   assert.match(source,/일자 기준/);
 });
+
+
+test('result sharing exposes PNG save and native-share fallbacks',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+
+  assert.match(html,/id="save-result-image"/);
+  assert.match(html,/id="share-result"/);
+  assert.match(html,/id="result-action-status"/);
+
+  assert.match(source,/width:1080/);
+  assert.match(source,/height:1350/);
+  assert.match(source,/buildShareCanvas/);
+  assert.match(source,/canvasToPngBlob/);
+  assert.match(source,/saju-gyeol-result\.png/);
+  assert.match(source,/navigator\.canShare/);
+  assert.match(source,/navigator\.share/);
+  assert.match(source,/navigator\.clipboard\.writeText/);
+});
+
+test('share card omits exact birth date and time from its drawing copy',async()=>{
+  const source=await readFile('src/browser/app.mjs','utf8');
+  const start=source.indexOf('const buildShareCanvas=');
+  const end=source.indexOf('const canvasToPngBlob=',start);
+  assert.ok(start>=0&&end>start);
+  const shareCanvasSource=source.slice(start,end);
+  assert.doesNotMatch(shareCanvasSource,/result\.input\.birthDate/);
+  assert.doesNotMatch(shareCanvasSource,/result\.input\.birthTime/);
+});
