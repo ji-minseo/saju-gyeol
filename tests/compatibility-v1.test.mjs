@@ -22,7 +22,7 @@ test('compatibility v1 returns structured two-way reading without a score',()=>{
 
   assert.ok(reading.aToB.evidence.some(x=>x.startsWith('A 기준 B 일간은 ')));
   assert.ok(reading.bToA.evidence.some(x=>x.startsWith('B 기준 A 일간은 ')));
-  assert.equal(JSON.stringify(reading).includes('점수'),false);
+  assert.equal(Object.hasOwn(reading,'score'),false);
   assert.equal(JSON.stringify(reading).includes('100점'),false);
 });
 
