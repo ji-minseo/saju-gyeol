@@ -395,7 +395,7 @@ const renderFlow=result=>{
 const SHARE_CARD={
   width:1080,
   height:1350,
-  pad:76,
+  pad:72,
   url:'saju.everytinytool.com'
 };
 
@@ -404,19 +404,33 @@ const shareFonts={
   serif:'"Noto Serif KR","Nanum Myeongjo","AppleMyungjo",serif'
 };
 
+const SHARE_PALETTE={
+  paper:'#f7f3ee',
+  paperDeep:'#f0ebe5',
+  ink:'#302a30',
+  muted:'#7c7279',
+  faint:'#cfc5cb',
+  line:'#d7cfd3',
+  plum:'#625062',
+  plumDeep:'#4f3e4f',
+  rose:'#a36770',
+  gold:'#9b7c4f',
+  white:'#fffdfb'
+};
+
 const elementShareColors={
-  wood:'#6f8f73',
-  fire:'#b77768',
-  earth:'#a88a61',
-  metal:'#7d8290',
-  water:'#657b91'
+  wood:'#728d75',
+  fire:'#b77767',
+  earth:'#aa8d64',
+  metal:'#818794',
+  water:'#667d91'
 };
 
 const shareCategoryLabels={
-  temperament:'성향',
-  relationship:'관계',
-  career:'일',
-  money:'돈'
+  temperament:{ko:'성향',hanja:'性'},
+  relationship:{ko:'관계',hanja:'緣'},
+  career:{ko:'일',hanja:'業'},
+  money:{ko:'돈',hanja:'財'}
 };
 
 const shareElementLabels={
@@ -470,6 +484,29 @@ const drawCanvasLines=(ctx,lines,x,y,lineHeight)=>{
   return y+Math.max(0,lines.length-1)*lineHeight;
 };
 
+const drawHairline=(ctx,x1,y1,x2,y2,color=SHARE_PALETTE.line,width=1)=>{
+  ctx.save();
+  ctx.strokeStyle=color;
+  ctx.lineWidth=width;
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2,y2);
+  ctx.stroke();
+  ctx.restore();
+};
+
+const drawSectionKicker=(ctx,{index,title,y,pad,width})=>{
+  ctx.save();
+  ctx.fillStyle=SHARE_PALETTE.gold;
+  ctx.font=`800 15px ${shareFonts.sans}`;
+  ctx.fillText(String(index).padStart(2,'0'),pad,y);
+  ctx.fillStyle=SHARE_PALETTE.ink;
+  ctx.font=`800 17px ${shareFonts.sans}`;
+  ctx.fillText(title,pad+40,y);
+  drawHairline(ctx,pad+190,y-6,width-pad,y-6,'#d9d0d4',1);
+  ctx.restore();
+};
+
 const buildShareCanvas=async result=>{
   if(document.fonts?.ready) await document.fonts.ready;
   const reading=buildReadingV2(result);
@@ -479,143 +516,201 @@ const buildShareCanvas=async result=>{
   const ctx=canvas.getContext('2d');
   const {width,height,pad}=SHARE_CARD;
 
-  ctx.fillStyle='#fbf8f6';
+  ctx.fillStyle=SHARE_PALETTE.paper;
   ctx.fillRect(0,0,width,height);
 
-  ctx.fillStyle='#5f4d5d';
-  ctx.font=`700 62px ${shareFonts.serif}`;
-  ctx.fillText('사주결',pad,112);
+  // Quiet paper grain — deterministic, no image dependency.
+  ctx.save();
+  ctx.globalAlpha=.16;
+  ctx.strokeStyle='#ffffff';
+  ctx.lineWidth=1;
+  for(let y=9;y<height;y+=17) drawHairline(ctx,0,y,width,y,'#ffffff',1);
+  ctx.restore();
 
-  ctx.fillStyle='#9a7e55';
-  ctx.font=`700 18px ${shareFonts.sans}`;
-  ctx.letterSpacing='3px';
-  ctx.fillText('SAJU GYEOL · PERSONAL READING',pad,154);
-  ctx.letterSpacing='0px';
+  // Large editorial watermark.
+  ctx.save();
+  ctx.globalAlpha=.045;
+  ctx.fillStyle=SHARE_PALETTE.plum;
+  ctx.font=`700 184px ${shareFonts.serif}`;
+  ctx.textAlign='right';
+  ctx.fillText('結',width-pad+10,154);
+  ctx.restore();
+  ctx.textAlign='left';
 
-  ctx.fillStyle='#70666f';
-  ctx.font=`500 24px ${shareFonts.sans}`;
-  ctx.fillText('나를 만나는 사주, 사주결',pad,198);
+  // Masthead.
+  ctx.fillStyle=SHARE_PALETTE.plum;
+  ctx.font=`700 64px ${shareFonts.serif}`;
+  ctx.fillText('사주결',pad,104);
 
-  ctx.strokeStyle='#d7cfd4';
-  ctx.lineWidth=2;
-  ctx.beginPath();
-  ctx.moveTo(pad,232);
-  ctx.lineTo(width-pad,232);
-  ctx.stroke();
+  ctx.fillStyle=SHARE_PALETTE.gold;
+  ctx.font=`800 15px ${shareFonts.sans}`;
+  ctx.fillText('SAJU GYEOL  ·  PERSONAL READING',pad,147);
+
+  ctx.fillStyle=SHARE_PALETTE.muted;
+  ctx.font=`600 20px ${shareFonts.sans}`;
+  ctx.fillText('나를 만나는 사주, 사주결',pad,184);
+
+  drawHairline(ctx,pad,218,width-pad,218,'#cfc5cb',1.5);
+  ctx.fillStyle=SHARE_PALETTE.gold;
+  ctx.fillRect(pad,214,58,5);
+
+  // 01. Four pillars — one continuous 명식 plate instead of four floating cards.
+  drawSectionKicker(ctx,{index:1,title:'命式  ·  FOUR PILLARS',y:255,pad,width});
 
   const pillarKeys=['year','month','day','hour'];
   const pillarLabels=['년주','월주','일주','시주'];
-  const pillarGap=14;
-  const pillarW=(width-pad*2-pillarGap*3)/4;
-  const pillarY=280;
-  const pillarH=188;
+  const plateY=284;
+  const plateH=202;
+  const plateW=width-pad*2;
+  const colW=plateW/4;
+
+  roundRectPath(ctx,pad,plateY,plateW,plateH,24);
+  ctx.fillStyle='rgba(255,253,251,.72)';
+  ctx.fill();
+  ctx.strokeStyle='#cfc4cb';
+  ctx.lineWidth=1.5;
+  ctx.stroke();
 
   pillarKeys.forEach((key,index)=>{
-    const x=pad+index*(pillarW+pillarGap);
+    const x=pad+index*colW;
     const isDay=key==='day';
-    roundRectPath(ctx,x,pillarY,pillarW,pillarH,22);
-    ctx.fillStyle=isDay?'#615061':'#ffffff';
-    ctx.fill();
-    ctx.strokeStyle=isDay?'#615061':'#ded6db';
-    ctx.lineWidth=2;
-    ctx.stroke();
 
-    ctx.fillStyle=isDay?'rgba(255,255,255,.72)':'#8b8188';
-    ctx.font=`700 17px ${shareFonts.sans}`;
+    if(index>0) drawHairline(ctx,x,plateY+20,x,plateY+plateH-20,'#ddd4d9',1);
+
+    if(isDay){
+      ctx.save();
+      roundRectPath(ctx,x+8,plateY+8,colW-16,plateH-16,18);
+      ctx.fillStyle=SHARE_PALETTE.plum;
+      ctx.fill();
+      ctx.restore();
+
+      roundRectPath(ctx,x+colW/2-29,plateY-11,58,24,12);
+      ctx.fillStyle=SHARE_PALETTE.gold;
+      ctx.fill();
+      ctx.fillStyle=SHARE_PALETTE.white;
+      ctx.font=`800 11px ${shareFonts.sans}`;
+      ctx.textAlign='center';
+      ctx.fillText('日 主',x+colW/2,plateY+5);
+    }
+
     ctx.textAlign='center';
-    ctx.fillText(pillarLabels[index],x+pillarW/2,pillarY+42);
+    ctx.fillStyle=isDay?'rgba(255,255,255,.70)':SHARE_PALETTE.muted;
+    ctx.font=`800 15px ${shareFonts.sans}`;
+    ctx.fillText(pillarLabels[index],x+colW/2,plateY+43);
 
-    ctx.fillStyle=isDay?'#fff':'#312b31';
-    ctx.font=`700 58px ${shareFonts.serif}`;
-    ctx.fillText(result.pillars[key]?.hanja||'—',x+pillarW/2,pillarY+119);
+    ctx.fillStyle=isDay?'#fff':SHARE_PALETTE.ink;
+    ctx.font=`700 62px ${shareFonts.serif}`;
+    ctx.fillText(result.pillars[key]?.hanja||'—',x+colW/2,plateY+120);
 
-    ctx.fillStyle=isDay?'rgba(255,255,255,.76)':'#81777f';
-    ctx.font=`600 15px ${shareFonts.sans}`;
     const stemGod=result.tenGods.visibleStems[key];
     const branchGod=result.tenGods.visibleBranches[key];
-    ctx.fillText(key==='day'?'나의 중심':(stemGod&&branchGod?`${stemGod} · ${branchGod}`:'출생시간 미상'),x+pillarW/2,pillarY+154);
+    ctx.fillStyle=isDay?'rgba(255,255,255,.72)':SHARE_PALETTE.muted;
+    ctx.font=`650 14px ${shareFonts.sans}`;
+    ctx.fillText(
+      key==='day'?'나의 중심':(stemGod&&branchGod?`${stemGod} · ${branchGod}`:'출생시간 미상'),
+      x+colW/2,
+      plateY+163
+    );
   });
   ctx.textAlign='left';
 
-  ctx.fillStyle='#9a7e55';
-  ctx.font=`800 17px ${shareFonts.sans}`;
-  ctx.fillText('KEY READING',pad,528);
+  // 02. Key reading — editorial 2×2 spread with dividers, not boxed cards.
+  drawSectionKicker(ctx,{index:2,title:'KEY READING',y:540,pad,width});
 
-  const cardGap=18;
-  const cardW=(width-pad*2-cardGap)/2;
-  const cardH=174;
-  const cardStartY=554;
+  const readingY=575;
+  const readingH=352;
+  const readingW=width-pad*2;
+  const readingColW=readingW/2;
+  const readingRowH=readingH/2;
+
+  roundRectPath(ctx,pad,readingY,readingW,readingH,24);
+  ctx.fillStyle='rgba(255,253,251,.58)';
+  ctx.fill();
+
+  drawHairline(ctx,pad+readingColW,readingY+24,pad+readingColW,readingY+readingH-24,'#ded5da',1);
+  drawHairline(ctx,pad+24,readingY+readingRowH,pad+readingW-24,readingY+readingRowH,'#ded5da',1);
+
   Object.entries(reading).forEach(([key,section],index)=>{
     const col=index%2;
     const row=Math.floor(index/2);
-    const x=pad+col*(cardW+cardGap);
-    const y=cardStartY+row*(cardH+cardGap);
-    roundRectPath(ctx,x,y,cardW,cardH,20);
-    ctx.fillStyle='#fff';
-    ctx.fill();
-    ctx.strokeStyle='#dfd8dc';
-    ctx.lineWidth=2;
-    ctx.stroke();
+    const x=pad+col*readingColW;
+    const y=readingY+row*readingRowH;
+    const meta=shareCategoryLabels[key]||{ko:key,hanja:''};
 
-    ctx.fillStyle='#a06a75';
-    ctx.font=`800 18px ${shareFonts.sans}`;
-    ctx.fillText(shareCategoryLabels[key]||key,x+24,y+36);
+    ctx.save();
+    ctx.globalAlpha=.08;
+    ctx.fillStyle=SHARE_PALETTE.plum;
+    ctx.font=`700 76px ${shareFonts.serif}`;
+    ctx.fillText(meta.hanja,x+26,y+78);
+    ctx.restore();
 
-    ctx.fillStyle='#322c31';
-    ctx.font=`700 25px ${shareFonts.sans}`;
-    const lines=wrapCanvasText(ctx,section.title,cardW-48,3);
-    drawCanvasLines(ctx,lines,x+24,y+76,36);
+    ctx.fillStyle=SHARE_PALETTE.rose;
+    ctx.font=`800 16px ${shareFonts.sans}`;
+    ctx.fillText(meta.ko,x+28,y+38);
+
+    ctx.fillStyle=SHARE_PALETTE.ink;
+    ctx.font=`750 24px ${shareFonts.sans}`;
+    const lines=wrapCanvasText(ctx,section.title,readingColW-64,3);
+    drawCanvasLines(ctx,lines,x+28,y+82,34);
   });
 
-  const elementY=940;
-  ctx.fillStyle='#9a7e55';
-  ctx.font=`800 17px ${shareFonts.sans}`;
-  ctx.fillText('FIVE ELEMENTS',pad,elementY);
+  // 03. Five elements — clean inset with normalized bars for easier comparison.
+  drawSectionKicker(ctx,{index:3,title:'FIVE ELEMENTS',y:981,pad,width});
 
   const counts=result.fiveElements.counts;
-  const total=Math.max(1,Object.values(counts).reduce((sum,value)=>sum+value,0));
   const keys=['wood','fire','earth','metal','water'];
-  const barX=pad+68;
-  const barW=width-pad*2-160;
-  keys.forEach((key,index)=>{
-    const y=elementY+42+index*47;
-    ctx.fillStyle='#6f666d';
-    ctx.font=`700 18px ${shareFonts.sans}`;
-    ctx.fillText(shareElementLabels[key],pad,y+7);
+  const maxCount=Math.max(1,...keys.map(key=>Number(counts[key]||0)));
+  const elementPanelY=1011;
+  const elementPanelH=228;
 
-    roundRectPath(ctx,barX,y-10,barW,16,8);
-    ctx.fillStyle='#ebe6e8';
+  roundRectPath(ctx,pad,elementPanelY,width-pad*2,elementPanelH,22);
+  ctx.fillStyle=SHARE_PALETTE.paperDeep;
+  ctx.fill();
+
+  const labelX=pad+28;
+  const barX=pad+92;
+  const barW=width-pad*2-154;
+
+  keys.forEach((key,index)=>{
+    const y=elementPanelY+35+index*38;
+    const value=Number(counts[key]||0);
+
+    ctx.fillStyle=SHARE_PALETTE.ink;
+    ctx.font=`800 16px ${shareFonts.sans}`;
+    ctx.fillText(shareElementLabels[key],labelX,y+5);
+
+    roundRectPath(ctx,barX,y-8,barW,12,6);
+    ctx.fillStyle='#ddd7da';
     ctx.fill();
 
-    const value=Number(counts[key]||0);
     if(value>0){
-      roundRectPath(ctx,barX,y-10,Math.max(16,barW*(value/total)),16,8);
+      roundRectPath(ctx,barX,y-8,Math.max(14,barW*(value/maxCount)),12,6);
       ctx.fillStyle=elementShareColors[key];
       ctx.fill();
     }
 
-    ctx.fillStyle='#766d73';
-    ctx.font=`700 16px ${shareFonts.sans}`;
     ctx.textAlign='right';
-    ctx.fillText(String(value),width-pad,y+6);
+    ctx.fillStyle=SHARE_PALETTE.muted;
+    ctx.font=`800 15px ${shareFonts.sans}`;
+    ctx.fillText(String(value),width-pad-24,y+5);
     ctx.textAlign='left';
   });
 
-  ctx.strokeStyle='#d7cfd4';
-  ctx.lineWidth=2;
-  ctx.beginPath();
-  ctx.moveTo(pad,1234);
-  ctx.lineTo(width-pad,1234);
-  ctx.stroke();
+  // Footer.
+  drawHairline(ctx,pad,1272,width-pad,1272,'#cfc5cb',1.5);
 
-  ctx.fillStyle='#5f4d5d';
-  ctx.font=`800 21px ${shareFonts.sans}`;
-  ctx.fillText(SHARE_CARD.url,pad,1282);
+  ctx.fillStyle=SHARE_PALETTE.plum;
+  ctx.font=`800 18px ${shareFonts.sans}`;
+  ctx.fillText(SHARE_CARD.url,pad,1311);
 
-  ctx.fillStyle='#887e85';
-  ctx.font=`600 16px ${shareFonts.sans}`;
+  ctx.fillStyle=SHARE_PALETTE.muted;
+  ctx.font=`650 14px ${shareFonts.sans}`;
   ctx.textAlign='right';
-  ctx.fillText(`절기 기준 · 한국 표준시 · ${dayBoundaryLabel(result.metadata?.dayBoundary)}`,width-pad,1282);
+  ctx.fillText(
+    `절기 기준 · 한국 표준시 · ${dayBoundaryLabel(result.metadata?.dayBoundary)}`,
+    width-pad,
+    1311
+  );
   ctx.textAlign='left';
 
   return canvas;
