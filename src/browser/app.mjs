@@ -42,6 +42,12 @@ const flowAsOf=document.querySelector('#flow-as-of');
 const saveResultImageButton=document.querySelector('#save-result-image');
 const shareResultButton=document.querySelector('#share-result');
 const resultActionStatus=document.querySelector('#result-action-status');
+const saveReadingInput=document.querySelector('#save-reading');
+const recentReading=document.querySelector('#recent-reading');
+const recentReadingTitle=document.querySelector('#recent-reading-title');
+const recentReadingMeta=document.querySelector('#recent-reading-meta');
+const restoreRecentReadingButton=document.querySelector('#restore-recent-reading');
+const clearRecentReadingButton=document.querySelector('#clear-recent-reading');
 
 let latestShareState=null;
 let resultActionStatusTimer=null;
@@ -810,6 +816,123 @@ const shareLatestResult=async()=>{
 saveResultImageButton?.addEventListener('click',saveLatestResultImage);
 shareResultButton?.addEventListener('click',shareLatestResult);
 
+const RECENT_READING_KEY='saju-gyeol:recent-reading:v1';
+
+const safeReadRecentReading=()=>{
+  try{
+    const raw=localStorage.getItem(RECENT_READING_KEY);
+    if(!raw) return null;
+    const saved=JSON.parse(raw);
+    if(saved?.version!==1||!saved.birthDate) return null;
+    return saved;
+  }catch{
+    return null;
+  }
+};
+
+const formatSavedAt=value=>{
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime())) return '이 브라우저에 저장됨';
+  return `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')} 저장`;
+};
+
+const refreshRecentReading=()=>{
+  if(!recentReading) return;
+  const saved=safeReadRecentReading();
+  if(!saved){
+    recentReading.hidden=true;
+    return;
+  }
+  recentReading.hidden=false;
+  if(recentReadingTitle){
+    recentReadingTitle.textContent=saved.dayPillar
+      ?`최근에 본 ${saved.dayPillar} 일주를 이어볼까요?`
+      :'최근에 본 사주를 이어볼까요?';
+  }
+  if(recentReadingMeta){
+    recentReadingMeta.textContent=`${formatSavedAt(saved.savedAt)} · 이 브라우저에만 보관 중`;
+  }
+};
+
+const persistRecentReading=({calendar,birthDate,birthTime,sexValue,dayBoundary,calendarMeta,result})=>{
+  if(!saveReadingInput?.checked) return;
+  const lunar=calendar==='lunar'?{
+    year:Number(lunarYear.value),
+    month:Number(lunarMonth.value),
+    day:Number(lunarDay.value),
+    isLeapMonth:Boolean(lunarLeap.checked)
+  }:null;
+  const payload={
+    version:1,
+    savedAt:new Date().toISOString(),
+    calendar,
+    birthDate,
+    birthTime,
+    sex:sexValue,
+    dayBoundary,
+    calendarMeta,
+    lunar,
+    dayPillar:result.pillars.day?.hanja??null
+  };
+  try{
+    localStorage.setItem(RECENT_READING_KEY,JSON.stringify(payload));
+    refreshRecentReading();
+  }catch{
+    // Storage may be disabled by the browser; calculation itself should still succeed.
+  }
+};
+
+const restoreRecentReading=()=>{
+  const saved=safeReadRecentReading();
+  if(!saved) return;
+
+  const calendar=saved.calendar==='lunar'&&saved.lunar?'lunar':'solar';
+  const calendarInput=form.elements.calendar;
+  if(calendarInput) calendarInput.value=calendar;
+
+  if(calendar==='lunar'){
+    lunarYear.value=String(saved.lunar.year??'');
+    lunarMonth.value=String(saved.lunar.month??'');
+    lunarDay.value=String(saved.lunar.day??'');
+    lunarLeap.checked=Boolean(saved.lunar.isLeapMonth);
+    dateInput.value='';
+  }else{
+    dateInput.value=saved.birthDate;
+  }
+  syncCalendarFields();
+
+  timeUnknown.checked=!saved.birthTime;
+  timeInput.disabled=!saved.birthTime;
+  timeInput.value=saved.birthTime||'';
+
+  if(saved.sex&&form.elements.sex) form.elements.sex.value=saved.sex;
+  if(form.elements.dayBoundary) form.elements.dayBoundary.value=saved.dayBoundary||'midnight';
+  if(saveReadingInput) saveReadingInput.checked=true;
+
+  try{
+    const result=calculateSaju(
+      {birthDate:saved.birthDate,birthTime:saved.birthTime||null,sex:saved.sex||null},
+      {dayBoundary:saved.dayBoundary||'midnight'}
+    );
+    if(result.status==='needs-birth-time'){
+      setError('저장된 날짜가 절기 경계일이라 정확한 결과를 다시 보려면 출생시간이 필요해요.');
+      return;
+    }
+    const sex=saved.sex==='female'?'여성':saved.sex==='male'?'남성':'성별 미선택';
+    showResult(result,sex,saved.calendarMeta||null);
+  }catch{
+    setError('저장된 결과를 다시 불러오지 못했어요. 새로 입력해 주세요.');
+  }
+};
+
+restoreRecentReadingButton?.addEventListener('click',restoreRecentReading);
+clearRecentReadingButton?.addEventListener('click',()=>{
+  try{localStorage.removeItem(RECENT_READING_KEY);}catch{}
+  if(saveReadingInput) saveReadingInput.checked=false;
+  refreshRecentReading();
+});
+refreshRecentReading();
+
 const renderSummary=(result,sex,calendarMeta=null)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
@@ -885,6 +1008,15 @@ form?.addEventListener('submit',event=>{
       return;
     }
     showResult(result,sex,calendarMeta);
+    persistRecentReading({
+      calendar,
+      birthDate,
+      birthTime,
+      sexValue,
+      dayBoundary,
+      calendarMeta,
+      result
+    });
   }catch(error){
     const message=String(error?.message||error);
     if(message.includes('did not exist')) setError('입력한 시각은 당시 한국의 표준시 전환 때문에 존재하지 않았던 시각이에요. 출생기록을 다시 확인해 주세요.');
