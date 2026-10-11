@@ -20,7 +20,7 @@
   <meta name="twitter:title" content="사주결 | 무료 사주 풀이">
   <meta name="twitter:description" content="생년월일과 출생시간으로 나의 사주 흐름을 차분하게 읽어보세요.">
   <meta name="twitter:image" content="https://saju.everytinytool.com/assets/saju-hero.webp">
-  <link rel="stylesheet" href="./assets/style.css?v=20261006-v09">
+  <link rel="stylesheet" href="./assets/style.css?v=20261012-recent1">
   <link rel="stylesheet" href="./assets/report-editorial.css?v=20261010-share1">
   <script type="application/ld+json">
   {
@@ -57,6 +57,18 @@
         </div>
         <div class="art-caption"><span class="caption-line"></span>당신만의 결을 따라.</div>
       </div>
+      <aside class="recent-reading" id="recent-reading" hidden>
+        <div>
+          <span class="recent-reading-kicker">RECENT READING</span>
+          <strong id="recent-reading-title">최근에 본 사주가 있어요.</strong>
+          <p id="recent-reading-meta">이 브라우저에 저장된 결과를 이어서 볼 수 있어요.</p>
+        </div>
+        <div class="recent-reading-actions">
+          <button type="button" id="restore-recent-reading">다시 보기 <span aria-hidden="true">→</span></button>
+          <button type="button" id="clear-recent-reading">삭제</button>
+        </div>
+      </aside>
+
       <form class="birth-form" id="birth-form">
         <div class="section-heading tool-heading">
           <p class="eyebrow">SAJU READING <span>무료 풀이</span></p>
@@ -118,9 +130,14 @@
           </div>
         </fieldset>
 
+        <label class="save-reading-option">
+          <input id="save-reading" type="checkbox">
+          <span><b>이 브라우저에 최근 결과 저장</b><small>체크한 경우에만 이 기기에 저장하며, 언제든 삭제할 수 있어요.</small></span>
+        </label>
+
         <button class="primary-button" type="submit">사주 풀어보기 <span aria-hidden="true">→</span></button>
         <p class="form-error" id="form-error" role="alert" hidden></p>
-        <p class="form-foot">가입 없이 · 입력 정보 저장 없이<br>양력 1912~2100년 · 음력 1912~2050년 한국 출생 · <a href="./methodology/">계산 기준 보기</a></p>
+        <p class="form-foot">가입 없이 · 서버 저장 없이<br>양력 1912~2100년 · 음력 1912~2050년 한국 출생 · <a href="./methodology/">계산 기준 보기</a></p>
       </form>
 
       <div class="service-strip"><span><i>性</i> 성향</span><span><i>緣</i> 관계</span><span><i>業</i> 일</span><span><i>財</i> 돈</span><small>네 가지 시선으로 읽는 나</small></div>
@@ -292,6 +309,6 @@
     <div><span>© SAJU GYEOL</span></div>
     <div class="footer-links"><a href="./methodology/">계산 기준</a></div>
   </footer>
-  <script src="./assets/engine-app.js?v=20261011-share2" defer></script>
+  <script src="./assets/engine-app.js?v=20261012-recent1" defer></script>
 </body>
 </html>
