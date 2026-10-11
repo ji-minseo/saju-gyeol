@@ -53,3 +53,31 @@ test('share card omits exact birth date and time from its drawing copy',async()=
   assert.doesNotMatch(shareCanvasSource,/result\.input\.birthDate/);
   assert.doesNotMatch(shareCanvasSource,/result\.input\.birthTime/);
 });
+
+
+test('recent reading restore is explicit opt-in and browser-local',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+
+  assert.match(html,/id="save-reading"/);
+  assert.match(html,/id="recent-reading"/);
+  assert.match(html,/id="restore-recent-reading"/);
+  assert.match(html,/id="clear-recent-reading"/);
+  assert.match(html,/서버 저장 없이/);
+
+  assert.match(source,/RECENT_READING_KEY='saju-gyeol:recent-reading:v1'/);
+  assert.match(source,/if\(!saveReadingInput\?\.checked\) return/);
+  assert.match(source,/localStorage\.setItem\(RECENT_READING_KEY/);
+  assert.match(source,/localStorage\.removeItem\(RECENT_READING_KEY/);
+  assert.match(source,/calculateSaju\(\s*\{birthDate:saved\.birthDate/);
+});
+
+test('recent reading UI does not expose saved birth date in its teaser',async()=>{
+  const source=await readFile('src/browser/app.mjs','utf8');
+  const start=source.indexOf('const refreshRecentReading=');
+  const end=source.indexOf('const persistRecentReading=',start);
+  assert.ok(start>=0&&end>start);
+  const teaserSource=source.slice(start,end);
+  assert.doesNotMatch(teaserSource,/saved\.birthDate/);
+  assert.doesNotMatch(teaserSource,/saved\.birthTime/);
+});
