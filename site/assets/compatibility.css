@@ -922,6 +922,7 @@
   .pair-person small{font-size:10px}
   .pair-person span{font-size:8.5px}
   .pair-center::before,.pair-center::after{width:16px}
+  .pair-center span{display:none}
   .pair-center b{font-size:22px}
   .compat-story>article{grid-template-columns:52px minmax(0,1fr)}
 }
