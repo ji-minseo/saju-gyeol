@@ -81,3 +81,22 @@ test('recent reading UI does not expose saved birth date in its teaser',async()=
   assert.doesNotMatch(teaserSource,/saved\.birthDate/);
   assert.doesNotMatch(teaserSource,/saved\.birthTime/);
 });
+
+
+test('compatibility page exposes two-person inputs and share actions',async()=>{
+  const html=await readFile('site/compatibility/index.html','utf8');
+  const source=await readFile('src/browser/compatibility-app.mjs','utf8');
+
+  assert.match(html,/id="compatibility-form"/);
+  assert.match(html,/name="aCalendar"/);
+  assert.match(html,/name="bCalendar"/);
+  assert.match(html,/id="compat-result"/);
+  assert.match(html,/id="save-compat-image"/);
+  assert.match(html,/id="share-compat-result"/);
+
+  assert.match(source,/buildCompatibilityV1/);
+  assert.match(source,/calculateSaju/);
+  assert.match(source,/lunarToSolarDate/);
+  assert.match(source,/saju-gyeol-compatibility\.png/);
+  assert.match(source,/navigator\.share/);
+});
