@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "build:site": "esbuild src/browser/app.mjs --bundle --platform=browser --format=iife --target=es2020 --outfile=site/assets/engine-app.js"
+    "build:site": "esbuild src/browser/app.mjs --bundle --platform=browser --format=iife --target=es2020 --outfile=site/assets/engine-app.js && esbuild src/browser/compatibility-app.mjs --bundle --platform=browser --format=iife --target=es2020 --outfile=site/assets/compatibility-app.js"
   },
   "dependencies": {
     "astronomy-engine": "2.1.19"
