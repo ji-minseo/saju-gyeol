@@ -5,6 +5,7 @@ import {readFile} from 'node:fs/promises';
 test('public pages are indexable and canonicalized',async()=>{
   const home=await readFile('site/index.html','utf8');
   const method=await readFile('site/methodology/index.html','utf8');
+  const compatibility=await readFile('site/compatibility/index.html','utf8');
 
   assert.match(home,/name="robots" content="index,follow,max-image-preview:large"/);
   assert.match(home,/rel="canonical" href="https:\/\/saju\.everytinytool\.com\/"/);
@@ -13,6 +14,10 @@ test('public pages are indexable and canonicalized',async()=>{
   assert.match(method,/name="robots" content="index,follow,max-image-preview:large"/);
   assert.match(method,/rel="canonical" href="https:\/\/saju\.everytinytool\.com\/methodology\/"/);
   assert.doesNotMatch(method,/noindex/i);
+
+  assert.match(compatibility,/name="robots" content="index,follow,max-image-preview:large"/);
+  assert.match(compatibility,/rel="canonical" href="https:\/\/saju\.everytinytool\.com\/compatibility\/"/);
+  assert.doesNotMatch(compatibility,/noindex/i);
 });
 
 test('404 remains excluded from search',async()=>{
@@ -30,6 +35,7 @@ test('robots and sitemap expose only public canonical pages',async()=>{
 
   assert.match(sitemap,/https:\/\/saju\.everytinytool\.com\/<\/loc>/);
   assert.match(sitemap,/https:\/\/saju\.everytinytool\.com\/methodology\/<\/loc>/);
+  assert.match(sitemap,/https:\/\/saju\.everytinytool\.com\/compatibility\/<\/loc>/);
   assert.doesNotMatch(sitemap,/404/);
 });
 
