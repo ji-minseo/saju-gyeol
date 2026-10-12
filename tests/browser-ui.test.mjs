@@ -100,3 +100,20 @@ test('compatibility page exposes two-person inputs and share actions',async()=>{
   assert.match(source,/saju-gyeol-compatibility\.png/);
   assert.match(source,/navigator\.share/);
 });
+
+
+test('personal result renders expanded reading v3 report',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+
+  assert.match(html,/id="result-deep-reading"/);
+  assert.match(html,/id="deep-portrait-title"/);
+  assert.match(html,/data-deep-pattern="decision"/);
+  assert.match(html,/data-deep-pattern="stress"/);
+  assert.match(html,/id="ten-god-position-list"/);
+
+  assert.match(source,/buildReadingV3/);
+  assert.match(source,/renderDeepReading/);
+  assert.match(source,/deep\.tenGodPositions/);
+  assert.doesNotMatch(source,/import \{buildReadingV2\}/);
+});
