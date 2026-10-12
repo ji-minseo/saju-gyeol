@@ -117,3 +117,16 @@ test('personal result renders expanded reading v3 report',async()=>{
   assert.match(source,/deep\.tenGodPositions/);
   assert.doesNotMatch(source,/import \{buildReadingV2\}/);
 });
+
+
+test('daeun timeline renders an explanation card for every cycle',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+
+  assert.match(html,/대운별 10년 해설/);
+  assert.match(source,/className='daeun-life-card'/);
+  assert.match(source,/className='daeun-life-body'/);
+  assert.match(source,/className='daeun-life-guide'/);
+  assert.match(source,/timeline\.evidence/);
+  assert.match(source,/dataset\.daeunOrder/);
+});
