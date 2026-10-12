@@ -5,8 +5,8 @@ import {resolveSeoulCivilTime} from '../src/engine/korea-time.mjs';
 import {getJieTermsForYear,SOLAR_TERM_SUPPORT} from '../src/engine/solar-term-provider.mjs';
 import {lunarToSolarDate,LUNAR_SUPPORT} from '../src/engine/lunar-calendar.mjs';
 
-test('v0.8 support boundaries are explicit',()=>{
-  assert.equal(ENGINE_VERSION,'0.8.0');
+test('v0.9 support boundaries are explicit',()=>{
+  assert.equal(ENGINE_VERSION,'0.9.0');
   assert.deepEqual(SOLAR_TERM_SUPPORT,{minYear:1912,maxYear:2100});
   assert.equal(LUNAR_SUPPORT.minYear,1912);
   assert.equal(LUNAR_SUPPORT.maxYear,2050);
