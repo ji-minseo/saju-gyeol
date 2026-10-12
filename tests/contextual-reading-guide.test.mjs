@@ -10,7 +10,7 @@ test('HOW TO READ is contextual instead of a standalone FAQ guidebook',async()=>
   assert.ok(html.includes('id="context-guide-body"'));
   assert.ok(html.includes('id="context-guide-personal"'));
 
-  for(const key of ['pillars','summary','day','structure','elements','tengods','relations','stars','flow','appendix']){
+  for(const key of ['pillars','summary','day','structure','climate','elements','tengods','relations','stars','flow','appendix']){
     assert.ok(html.includes('data-guide-key="'+key+'"'),key);
   }
 });
@@ -22,6 +22,7 @@ test('contextual guide copy changes by report chapter',async()=>{
     "AT A GLANCE · 먼저 보는 핵심",
     "日柱 · DAY PILLAR",
     "STRUCTURE · 힘과 균형",
+    "調候 · 계절의 균형",
     "五行 · FIVE ELEMENTS",
     "十星 · TEN GODS",
     "地支關係 · BRANCH RELATIONS",
@@ -93,4 +94,18 @@ test('structure chapter defines expert terms in plain Korean before relying on t
   assert.ok(source.includes("kicker:'STRUCTURE · 힘과 균형'"));
   assert.ok(source.includes('명리에서는 각각 신강·신약, 격국, 용신이라고 불러요.'));
   assert.equal(source.includes(":'월령·뿌리·천간의 도움과 소모를 함께 계산합니다.'"),false);
+});
+
+
+test('climate chapter explains seasonal balance separately from strength balance',async()=>{
+  const html=await readFile(new URL('../site/index.html',import.meta.url),'utf8');
+  const source=await readFile(new URL('../src/browser/app.mjs',import.meta.url),'utf8');
+  for(const id of [
+    'chapter-climate','climate-season-copy','climate-primary-stem',
+    'climate-candidate-list','climate-balance-useful','climate-season-useful',
+    'climate-comparison-copy'
+  ]) assert.ok(html.includes('id="'+id+'"'),id);
+  assert.ok(source.includes("kicker:'調候 · 계절의 균형'"));
+  assert.ok(source.includes('const renderClimateBalance=result=>'));
+  assert.ok(source.includes('renderClimateBalance(result)'));
 });
