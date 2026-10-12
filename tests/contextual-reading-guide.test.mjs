@@ -21,7 +21,7 @@ test('contextual guide copy changes by report chapter',async()=>{
     "命式 · 네 기둥",
     "AT A GLANCE · 먼저 보는 핵심",
     "日柱 · DAY PILLAR",
-    "身强身弱 · 格局 · 用神",
+    "STRUCTURE · 힘과 균형",
     "五行 · FIVE ELEMENTS",
     "十星 · TEN GODS",
     "地支關係 · BRANCH RELATIONS",
