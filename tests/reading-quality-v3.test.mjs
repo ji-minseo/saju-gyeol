@@ -79,9 +79,11 @@ test('2027 flow preserves 未戌 punishment when natal chart contains 戌',()=>{
   assert.ok(annual2027.evidence.some(x=>x==='형 未·戌'||x==='형 戌·未'));
 });
 
-test('daeun detail timeline uses month-precision start ages and reading title seam guards',async()=>{
+test('daeun detail timeline uses engine-provided month-precision periods and reading title seam guards',async()=>{
   const app=await readFile('src/browser/app.mjs','utf8');
-  assert.match(app,/formatAgeMonthsLabel\(cycle\.startAgeMonths\)/);
+  const flow=await readFile('src/content/flow-v1.mjs','utf8');
+  assert.match(flow,/period:\`약 \${formatAgeMonths\(cycle\.startAgeMonths\)} ~ \${formatAgeMonths\(endAgeMonths\)}\`/);
+  assert.match(app,/period\.textContent=timeline\.period/);
   assert.doesNotMatch(app,/cycle\.startAge}세/);
   assert.match(app,/relationship:\/\^관계\//);
   assert.match(app,/money:\/\^돈\//);
