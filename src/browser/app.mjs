@@ -1,6 +1,7 @@
 import {calculateSaju,ENGINE_VERSION} from '../engine/calculator.mjs';
 import {buildReadingV3} from '../content/reading-v3.mjs';
 import {buildCurrentFlow} from '../content/flow-v1.mjs';
+import {buildReadingGuide} from '../content/guide-v1.mjs';
 import {lunarToSolarDate} from '../engine/lunar-calendar.mjs';
 
 const form=document.querySelector('#birth-form');
@@ -1032,6 +1033,17 @@ clearRecentReadingButton?.addEventListener('click',()=>{
 });
 refreshRecentReading();
 
+
+const renderReadingGuide=result=>{
+  const guide=buildReadingGuide(result);
+  const dayCopy=document.querySelector('#guide-day-pillar-copy');
+  const elementsCopy=document.querySelector('#guide-elements-copy');
+  const tenGodsCopy=document.querySelector('#guide-ten-gods-copy');
+  if(dayCopy) dayCopy.textContent=guide.dayPillar;
+  if(elementsCopy) elementsCopy.textContent=guide.elements;
+  if(tenGodsCopy) tenGodsCopy.textContent=guide.tenGods;
+};
+
 const renderSummary=(result,sex,calendarMeta=null)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
@@ -1050,6 +1062,7 @@ const showResult=(result,sex,calendarMeta=null)=>{
   renderPillar('month',result.pillars.month,result.tenGods.visibleStems.month,result.tenGods.visibleBranches.month);
   renderPillar('day',result.pillars.day,result.tenGods.visibleStems.day,result.tenGods.visibleBranches.day);
   renderPillar('hour',result.pillars.hour,result.tenGods.visibleStems.hour,result.tenGods.visibleBranches.hour);
+  renderReadingGuide(result);
   renderElements(result);
   renderTenGods(result);
   renderHiddenStems(result);
