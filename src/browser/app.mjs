@@ -1201,11 +1201,11 @@ const renderReadingGuide=result=>{
     },
     stars:{
       kicker:'神煞 · 貴人 · 보조 상징',
-      title:'천을귀인·도화·역마 같은 이름은 특정 글자 조합에 붙인 별칭이에요.',
-      body:'이름만 보고 좋고 나쁨을 정하는 표가 아니에요. 어떤 기준으로 잡혔는지와 실제 네 기둥의 어느 자리에 해당하는지를 확인한 뒤 다른 구조와 함께 참고합니다.',
+      title:'여기는 공통 24종과 12신살 전체를 한 번에 확인하는 곳이에요.',
+      body:'신살은 종류마다 계산 기준이 달라요. 사주결은 정한 24종을 빠짐없이 보여주고, 12신살은 연지·일지를 기준으로 열두 단계를 모두 배정해 따로 보여줍니다.',
       personal:result.symbolicStars?.present?.length
-        ?'현재 대표 5종 가운데 '+result.symbolicStars.present.map(x=>x.label).join(' · ')+' 표시가 있어요.'
-        :'현재 대표 5종 기준에서 네 기둥에 직접 걸리는 표시는 없어요.'
+        ?'현재 공통 24종 가운데 '+result.symbolicStars.present.length+'종이 명식에 직접 걸려 있어요.'
+        :'현재 공통 24종 기준에서 네 기둥에 직접 걸리는 표시는 없어요.'
     },
     flow:{
       kicker:'原局 × 大運 × 歲運',
@@ -1227,71 +1227,169 @@ const renderReadingGuide=result=>{
 
 const renderSymbolicStars=result=>{
   const container=document.querySelector('#symbolic-stars-list');
+  const summary=document.querySelector('#symbolic-stars-summary');
+  const catalog=document.querySelector('#twelve-star-catalog');
+  const anchors=document.querySelector('#twelve-star-anchors');
   const footnote=document.querySelector('#symbolic-star-footnote');
   const data=result.symbolicStars;
   if(!container||!data) return;
 
+  if(summary){
+    summary.replaceChildren();
+    const count=document.createElement('strong');
+    count.textContent='공통 24종 중 '+data.present.length+'종 해당';
+    const note=document.createElement('span');
+    note.textContent='해당 없음도 포함해 24종 전체를 아래에 표시합니다.';
+    summary.append(count,note);
+  }
+
   container.replaceChildren();
-  for(const star of data.stars){
-    const card=document.createElement('article');
-    card.className='symbolic-star-card '+(star.present?'is-present':'is-absent');
+  const groups=['귀인·길신','신살·보조'];
+  for(const groupName of groups){
+    const stars=data.stars.filter(star=>star.group===groupName);
+    const section=document.createElement('section');
+    section.className='symbolic-star-group';
 
-    const head=document.createElement('div');
-    head.className='symbolic-star-head';
+    const groupHead=document.createElement('div');
+    groupHead.className='symbolic-star-group-head';
+    const groupTitle=document.createElement('h3');
+    groupTitle.textContent=groupName;
+    const groupCount=document.createElement('span');
+    groupCount.textContent=stars.length+'종 · 해당 '+stars.filter(x=>x.present===true).length+'종';
+    groupHead.append(groupTitle,groupCount);
 
-    const mark=document.createElement('span');
-    mark.className='symbolic-star-mark';
-    mark.textContent=star.hanja;
+    const grid=document.createElement('div');
+    grid.className='symbolic-star-grid';
 
-    const titleBox=document.createElement('div');
-    const label=document.createElement('small');
-    label.textContent=star.label;
-    const title=document.createElement('h3');
-    title.textContent=star.plain;
-    titleBox.append(label,title);
+    for(const star of stars){
+      const card=document.createElement('details');
+      card.className='symbolic-star-card '+(star.present===true?'is-present':star.mode==='cycle'?'is-cycle':'is-absent');
+      if(star.present===true) card.open=true;
 
-    const status=document.createElement('b');
-    status.className='symbolic-star-status';
-    status.textContent=star.present?'있음':'해당 없음';
+      const head=document.createElement('summary');
+      head.className='symbolic-star-head';
 
-    head.append(mark,titleBox,status);
+      const mark=document.createElement('span');
+      mark.className='symbolic-star-mark';
+      mark.textContent=star.hanja;
 
-    const meaning=document.createElement('p');
-    meaning.className='symbolic-star-meaning';
-    meaning.textContent=star.meaning;
+      const titleBox=document.createElement('div');
+      const label=document.createElement('small');
+      label.textContent=star.key;
+      const title=document.createElement('h4');
+      title.textContent=star.plain;
+      titleBox.append(label,title);
 
-    const hits=document.createElement('div');
-    hits.className='symbolic-star-hits';
-    if(star.present){
-      for(const hit of star.hits){
+      const status=document.createElement('b');
+      status.className='symbolic-star-status';
+      status.textContent=star.mode==='cycle'?'주기':star.present?'있음':'해당 없음';
+
+      head.append(mark,titleBox,status);
+
+      const detail=document.createElement('div');
+      detail.className='symbolic-star-detail';
+
+      const meaning=document.createElement('p');
+      meaning.className='symbolic-star-meaning';
+      meaning.textContent=star.meaning;
+
+      const hits=document.createElement('div');
+      hits.className='symbolic-star-hits';
+
+      if(star.mode==='cycle'){
         const row=document.createElement('div');
         const where=document.createElement('strong');
-        where.textContent=hit.label+' '+hit.hanja;
+        where.textContent='주기 정보';
         const source=document.createElement('span');
-        source.textContent=hit.sources.join(' · ');
+        source.textContent=star.statusText;
         row.append(where,source);
         hits.append(row);
+      }else if(star.present){
+        for(const hit of star.hits){
+          const row=document.createElement('div');
+          const where=document.createElement('strong');
+          where.textContent=hit.subtype
+            ?hit.subtype+' · '+hit.label+' '+hit.hanja
+            :hit.label+' '+hit.hanja;
+          const source=document.createElement('span');
+          source.textContent=hit.source||hit.sources?.join(' · ')||'이 자리에서 기준이 성립합니다.';
+          row.append(where,source);
+          hits.append(row);
+        }
+      }else{
+        const empty=document.createElement('p');
+        empty.textContent='현재 보이는 네 기둥에는 이 기준에 맞는 글자나 조합이 없어요.';
+        hits.append(empty);
       }
-    }else{
-      const empty=document.createElement('p');
-      empty.textContent='현재 보이는 네 기둥에는 이 기준에 맞는 글자가 없어요.';
-      hits.append(empty);
+
+      const basis=document.createElement('div');
+      basis.className='symbolic-star-basis';
+      const basisLabel=document.createElement('b');
+      basisLabel.textContent='어떻게 찾았나요?';
+      const basisText=document.createElement('p');
+      basisText.textContent=star.basis;
+      basis.append(basisLabel,basisText);
+
+      detail.append(meaning,hits,basis);
+
+      if(star.extra?.schoolVariant){
+        const variance=document.createElement('p');
+        variance.className='symbolic-star-variance';
+        variance.textContent='학파 차이 · '+star.extra.schoolVariant;
+        detail.append(variance);
+      }
+
+      card.append(head,detail);
+      grid.append(card);
     }
 
-    const basis=document.createElement('div');
-    basis.className='symbolic-star-basis';
-    const basisLabel=document.createElement('b');
-    basisLabel.textContent='어떻게 찾았나요?';
-    const basisText=document.createElement('p');
-    basisText.textContent=star.basis;
-    basis.append(basisLabel,basisText);
+    section.append(groupHead,grid);
+    container.append(section);
+  }
 
-    card.append(head,meaning,hits,basis);
-    container.append(card);
+  if(catalog){
+    catalog.replaceChildren();
+    const names=data.twelveCatalog||[];
+    for(const name of names){
+      const chip=document.createElement('span');
+      chip.textContent=name;
+      catalog.append(chip);
+    }
+  }
+
+  if(anchors){
+    anchors.replaceChildren();
+    for(const anchor of data.twelveStars||[]){
+      const panel=document.createElement('article');
+      panel.className='twelve-star-anchor';
+
+      const heading=document.createElement('div');
+      heading.className='twelve-star-anchor-head';
+      const title=document.createElement('h4');
+      title.textContent=anchor.anchorLabel+' '+anchor.anchorBranch+' 기준';
+      const group=document.createElement('span');
+      group.textContent='삼합 '+anchor.group;
+      heading.append(title,group);
+
+      const rows=document.createElement('div');
+      rows.className='twelve-star-rows';
+      for(const row of anchor.rows){
+        const item=document.createElement('div');
+        const position=document.createElement('span');
+        position.textContent=row.positionLabel+' '+row.branch;
+        const label=document.createElement('strong');
+        label.textContent=row.label;
+        item.append(position,label);
+        rows.append(item);
+      }
+
+      panel.append(heading,rows);
+      anchors.append(panel);
+    }
   }
 
   if(footnote){
-    footnote.textContent=data.explanation+(data.missingHour?' 태어난 시간을 몰라 시지에 해당하는 표시는 확인하지 않았어요.':'');
+    footnote.textContent=data.explanation+(data.missingHour?' 태어난 시간을 몰라 시지에 걸리는 신살과 12신살 배정은 확인하지 않았어요.':'');
   }
 };
 
