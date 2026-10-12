@@ -16,7 +16,7 @@ test('1995-10-13 10:13 reference chart gets transparent base structure',()=>{
   assert.equal(a.strength.label,'신강');
   assert.equal(a.usefulGod.status,'candidate');
   assert.equal(a.usefulGod.primary.label,'토');
-  assert.ok(a.strength.evidence.some(x=>x.includes('월령')));
+  assert.ok(a.strength.evidence.some(x=>x.includes('태어난 달의 계절 힘')));
   assert.ok(a.strength.roots.length>=1);
 });
 
@@ -51,4 +51,16 @@ test('strength classification remains finite and explainable across fixtures',()
 test('balancing candidate does not pretend to include unimplemented methods',()=>{
   assert.equal(STRUCTURE_ANALYSIS_POLICY.usefulGodMethod,'balancing-candidate');
   assert.equal(STRUCTURE_ANALYSIS_POLICY.climateUsefulGod,false);
+});
+
+
+test('structure explanations define jargon after plain language',()=>{
+  const result=calculateSaju({birthDate:'1995-10-13',birthTime:'10:13',sex:'female'});
+  const a=result.structuralAnalysis;
+  assert.match(a.strength.explanation,/태어난 날의 위 글자/);
+  assert.match(a.strength.explanation,/신강·신약이라고 불러요/);
+  assert.match(a.pattern.explanation,/쉽게 말하면/);
+  assert.match(a.pattern.explanation,/격국이라고 해요/);
+  assert.match(a.usefulGod.explanation,/균형을 돕는/);
+  assert.match(a.usefulGod.explanation,/용신이라고 불러요/);
 });
