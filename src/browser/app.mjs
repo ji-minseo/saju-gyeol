@@ -242,20 +242,61 @@ const renderStructureFacts=result=>{
   }
   daeunMeta.textContent=`${result.daeun.direction==='forward'?'순행':'역행'} · 대운수 약 ${result.daeun.startAgeYearsRounded} · ${result.daeun.boundary.name} 절입 기준`;
   const flow=buildCurrentFlow(result,{today:new Date()});
-  for(const cycle of result.daeun.cycles){
-    const timeline=flow.daeunTimeline.find(item=>item.order===cycle.order);
-    const item=document.createElement('div');
+  for(const timeline of flow.daeunTimeline){
+    const item=document.createElement('article');
+    item.className='daeun-life-card';
+    item.dataset.daeunOrder=String(timeline.order);
+    if(timeline.isCurrent){
+      item.classList.add('is-current-daeun');
+      item.setAttribute('aria-current','true');
+    }
 
-    const age=document.createElement('small');
-    age.textContent=`약 ${formatAgeMonthsLabel(cycle.startAgeMonths)}~`;
+    const rail=document.createElement('div');
+    rail.className='daeun-life-rail';
+    const order=document.createElement('small');
+    order.textContent=String(timeline.order).padStart(2,'0');
     const pillar=document.createElement('strong');
-    pillar.textContent=cycle.pillar.hanja;
+    pillar.textContent=timeline.pillar.hanja;
     const korean=document.createElement('span');
-    korean.textContent=cycle.pillar.korean;
-    const theme=document.createElement('em');
-    theme.textContent=timeline?timeline.theme:'';
+    korean.textContent=timeline.pillar.korean;
+    rail.append(order,pillar,korean);
 
-    item.append(age,pillar,korean,theme);
+    const copy=document.createElement('div');
+    copy.className='daeun-life-copy';
+
+    const top=document.createElement('div');
+    top.className='daeun-life-top';
+    const period=document.createElement('span');
+    period.textContent=timeline.period;
+    const theme=document.createElement('em');
+    theme.textContent=timeline.theme;
+    top.append(period,theme);
+
+    const title=document.createElement('h4');
+    title.textContent=timeline.title;
+
+    const body=document.createElement('p');
+    body.className='daeun-life-body';
+    body.textContent=timeline.body;
+
+    const guide=document.createElement('div');
+    guide.className='daeun-life-guide';
+    const guideLabel=document.createElement('b');
+    guideLabel.textContent='이 10년을 쓰는 법';
+    const guideText=document.createElement('p');
+    guideText.textContent=timeline.guide;
+    guide.append(guideLabel,guideText);
+
+    const evidence=document.createElement('div');
+    evidence.className='daeun-life-evidence';
+    for(const value of timeline.evidence){
+      const chip=document.createElement('span');
+      chip.textContent=value;
+      evidence.append(chip);
+    }
+
+    copy.append(top,title,body,guide,evidence);
+    item.append(rail,copy);
     daeunTrack.append(item);
   }
 };
@@ -459,8 +500,12 @@ const renderFlow=result=>{
   currentDaeunGuide.textContent=daeun.guide||'대운 계산에 필요한 정보를 입력하면 활용 포인트를 함께 보여드립니다.';
   addEvidenceChips(currentDaeunEvidence,daeun.evidence||[]);
 
-  [...daeunTrack.children].forEach((item,index)=>{
-    item.classList.toggle('is-current-daeun',daeun.status==='active'&&index+1===daeun.order);
+  [...daeunTrack.children].forEach(item=>{
+    const order=Number(item.dataset.daeunOrder);
+    const active=daeun.status==='active'&&order===daeun.order;
+    item.classList.toggle('is-current-daeun',active);
+    if(active) item.setAttribute('aria-current','true');
+    else item.removeAttribute('aria-current');
   });
 
   annualFlow.replaceChildren();
