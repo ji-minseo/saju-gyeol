@@ -67,11 +67,22 @@ test('flow titles choose Korean 이/가 from the keyword final consonant',()=>{
 });
 
 
-test('daeun timeline exposes a theme for every 10-year cycle',()=>{
+test('daeun timeline explains every 10-year cycle',()=>{
   const result=calculateSaju({birthDate:'1990-08-21',birthTime:'11:20',sex:'female'});
   const flow=buildCurrentFlow(result,{today:'2026-10-06'});
   assert.equal(flow.daeunTimeline.length,result.daeun.cycles.length);
-  assert.ok(flow.daeunTimeline.every(item=>item.theme&&item.title&&item.pillar.hanja.length===2));
+  assert.ok(flow.daeunTimeline.every(item=>
+    item.theme&&
+    item.title&&
+    item.body.length>=45&&
+    item.guide.length>=20&&
+    item.period.includes('~')&&
+    item.evidence.length>=3&&
+    item.pillar.hanja.length===2&&
+    item.methodId==='daeun-timeline-v2'
+  ));
+  assert.equal(flow.daeunTimeline.filter(item=>item.isCurrent).length,1);
+  assert.equal(flow.daeunTimeline.find(item=>item.isCurrent)?.order,flow.daeun.order);
 });
 
 test('no rendered flow title contains broken Korean particles',()=>{
@@ -89,4 +100,17 @@ test('no rendered flow title contains broken Korean particles',()=>{
     ].filter(Boolean).join(' ');
     assert.doesNotMatch(titles,/루틴가|독립가/);
   }
+});
+
+
+test('daeun cycle explanations include natal branch relations when present',()=>{
+  const samples=[
+    {birthDate:'1988-09-19',birthTime:'16:40',sex:'male'},
+    {birthDate:'1995-10-13',birthTime:'10:10',sex:'female'},
+    {birthDate:'2001-06-12',birthTime:'14:30',sex:'male'}
+  ];
+  const timelines=samples.flatMap(input=>buildCurrentFlow(calculateSaju(input),{today:'2026-10-06'}).daeunTimeline);
+  const related=timelines.filter(item=>item.relations.length>0);
+  assert.ok(related.length>0);
+  assert.ok(related.every(item=>item.evidence.length>3));
 });
