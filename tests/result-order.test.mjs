@@ -8,6 +8,7 @@ test('result report is organized as data-first interpretation chapters',async()=
   const summary=html.indexOf('id="result-summary"');
   const day=html.indexOf('id="chapter-day"');
   const structure=html.indexOf('id="result-structure-reading"');
+  const climate=html.indexOf('id="chapter-climate"');
   const elements=html.indexOf('id="chapter-elements"');
   const tenGods=html.indexOf('id="chapter-ten-gods"');
   const relations=html.indexOf('id="chapter-relations"');
@@ -15,13 +16,14 @@ test('result report is organized as data-first interpretation chapters',async()=
   const flow=html.indexOf('id="chapter-flow"');
   const details=html.indexOf('id="result-details"');
 
-  for(const [key,value] of Object.entries({pillars,summary,day,structure,elements,tenGods,relations,stars,flow,details})){
+  for(const [key,value] of Object.entries({pillars,summary,day,structure,climate,elements,tenGods,relations,stars,flow,details})){
     assert.ok(value>0,key);
   }
   assert.ok(pillars<summary);
   assert.ok(summary<day);
   assert.ok(day<structure);
-  assert.ok(structure<elements);
+  assert.ok(structure<climate);
+  assert.ok(climate<elements);
   assert.ok(elements<tenGods);
   assert.ok(tenGods<relations);
   assert.ok(relations<stars);
