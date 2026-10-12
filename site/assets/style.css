@@ -3945,3 +3945,7 @@ body{
     margin-top:20px;
   }
 }
+
+
+/* numbered structure chapter no longer needs the old floating FRAME marker */
+.structure-reading::before{content:none!important}
