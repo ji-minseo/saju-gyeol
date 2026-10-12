@@ -11,10 +11,11 @@ test('result report is organized as data-first interpretation chapters',async()=
   const elements=html.indexOf('id="chapter-elements"');
   const tenGods=html.indexOf('id="chapter-ten-gods"');
   const relations=html.indexOf('id="chapter-relations"');
+  const stars=html.indexOf('id="chapter-symbolic-stars"');
   const flow=html.indexOf('id="chapter-flow"');
   const details=html.indexOf('id="result-details"');
 
-  for(const [key,value] of Object.entries({pillars,summary,day,structure,elements,tenGods,relations,flow,details})){
+  for(const [key,value] of Object.entries({pillars,summary,day,structure,elements,tenGods,relations,stars,flow,details})){
     assert.ok(value>0,key);
   }
   assert.ok(pillars<summary);
@@ -23,7 +24,8 @@ test('result report is organized as data-first interpretation chapters',async()=
   assert.ok(structure<elements);
   assert.ok(elements<tenGods);
   assert.ok(tenGods<relations);
-  assert.ok(relations<flow);
+  assert.ok(relations<stars);
+  assert.ok(stars<flow);
   assert.ok(flow<details);
 });
 
@@ -45,8 +47,10 @@ test('interpretations sit beside the data they are derived from',async()=>{
 
   const branchData=html.indexOf('id="branch-relations"');
   const relationship=html.indexOf('data-reading="relationship"');
+  const stars=html.indexOf('id="chapter-symbolic-stars"');
   const flow=html.indexOf('id="chapter-flow"');
-  assert.ok(relations<branchData&&branchData<relationship&&relationship<flow);
+  assert.ok(relations<branchData&&branchData<relationship&&relationship<stars);
+  assert.ok(stars<flow);
 
   const daeunTrack=html.indexOf('id="daeun-track"');
   const currentFlow=html.indexOf('id="result-flow"');
