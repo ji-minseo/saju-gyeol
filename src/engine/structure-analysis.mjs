@@ -148,7 +148,7 @@ export function analyzeDayMasterStrength({dayStemIndex,pillars}){
       tenGod:monthTenGod,
       group:seasonGroup,
       score:seasonScore,
-      text:'월지 '+month.branch.hanja+'의 정기 '+STEMS[monthMainStem].hanja+'('+monthTenGod+')은 일간의 힘을 '+seasonDirection+' 계절 조건으로 봅니다.'
+      text:'태어난 달의 아래 글자 '+month.branch.hanja+' 속 대표 기운 '+STEMS[monthMainStem].hanja+'('+monthTenGod+')은, 나를 뜻하는 글자의 힘을 '+seasonDirection+' 계절 조건으로 봅니다.'
     },
     roots,
     rootScore:Number(rootScore.toFixed(2)),
@@ -159,7 +159,7 @@ export function analyzeDayMasterStrength({dayStemIndex,pillars}){
       '뿌리 · '+roots.length+'곳 '+(rootScore?('+'+Number(rootScore.toFixed(2))):'0'),
       '표면 천간 · 도움 '+supportiveVisible.length+' / 소모·압박 '+drainingVisible.length
     ],
-    explanation:'사주결은 월령을 가장 먼저 보고, 지지에 같은 오행의 뿌리가 있는지, 표면 천간에서 비겁·인성이 돕는지 또는 식상·재성·관성이 힘을 쓰게 하는지를 합쳐 상대적인 강약을 봅니다. 이 명식은 '+grade.label+' 쪽으로 분류됩니다.',
+    explanation:'태어난 날의 위 글자를 ‘나’로 놓고, ① 태어난 달의 계절 기운이 나를 돕는지 ② 아래 글자들 속에 나와 같은 기운이 받쳐주는지 ③ 겉에 드러난 다른 글자들이 나를 돕는지 또는 힘을 쓰게 하는지를 함께 봅니다. 이 명식은 '+grade.label+' 쪽으로 분류됩니다. 이 상대적인 힘의 구분을 신강·신약이라고 불러요.',
     detail:{
       roots:rootText,
       visibleSupport:visibleSupportText,
@@ -204,7 +204,7 @@ export function analyzeBasePattern({dayStemIndex,pillars}){
     monthStage,
     exposed,
     exposedLabels:exposed.map(x=>STEM_POSITION_KO[x]),
-    explanation:'격국은 먼저 월지 '+month.branch.hanja+'의 정기 '+STEMS[monthMainStemIndex].hanja+'가 일간과 맺는 관계인 '+mainTenGod+'을 기준으로 기초 골격을 잡습니다. 그래서 사주결의 기본 격은 ‘'+label+'’로 표시합니다.',
+    explanation:'태어난 달의 아래 글자 '+month.branch.hanja+' 안에서 가장 중심이 되는 기운은 '+STEMS[monthMainStemIndex].hanja+'이고, 이 기운은 나를 뜻하는 글자와 '+mainTenGod+' 관계예요. 그래서 이 명식의 기본 골격에 ‘'+label+'’이라는 이름을 붙입니다. 이렇게 태어난 달의 중심 역할을 이름 붙인 것을 격국이라고 해요.',
     caveat:'종격·화격·전왕격 같은 특수격과 합화에 따른 격 변화는 이 자동 판정에 넣지 않습니다.'
   };
 }
@@ -238,7 +238,7 @@ export function analyzeUsefulGod({strength,pillars}){
       primary:null,
       supportive:[],
       counts,
-      explanation:'현재 기준에서는 일간이 중화권이라 억부만으로 특정 오행 하나를 용신으로 고정하지 않습니다. 어느 한쪽을 더하는 것보다 계절·격국·실제 운의 흐름을 함께 보는 편이 안전합니다.',
+      explanation:'나를 뜻하는 글자의 힘이 한쪽으로 크게 치우치지 않은 편이라, 균형을 위해 특정 오행 하나를 꼭 보태야 한다고 정하지 않습니다. 그래서 이 경우에는 단일 용신 후보를 보류해요.',
       caveat:'조후용신·격국용신은 별도 체계이므로 여기서 억지로 하나로 합치지 않습니다.'
     };
   }
