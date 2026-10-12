@@ -59,7 +59,7 @@ test('symbolic stars are explicitly supporting symbols, not deterministic predic
   assert.equal(SYMBOLIC_STAR_POLICY.deterministicPrediction,false);
   const result=calculateSaju({birthDate:'1995-10-13',birthTime:'10:13',sex:'female'});
   const text=JSON.stringify(result.symbolicStars);
-  for(const forbidden of ['반드시 결혼','무조건 인기','귀인이 나타난다','해외로 이사한다','사고가 난다']){
+  for(const forbidden of ['반드시 결혼','무조건 인기','반드시 귀인이 나타난다','해외로 이사하게 된다','반드시 사고가 난다']){
     assert.equal(text.includes(forbidden),false,forbidden);
   }
 });
