@@ -1046,7 +1046,7 @@ clearRecentReadingButton?.addEventListener('click',()=>{
 refreshRecentReading();
 
 
-const CONTEXT_GUIDE_ORDER=['pillars','structure','summary','reading','deep','flow','details'];
+const CONTEXT_GUIDE_ORDER=['pillars','summary','day','structure','elements','tengods','relations','flow','appendix'];
 
 const activateContextGuide=key=>{
   const chapter=contextGuideChapters[key]||contextGuideChapters.pillars;
@@ -1101,6 +1101,14 @@ const renderReadingGuide=result=>{
     ?structure.usefulGod.primary.label+'('+structure.usefulGod.primary.roleLabel+')'
     :'단일 후보 보류';
 
+  const setInline=(selector,value)=>{
+    const node=document.querySelector(selector);
+    if(node) node.textContent=value||'';
+  };
+  setInline('#chapter-day-personal',guide.dayPillar);
+  setInline('#chapter-elements-personal',guide.elements);
+  setInline('#chapter-ten-gods-personal',guide.tenGods);
+
   contextGuideChapters={
     pillars:{
       kicker:'命式 · 네 기둥',
@@ -1108,43 +1116,55 @@ const renderReadingGuide=result=>{
       body:'년주·월주·일주·시주는 서로 다른 자리를 뜻해요. 위 글자는 천간, 아래 글자는 지지이고, 그중 일주를 나를 읽는 중심으로 삼습니다.',
       personal:guide.dayPillar
     },
+    summary:{
+      kicker:'AT A GLANCE · 먼저 보는 핵심',
+      title:'긴 풀이에 들어가기 전에 네 가지 핵심만 먼저 압축해 봐요.',
+      body:'성향·관계·일·돈을 한 줄씩 먼저 보고, 아래에서는 각각 어떤 명식 데이터에서 나온 해석인지 같은 챕터 안에서 확인할 수 있어요.',
+      personal:'아래부터는 데이터와 해석을 따로 떼지 않고 바로 이어서 보여줘요.'
+    },
+    day:{
+      kicker:'日柱 · DAY PILLAR',
+      title:'일주 데이터와 “나의 중심 성향”을 한 번에 보고 있어요.',
+      body:'일간은 해석에서 나를 잡는 기준이고 일지는 가까운 생활과 관계의 리듬을 보는 자리예요. 그래서 일주를 먼저 보고 강점·과잉·결정·압박 패턴을 이어서 읽습니다.',
+      personal:guide.dayPillar
+    },
     structure:{
       kicker:'身强身弱 · 格局 · 用神',
-      title:'여기서는 “힘의 크기”, “기본 골격”, “균형 후보”를 따로 봐요.',
-      body:'신강·신약은 일간이 얼마나 받쳐지는지, 격국은 월령을 중심으로 잡는 구조의 이름, 용신은 그 구조의 균형을 돕는 오행 후보예요. 같은 개념이 아니라 순서대로 이어서 봅니다.',
+      title:'여기서는 힘의 크기, 기본 골격, 균형 후보를 구분해서 봐요.',
+      body:'신강·신약은 일간이 얼마나 받쳐지는지, 격국은 월령을 중심으로 잡는 구조의 이름, 용신은 그 구조의 균형을 돕는 오행 후보예요.',
       personal:structure
         ?structure.strength.label+' · '+structure.pattern.label+' · 억부 용신 '+useful
         :'월령·뿌리·천간의 도움과 소모를 함께 계산합니다.'
     },
-    summary:{
-      kicker:'KEY READING · 먼저 볼 결',
-      title:'여기는 긴 풀이 전에 핵심 네 가지를 먼저 압축해 보는 곳이에요.',
-      body:'성향·관계·일·돈을 각각 한 줄의 결로 먼저 보여주고, 바로 아래 챕터에서 왜 그런 해석이 나왔는지 십성·오행·위치 근거를 다시 풀어갑니다.',
-      personal:'짧은 요약은 결론이 아니라 아래 상세 해석의 길잡이예요.'
+    elements:{
+      kicker:'五行 · FIVE ELEMENTS',
+      title:'오행 숫자 바로 옆에서 이 분포를 어떻게 읽는지 확인해요.',
+      body:'목·화·토·금·수는 다섯 가지 기본 성질의 표면 분포예요. 많고 적음 자체를 길흉으로 보지 않고, 어떤 성질이 눈에 많이 보이고 덜 보이는지를 다른 구조와 함께 봅니다.',
+      personal:guide.elements
     },
-    reading:{
-      kicker:'十星 · 성향·관계·일·돈',
-      title:'같은 명식을 생활 장면별로 나눠 읽고 있어요.',
-      body:'십성은 일간인 “나”와 다른 글자의 관계에 붙인 이름이에요. 같은 십성도 어느 기둥에 놓였는지에 따라 성향, 가까운 관계, 일, 돈에서 드러나는 방식이 달라질 수 있어요.',
+    tengods:{
+      kicker:'十星 · TEN GODS',
+      title:'십성 구성과 실제 일·돈의 해석을 같은 자리에서 보고 있어요.',
+      body:'십성은 일간인 “나”와 다른 글자의 관계예요. 표면 십성, 지장간, 어느 기둥에 놓였는지를 함께 보고 실제 업무·성과·돈을 판단하는 방식으로 연결합니다.',
       personal:guide.tenGods
     },
-    deep:{
-      kicker:'POSITION · 여러 결 겹쳐 보기',
-      title:'여기서는 한 단어로 성격을 단정하지 않고 서로 다른 단서를 겹쳐 봐요.',
-      body:'일주 하나만 보는 대신 일간·일지·반복되는 십성·오행·기둥 위치를 함께 놓고, 잘 쓰일 때와 과해질 때, 결정·압박·관계·일·돈에서의 차이를 나눠 읽습니다.',
-      personal:'같은 성질도 “어디에 놓였는지”와 “무엇과 함께 있는지”에 따라 표현이 달라져요.'
+    relations:{
+      kicker:'地支關係 · BRANCH RELATIONS',
+      title:'합·충·형·파·해 데이터 바로 아래에서 관계 패턴을 이어서 읽어요.',
+      body:'관계 이름만으로 좋고 나쁨을 정하지 않고, 어느 자리 사이에 연결이나 긴장이 있는지 확인한 다음 가까운 관계에서 반복되기 쉬운 방식으로 해석합니다.',
+      personal:'지지 관계가 없더라도 관계성이 없다는 뜻은 아니고, 해당 규칙의 강한 연결 표시가 없다는 뜻이에요.'
     },
     flow:{
       kicker:'原局 × 大運 × 歲運',
-      title:'타고난 구조 위에 시간의 층을 겹쳐 보는 부분이에요.',
-      body:'원국은 태어난 순간의 기본 구조, 대운은 약 10년 단위의 큰 흐름, 세운은 해마다 바뀌는 흐름이에요. 사건을 예언하기보다 어떤 주제가 그 시기에 더 앞에 오기 쉬운지 비교합니다.',
-      personal:'좋고 나쁨을 한 점수로 매기기보다 원국이 어떤 흐름을 받는지 함께 봐요.'
+      title:'대운 배열과 지금의 대운·세운 해석을 한 챕터에서 겹쳐 봐요.',
+      body:'원국은 태어난 순간의 기본 구조, 대운은 약 10년 단위의 큰 흐름, 세운은 해마다 바뀌는 흐름이에요. 사건보다 어떤 주제가 더 앞에 오는지를 비교합니다.',
+      personal:'아래 대운 배열에서 “지금” 위치와 현재 흐름 해석을 함께 확인할 수 있어요.'
     },
-    details:{
-      kicker:'DETAILS · 해석의 근거표',
-      title:'마지막은 위 해석이 어디서 나왔는지 직접 확인하는 기술 자료예요.',
-      body:'오행은 표면 구성, 십성은 일간과의 관계, 지장간은 지지 안쪽 성분, 십이운성·지지 관계·공망·대운 배열은 서로 다른 계산표예요. 하나만 떼어 길흉으로 읽지 않습니다.',
-      personal:guide.elements
+    appendix:{
+      kicker:'APPENDIX · 보조 데이터',
+      title:'마지막은 핵심 결론보다 한 단계 더 깊게 볼 때 참고하는 표예요.',
+      body:'십이운성과 공망은 하나만 떼어 길흉으로 읽지 않고, 앞에서 본 일주·십성·지지 관계·대운과 함께 참고합니다.',
+      personal:'처음 보는 경우라면 여기까지 모두 외울 필요는 없어요.'
     }
   };
 
