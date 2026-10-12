@@ -331,16 +331,33 @@ const buildDaeunTimeline=result=>{
   return result.daeun.cycles.map(cycle=>{
     const stemGod=tenGod(result.pillars.day.stemIndex,cycle.pillar.stemIndex);
     const branchGod=branchTenGod(result.pillars.day.stemIndex,cycle.pillar.branchIndex);
+    const relations=flowRelations(result,cycle.pillar.branchIndex,`daeun-${cycle.order}`);
+    const relationCopy=relationBundle(relations);
     const pair=godPairSummary(stemGod,branchGod);
+    const endAgeMonths=cycle.startAgeMonths+120;
     return {
       order:cycle.order,
       startAge:cycle.startAge,
       startAgeMonths:cycle.startAgeMonths,
+      endAgeMonths,
+      period:`약 ${formatAgeMonths(cycle.startAgeMonths)} ~ ${formatAgeMonths(endAgeMonths)}`,
       pillar:cycle.pillar,
       stemTenGod:stemGod,
       branchTenGod:branchGod,
       theme:pair.keywords,
-      title:pair.title
+      title:pair.title,
+      body:relationCopy?`${pair.body} ${relationCopy.body}`:pair.body,
+      guide:relationCopy?`${pair.guide} ${relationCopy.action}`:pair.guide,
+      relations,
+      evidence:[
+        `대운 ${cycle.pillar.hanja}`,
+        `천간 ${stemGod}`,
+        `지지 ${branchGod}`,
+        ...[...new Set(relations.map(relationEvidence))]
+      ].filter(Boolean),
+      confidence:'medium',
+      approximateStart:true,
+      methodId:'daeun-timeline-v2'
     };
   });
 };
@@ -372,11 +389,15 @@ export function buildCurrentFlow(result,{today=new Date()}={}){
     buildDaeun(result,target),
     [0,1,2].map(offset=>buildAnnual(result,currentYear+offset,currentYear,offset))
   );
+  const timeline=buildDaeunTimeline(result).map(item=>({
+    ...item,
+    isCurrent:unique.daeun.status==='active'&&item.order===unique.daeun.order
+  }));
   return {
     asOf:`${target.year}-${String(target.month).padStart(2,'0')}-${String(target.day).padStart(2,'0')}`,
     currentSajuYear:currentYear,
     daeun:unique.daeun,
-    daeunTimeline:buildDaeunTimeline(result),
+    daeunTimeline:timeline,
     annuals:unique.annuals,
     policy:{
       yearBoundary:'li-chun',
