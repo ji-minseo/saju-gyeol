@@ -3685,3 +3685,263 @@ body{
   position:-webkit-sticky;
   position:sticky;
 }
+
+
+/* v0.9.2 data-first report chapters */
+.integrated-chapter,
+.technical-appendix{
+  position:relative;
+  margin-top:58px;
+  padding-top:38px;
+  border-top:1px solid #ded5dc;
+}
+.integrated-chapter-heading{
+  display:grid;
+  grid-template-columns:54px minmax(0,1fr);
+  gap:18px;
+  align-items:start;
+  max-width:850px;
+}
+.integrated-number{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border:1px solid #d9ced6;
+  border-radius:50%;
+  background:#fff;
+  color:#765b70;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.05em;
+}
+.integrated-chapter-heading small{
+  display:block;
+  color:#9b7890;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.11em;
+}
+.integrated-chapter-heading h2{
+  margin-top:5px;
+  color:#493846;
+  font-size:28px;
+  line-height:1.42;
+  letter-spacing:-.045em;
+}
+.integrated-chapter-heading p{
+  max-width:720px;
+  margin-top:7px;
+  color:#81747e;
+  font-size:11.5px;
+  line-height:1.78;
+}
+.integrated-personal-note{
+  max-width:850px;
+  margin:19px 0 0 72px;
+  padding:14px 16px;
+  border-left:3px solid #9f7d94;
+  background:#faf7f9;
+  color:#675761;
+  font-size:11px;
+  font-weight:650;
+  line-height:1.78;
+  word-break:keep-all;
+}
+.integrated-personal-note:empty{display:none}
+
+.integrated-data-panel{
+  margin-top:24px;
+}
+.integrated-data-panel>.result-panel,
+.integrated-data-panel>.fact-card{
+  width:100%;
+  margin:0;
+}
+.integrated-data-panel>.result-panel{
+  min-height:0;
+}
+.chapter-elements .integrated-data-panel>.elements-panel{
+  display:grid;
+  grid-template-columns:minmax(180px,.42fr) minmax(0,.58fr);
+  grid-template-areas:
+    "title title"
+    "visual list"
+    "note note";
+  column-gap:34px;
+  align-items:center;
+}
+.chapter-elements .elements-panel>.panel-title{grid-area:title}
+.chapter-elements .elements-panel>.element-visual{grid-area:visual}
+.chapter-elements .elements-panel>.element-list{grid-area:list}
+.chapter-elements .elements-panel>#element-note{grid-area:note}
+
+.chapter-reading-single,
+.chapter-reading-pair{
+  margin-top:20px;
+}
+.chapter-reading-single{
+  grid-template-columns:1fr!important;
+}
+.chapter-reading-single>article{
+  max-width:none;
+}
+.chapter-reading-pair{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+
+.chapter-day .deep-reading{
+  margin-top:26px;
+  padding-top:0;
+}
+.chapter-day .deep-reading-heading{
+  display:none;
+}
+.chapter-day .deep-pattern-section{
+  margin-top:42px;
+}
+
+.chapter-ten-gods .ten-god-position-story{
+  margin-top:38px;
+}
+.chapter-ten-gods .integrated-data-panel>.result-panel{
+  background:#fbf8fc;
+}
+.chapter-relations .integrated-fact-panel>.fact-card{
+  background:#fdf4ee;
+  border-color:#f2e3d9;
+}
+.chapter-relations .integrated-fact-panel .panel-title>span{
+  background:#f7e6da;
+  color:#ba8a67;
+}
+
+.chapter-flow .flow-heading{
+  margin-top:25px;
+}
+.chapter-flow .flow-heading>p.eyebrow{
+  display:none;
+}
+.chapter-flow .flow-heading h2{
+  font-size:22px;
+}
+.chapter-flow .daeun-data-panel{
+  margin-top:22px;
+}
+.chapter-flow .daeun-data-panel>.fact-card{
+  padding:25px 27px;
+  background:#fff;
+  border-color:#e8dfe6;
+}
+
+.structure-reading{
+  margin-top:58px;
+  padding-top:38px;
+}
+.structure-reading::before{
+  content:"FRAME";
+  position:absolute;
+  right:0;
+  top:39px;
+  color:#d8ccd5;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.16em;
+}
+
+.technical-appendix .details-heading{
+  margin:0;
+}
+.technical-facts{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin-top:22px;
+}
+.technical-facts>.fact-card{
+  margin:0;
+  padding:24px;
+}
+.technical-facts>.fact-card:nth-child(1){
+  background:#f5f7f1;
+  border-color:#e5eadc;
+}
+.technical-facts>.fact-card:nth-child(2){
+  background:#f0f5f9;
+  border-color:#dfe8f0;
+}
+
+.quick-summary{
+  margin-top:35px;
+}
+.quick-summary+.integrated-chapter{
+  margin-top:50px;
+}
+
+/* old standalone interpretation heading/grid no longer owns the IA */
+.interpretation-heading{
+  display:none;
+}
+
+@media(max-width:760px){
+  .integrated-chapter,
+  .technical-appendix,
+  .structure-reading{
+    margin-top:44px;
+    padding-top:30px;
+  }
+  .integrated-chapter-heading{
+    grid-template-columns:42px minmax(0,1fr);
+    gap:13px;
+  }
+  .integrated-number{
+    width:36px;
+    height:36px;
+    font-size:9px;
+  }
+  .integrated-chapter-heading h2{
+    font-size:23px;
+  }
+  .integrated-chapter-heading p{
+    font-size:10.5px;
+  }
+  .integrated-personal-note{
+    margin-left:55px;
+    font-size:10.5px;
+  }
+  .chapter-elements .integrated-data-panel>.elements-panel{
+    display:block;
+  }
+  .chapter-reading-pair{
+    grid-template-columns:1fr!important;
+  }
+  .technical-facts{
+    grid-template-columns:1fr;
+  }
+  .structure-reading::before{
+    display:none;
+  }
+}
+
+@media(max-width:520px){
+  .integrated-chapter-heading{
+    grid-template-columns:34px minmax(0,1fr);
+    gap:10px;
+  }
+  .integrated-number{
+    width:31px;
+    height:31px;
+  }
+  .integrated-chapter-heading h2{
+    font-size:21px;
+    line-height:1.46;
+  }
+  .integrated-personal-note{
+    margin:14px 0 0 44px;
+    padding:12px 13px;
+    font-size:10px;
+  }
+  .chapter-day .deep-reading{
+    margin-top:20px;
+  }
+}
