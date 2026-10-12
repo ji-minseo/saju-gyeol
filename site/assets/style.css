@@ -2499,3 +2499,375 @@ body{
   .recent-reading-actions button:first-child{flex:1}
   .save-reading-option{margin-top:18px}
 }
+
+
+/* reading v3 — expanded personal report */
+.deep-reading{
+  margin-top:68px;
+  padding-top:8px;
+}
+.deep-reading-heading{
+  max-width:780px;
+  margin-bottom:24px;
+}
+.deep-reading-heading .eyebrow{margin-bottom:10px}
+.deep-reading-heading h2{
+  color:var(--ink);
+  font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  font-size:32px;
+  line-height:1.42;
+  letter-spacing:-.045em;
+}
+.deep-reading-heading>p:last-child{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.75;
+}
+
+.deep-portrait{
+  display:grid;
+  grid-template-columns:210px minmax(0,1fr);
+  overflow:hidden;
+  border:1px solid #e3d9e0;
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 13% 22%,rgba(177,124,147,.08),transparent 28%),
+    linear-gradient(135deg,#fbf7fa 0%,#fff 54%,#faf7f4 100%);
+}
+.deep-portrait-mark{
+  position:relative;
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-right:1px solid #e4dbe1;
+}
+.deep-portrait-mark::after{
+  content:"日";
+  position:absolute;
+  inset:auto 0 4px;
+  color:rgba(106,57,92,.035);
+  font:700 150px/1 "Noto Serif KR","Nanum Myeongjo",serif;
+  text-align:center;
+  pointer-events:none;
+}
+.deep-portrait-mark small{
+  color:#9a8595;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.15em;
+}
+.deep-portrait-mark strong{
+  position:relative;
+  z-index:1;
+  margin:16px 0 10px;
+  color:var(--jade-deep);
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:60px;
+  line-height:1;
+}
+.deep-portrait-mark span{
+  position:relative;
+  z-index:1;
+  color:#8f818c;
+  font-size:10px;
+  font-weight:700;
+}
+.deep-portrait-copy{
+  padding:38px 40px 34px;
+}
+.deep-kicker,.deep-side-label{
+  color:#a06f85;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.12em;
+}
+.deep-portrait-copy h3{
+  max-width:720px;
+  margin-top:9px;
+  color:#392d36;
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:27px;
+  line-height:1.45;
+  letter-spacing:-.04em;
+}
+.deep-portrait-copy>p:not(.deep-footnote){
+  max-width:760px;
+  margin-top:14px;
+  color:#655a62;
+  font-size:13px;
+  line-height:1.85;
+}
+.deep-footnote{
+  margin-top:16px;
+  padding-top:13px;
+  border-top:1px solid #eee7eb;
+  color:#92868f;
+  font-size:10px;
+  line-height:1.65;
+}
+
+.deep-evidence{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:16px;
+}
+.deep-evidence span{
+  display:inline-flex;
+  padding:6px 8px;
+  border:1px solid rgba(106,57,92,.13);
+  border-radius:999px;
+  background:#fff;
+  color:#745e6f;
+  font-size:9px;
+  font-weight:750;
+  line-height:1.25;
+}
+
+.deep-balance{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  margin-top:18px;
+  border-top:1px solid #ddd3da;
+  border-bottom:1px solid #ddd3da;
+}
+.deep-balance article{
+  min-width:0;
+  padding:30px 32px 28px;
+}
+.deep-balance article+article{border-left:1px solid #e0d6dd}
+.deep-balance .deep-strength{
+  background:linear-gradient(180deg,#fbfdfb,#f7fbf8);
+}
+.deep-balance .deep-overdrive{
+  background:linear-gradient(180deg,#fffaf8,#fdf7f5);
+}
+.deep-balance .deep-strength .deep-side-label{color:#617e71}
+.deep-balance .deep-overdrive .deep-side-label{color:#a66d63}
+.deep-balance h3{
+  margin-top:10px;
+  color:#3b3138;
+  font-size:20px;
+  line-height:1.48;
+  letter-spacing:-.035em;
+}
+.deep-balance>article>p:not(.deep-side-tip){
+  margin-top:11px;
+  color:#685d65;
+  font-size:11.5px;
+  line-height:1.8;
+}
+.deep-side-tip{
+  margin-top:15px;
+  padding:11px 13px;
+  border-left:2px solid #c79f95;
+  background:rgba(255,255,255,.7);
+  color:#806c72;
+  font-size:10px;
+  line-height:1.65;
+}
+
+.deep-pattern-section,
+.ten-god-position-story{
+  margin-top:54px;
+}
+.deep-subheading{
+  display:grid;
+  grid-template-columns:126px minmax(0,1fr);
+  column-gap:24px;
+  align-items:end;
+  padding-bottom:19px;
+  border-bottom:1px solid #ddd4d9;
+}
+.deep-subheading>span{
+  grid-row:1 / span 2;
+  align-self:start;
+  color:#9a7b8d;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.14em;
+}
+.deep-subheading h3{
+  color:#40343d;
+  font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+  font-size:25px;
+  line-height:1.4;
+  letter-spacing:-.04em;
+}
+.deep-subheading p{
+  margin-top:5px;
+  color:#8a7f87;
+  font-size:10.5px;
+  line-height:1.65;
+}
+
+.deep-pattern-list{
+  position:relative;
+}
+.deep-pattern-list::before{
+  content:"";
+  position:absolute;
+  left:21px;
+  top:34px;
+  bottom:34px;
+  width:1px;
+  background:#ddd3da;
+}
+.deep-pattern-list>article{
+  position:relative;
+  display:grid;
+  grid-template-columns:44px minmax(0,1fr);
+  gap:25px;
+  padding:27px 0 25px;
+  border-bottom:1px solid #eee8ec;
+}
+.deep-pattern-list>article:last-child{border-bottom:0}
+.deep-pattern-index{
+  position:relative;
+  z-index:1;
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border:1px solid #d9cbd4;
+  border-radius:50%;
+  background:#fff;
+  color:#8b667d;
+  font-size:9px;
+  font-weight:900;
+}
+.deep-pattern-list small{
+  color:#a17a91;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.12em;
+}
+.deep-pattern-list h4{
+  margin-top:4px;
+  color:#3d333a;
+  font-size:19px;
+  line-height:1.48;
+  letter-spacing:-.03em;
+}
+.deep-pattern-list article>div>p:not(.deep-pattern-tip){
+  max-width:820px;
+  margin-top:9px;
+  color:#665d63;
+  font-size:12px;
+  line-height:1.8;
+}
+.deep-pattern-tip{
+  max-width:780px;
+  margin-top:12px;
+  padding:10px 12px;
+  background:#faf6f8;
+  color:#786a73;
+  font-size:10px;
+  line-height:1.65;
+}
+.deep-pattern-tip:empty{display:none}
+
+.ten-god-position-list{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  margin-top:24px;
+  border-top:1px solid #dcd3d9;
+  border-bottom:1px solid #dcd3d9;
+}
+.ten-god-position-item{
+  min-width:0;
+  padding:26px 22px 24px;
+}
+.ten-god-position-item+article{border-left:1px solid #e3dbe0}
+.ten-god-position-head{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+.ten-god-position-pillar{
+  flex:0 0 auto;
+  width:44px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border:1px solid #d9cdd5;
+  border-radius:12px;
+  background:#fbf7fa;
+  color:#704d65;
+  font:700 20px/1 "Noto Serif KR","Nanum Myeongjo",serif;
+}
+.ten-god-position-head small{
+  color:#9b8e96;
+  font-size:8.5px;
+  line-height:1.45;
+}
+.ten-god-position-head h4{
+  margin-top:4px;
+  color:#40363d;
+  font-size:15px;
+  line-height:1.5;
+  letter-spacing:-.025em;
+}
+.ten-god-position-item>p{
+  margin-top:17px;
+  color:#6d6369;
+  font-size:10.5px;
+  line-height:1.72;
+}
+
+@media(max-width:900px){
+  .ten-god-position-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ten-god-position-item:nth-child(3){border-left:0;border-top:1px solid #e3dbe0}
+  .ten-god-position-item:nth-child(4){border-top:1px solid #e3dbe0}
+}
+
+@media(max-width:620px){
+  .deep-reading{margin-top:52px}
+  .deep-reading-heading h2{font-size:26px}
+  .deep-portrait{grid-template-columns:1fr}
+  .deep-portrait-mark{
+    min-height:146px;
+    border-right:0;
+    border-bottom:1px solid #e4dbe1;
+  }
+  .deep-portrait-mark::after{font-size:105px;inset:auto 0 -4px}
+  .deep-portrait-mark strong{font-size:48px;margin:12px 0 7px}
+  .deep-portrait-copy{padding:26px 20px 24px}
+  .deep-portrait-copy h3{font-size:22px}
+  .deep-portrait-copy>p:not(.deep-footnote){font-size:12px}
+
+  .deep-balance{grid-template-columns:1fr}
+  .deep-balance article{padding:24px 20px}
+  .deep-balance article+article{
+    border-left:0;
+    border-top:1px solid #e0d6dd;
+  }
+
+  .deep-subheading{display:block}
+  .deep-subheading>span{display:block;margin-bottom:7px}
+  .deep-subheading h3{font-size:22px}
+
+  .deep-pattern-list::before{left:17px}
+  .deep-pattern-list>article{grid-template-columns:35px minmax(0,1fr);gap:16px;padding:23px 0}
+  .deep-pattern-index{width:35px;height:35px}
+  .deep-pattern-list h4{font-size:17px}
+  .deep-pattern-list article>div>p:not(.deep-pattern-tip){font-size:11px}
+
+  .ten-god-position-list{
+    display:block;
+    border-bottom:0;
+  }
+  .ten-god-position-item{
+    padding:22px 0;
+    border-bottom:1px solid #e3dbe0;
+  }
+  .ten-god-position-item+article{border-left:0}
+  .ten-god-position-item:nth-child(3),
+  .ten-god-position-item:nth-child(4){border-top:0}
+  .ten-god-position-item>p{font-size:10.5px}
+}
