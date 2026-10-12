@@ -1091,7 +1091,7 @@ clearRecentReadingButton?.addEventListener('click',()=>{
 refreshRecentReading();
 
 
-const CONTEXT_GUIDE_ORDER=['pillars','summary','day','structure','elements','tengods','relations','flow','appendix'];
+const CONTEXT_GUIDE_ORDER=['pillars','summary','day','structure','elements','tengods','relations','stars','flow','appendix'];
 
 const activateContextGuide=key=>{
   const chapter=contextGuideChapters[key]||contextGuideChapters.pillars;
@@ -1199,6 +1199,14 @@ const renderReadingGuide=result=>{
       body:'관계 이름만으로 좋고 나쁨을 정하지 않고, 어느 자리 사이에 연결이나 긴장이 있는지 확인한 다음 가까운 관계에서 반복되기 쉬운 방식으로 해석합니다.',
       personal:'지지 관계가 없더라도 관계성이 없다는 뜻은 아니고, 해당 규칙의 강한 연결 표시가 없다는 뜻이에요.'
     },
+    stars:{
+      kicker:'神煞 · 貴人 · 보조 상징',
+      title:'천을귀인·도화·역마 같은 이름은 특정 글자 조합에 붙인 별칭이에요.',
+      body:'이름만 보고 좋고 나쁨을 정하는 표가 아니에요. 어떤 기준으로 잡혔는지와 실제 네 기둥의 어느 자리에 해당하는지를 확인한 뒤 다른 구조와 함께 참고합니다.',
+      personal:result.symbolicStars?.present?.length
+        ?'현재 대표 5종 가운데 '+result.symbolicStars.present.map(x=>x.label).join(' · ')+' 표시가 있어요.'
+        :'현재 대표 5종 기준에서 네 기둥에 직접 걸리는 표시는 없어요.'
+    },
     flow:{
       kicker:'原局 × 大運 × 歲運',
       title:'대운 배열과 지금의 대운·세운 해석을 한 챕터에서 겹쳐 봐요.',
@@ -1215,6 +1223,76 @@ const renderReadingGuide=result=>{
 
   bindContextGuideScroll();
   activateContextGuide('pillars');
+};
+
+const renderSymbolicStars=result=>{
+  const container=document.querySelector('#symbolic-stars-list');
+  const footnote=document.querySelector('#symbolic-star-footnote');
+  const data=result.symbolicStars;
+  if(!container||!data) return;
+
+  container.replaceChildren();
+  for(const star of data.stars){
+    const card=document.createElement('article');
+    card.className='symbolic-star-card '+(star.present?'is-present':'is-absent');
+
+    const head=document.createElement('div');
+    head.className='symbolic-star-head';
+
+    const mark=document.createElement('span');
+    mark.className='symbolic-star-mark';
+    mark.textContent=star.hanja;
+
+    const titleBox=document.createElement('div');
+    const label=document.createElement('small');
+    label.textContent=star.label;
+    const title=document.createElement('h3');
+    title.textContent=star.plain;
+    titleBox.append(label,title);
+
+    const status=document.createElement('b');
+    status.className='symbolic-star-status';
+    status.textContent=star.present?'있음':'해당 없음';
+
+    head.append(mark,titleBox,status);
+
+    const meaning=document.createElement('p');
+    meaning.className='symbolic-star-meaning';
+    meaning.textContent=star.meaning;
+
+    const hits=document.createElement('div');
+    hits.className='symbolic-star-hits';
+    if(star.present){
+      for(const hit of star.hits){
+        const row=document.createElement('div');
+        const where=document.createElement('strong');
+        where.textContent=hit.label+' '+hit.hanja;
+        const source=document.createElement('span');
+        source.textContent=hit.sources.join(' · ');
+        row.append(where,source);
+        hits.append(row);
+      }
+    }else{
+      const empty=document.createElement('p');
+      empty.textContent='현재 보이는 네 기둥에는 이 기준에 맞는 글자가 없어요.';
+      hits.append(empty);
+    }
+
+    const basis=document.createElement('div');
+    basis.className='symbolic-star-basis';
+    const basisLabel=document.createElement('b');
+    basisLabel.textContent='어떻게 찾았나요?';
+    const basisText=document.createElement('p');
+    basisText.textContent=star.basis;
+    basis.append(basisLabel,basisText);
+
+    card.append(head,meaning,hits,basis);
+    container.append(card);
+  }
+
+  if(footnote){
+    footnote.textContent=data.explanation+(data.missingHour?' 태어난 시간을 몰라 시지에 해당하는 표시는 확인하지 않았어요.':'');
+  }
 };
 
 const renderStructuralAnalysis=result=>{
@@ -1327,6 +1405,7 @@ const showResult=(result,sex,calendarMeta=null)=>{
   renderStructureFacts(result);
   renderDetailGuide(result);
   renderStructuralAnalysis(result);
+  renderSymbolicStars(result);
   renderReading(result);
   renderFlow(result);
   renderSummary(result,sex,calendarMeta);
