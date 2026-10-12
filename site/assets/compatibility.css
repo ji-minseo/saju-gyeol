@@ -926,3 +926,23 @@
   .pair-center b{font-size:22px}
   .compat-story>article{grid-template-columns:52px minmax(0,1fr)}
 }
+
+
+/* Korean typography — sans serif throughout; serif is reserved for pure Hanja marks. */
+.compatibility-page{
+  --compat-sans:Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:var(--compat-sans);
+}
+.compatibility-page input,
+.compatibility-page button,
+.compatibility-page select,
+.compatibility-page textarea{font-family:inherit}
+.compat-hero h1,
+.compat-form-heading h2,
+.compat-result-head h2,
+.pair-summary h3,
+.compat-section-heading h2,
+.direction-reading h3,
+.compat-story article h3{
+  font-family:var(--compat-sans);
+}
