@@ -10,7 +10,7 @@ test('HOW TO READ is contextual instead of a standalone FAQ guidebook',async()=>
   assert.ok(html.includes('id="context-guide-body"'));
   assert.ok(html.includes('id="context-guide-personal"'));
 
-  for(const key of ['pillars','structure','summary','reading','deep','flow','details']){
+  for(const key of ['pillars','summary','day','structure','elements','tengods','relations','flow','appendix']){
     assert.ok(html.includes('data-guide-key="'+key+'"'),key);
   }
 });
@@ -19,11 +19,14 @@ test('contextual guide copy changes by report chapter',async()=>{
   const app=await readFile(new URL('../src/browser/app.mjs',import.meta.url),'utf8');
   for(const phrase of [
     "命式 · 네 기둥",
+    "AT A GLANCE · 먼저 보는 핵심",
+    "日柱 · DAY PILLAR",
     "身强身弱 · 格局 · 用神",
-    "KEY READING · 먼저 볼 결",
-    "十星 · 성향·관계·일·돈",
+    "五行 · FIVE ELEMENTS",
+    "十星 · TEN GODS",
+    "地支關係 · BRANCH RELATIONS",
     "原局 × 大運 × 歲運",
-    "DETAILS · 해석의 근거표"
+    "APPENDIX · 보조 데이터"
   ]){
     assert.ok(app.includes(phrase),phrase);
   }
@@ -55,4 +58,16 @@ test('compatibility nav uses the same main reading label',async()=>{
   const html=await readFile(new URL('../site/compatibility/index.html',import.meta.url),'utf8');
   assert.ok(html.includes('href="../#reading">내 사주 보기</a>'));
   assert.equal(html.includes('href="../#reading">내 사주</a>'),false);
+});
+
+
+test('data chapters expose personalized inline explanations',async()=>{
+  const html=await readFile(new URL('../site/index.html',import.meta.url),'utf8');
+  const source=await readFile(new URL('../src/browser/app.mjs',import.meta.url),'utf8');
+  for(const id of ['chapter-day-personal','chapter-elements-personal','chapter-ten-gods-personal']){
+    assert.ok(html.includes('id="'+id+'"'),id);
+  }
+  assert.ok(source.includes("setInline('#chapter-day-personal',guide.dayPillar)"));
+  assert.ok(source.includes("setInline('#chapter-elements-personal',guide.elements)"));
+  assert.ok(source.includes("setInline('#chapter-ten-gods-personal',guide.tenGods)"));
 });
