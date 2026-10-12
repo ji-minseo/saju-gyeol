@@ -43,3 +43,16 @@ test('desktop recent reading occupies a full-width row without displacing the fo
   assert.match(css,/@media\(min-width:761px\)[\s\S]*?\.tool-shell>\.birth-form\{[\s\S]*?grid-column:2;[\s\S]*?grid-row:1;/);
   assert.match(css,/@media\(min-width:761px\)[\s\S]*?\.tool-shell>\.recent-reading\{[\s\S]*?grid-column:1 \/ -1;[\s\S]*?grid-row:2;/);
 });
+
+
+test('sticky guide ancestors stay overflow-visible on mobile and desktop',async()=>{
+  const css=await readFile(new URL('../site/assets/style.css',import.meta.url),'utf8');
+  assert.match(css,/\.home-page \.tool-shell,\s*\.home-page \.result-preview\{[\s\S]*?overflow:visible!important;/);
+  assert.match(css,/\.context-reading-guide\{[\s\S]*?position:-webkit-sticky;[\s\S]*?position:sticky;/);
+});
+
+test('compatibility nav uses the same main reading label',async()=>{
+  const html=await readFile(new URL('../site/compatibility/index.html',import.meta.url),'utf8');
+  assert.ok(html.includes('href="../#reading">내 사주 보기</a>'));
+  assert.equal(html.includes('href="../#reading">내 사주</a>'),false);
+});
