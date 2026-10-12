@@ -14,8 +14,9 @@ import {twelveStage,branchRelations,dayVoid,BRANCH_RELATION_POLICY} from './deri
 import {calculateDaeun} from './fortune-cycles.mjs';
 import {analyzeStructure,STRUCTURE_ANALYSIS_POLICY} from './structure-analysis.mjs';
 import {calculateSymbolicStars,SYMBOLIC_STAR_POLICY} from './symbolic-stars.mjs';
+import {analyzeClimateBalance,CLIMATE_BALANCE_POLICY} from './climate-balance.mjs';
 
-export const ENGINE_VERSION='0.9.0';
+export const ENGINE_VERSION='0.10.0';
 export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
 
 const parseDate=value=>{
@@ -139,6 +140,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
   const relations=branchRelations(branchEntries);
   const voidInfo=dayVoid(day.index,branchEntries);
   const structuralAnalysis=analyzeStructure({dayStemIndex:day.stemIndex,pillars:pillarMap});
+  const climateBalance=analyzeClimateBalance({dayStemIndex:day.stemIndex,pillars:pillarMap,structuralAnalysis});
   const symbolicStars=calculateSymbolicStars({dayStemIndex:day.stemIndex,pillars:pillarMap});
 
   const daeun=calculateDaeun({
@@ -197,6 +199,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
       ...voidInfo
     },
     structuralAnalysis,
+    climateBalance,
     symbolicStars,
     daeun,
     metadata:{
@@ -208,6 +211,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
       equationOfTime:KOREA_TIME_POLICY.equationOfTime,
       hiddenStemPolicy:HIDDEN_STEM_POLICY.scheme,
       structureAnalysisPolicy:STRUCTURE_ANALYSIS_POLICY,
+      climateBalancePolicy:CLIMATE_BALANCE_POLICY,
       symbolicStarPolicy:SYMBOLIC_STAR_POLICY,
       branchRelationPunishmentPolicy:BRANCH_RELATION_POLICY.punishment,
       solarTermSource:SOLAR_TERM_PROVIDER_METADATA.engine,
