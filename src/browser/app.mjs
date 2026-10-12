@@ -1091,7 +1091,7 @@ clearRecentReadingButton?.addEventListener('click',()=>{
 refreshRecentReading();
 
 
-const CONTEXT_GUIDE_ORDER=['pillars','summary','day','structure','elements','tengods','relations','stars','flow','appendix'];
+const CONTEXT_GUIDE_ORDER=['pillars','summary','day','structure','climate','elements','tengods','relations','stars','flow','appendix'];
 
 const activateContextGuide=key=>{
   const chapter=contextGuideChapters[key]||contextGuideChapters.pillars;
@@ -1181,6 +1181,14 @@ const renderReadingGuide=result=>{
         ?'현재 결과 · '+structure.strength.label+' · '+structure.pattern.label+' · 균형 후보 '+useful
         :'계산 후 현재 구조를 쉬운 말로 보여드려요.'
     },
+    climate:{
+      kicker:'調候 · 계절의 균형',
+      title:'여기서는 “내 힘”이 아니라 “태어난 계절에서 무엇을 먼저 보나”를 봐요.',
+      body:'같은 글자라도 초봄·한여름·한겨울처럼 태어난 계절이 다르면 필요한 환경을 다르게 봅니다. 이 계절 균형 관점을 조후라고 해요.',
+      personal:result.climateBalance
+        ?result.climateBalance.month.season+' · 1순위 참고 '+result.climateBalance.primary.label
+        :'계산 후 계절 기준 후보를 보여드려요.'
+    },
     elements:{
       kicker:'五行 · FIVE ELEMENTS',
       title:'오행 숫자 바로 옆에서 이 분포를 어떻게 읽는지 확인해요.',
@@ -1223,6 +1231,61 @@ const renderReadingGuide=result=>{
 
   bindContextGuideScroll();
   activateContextGuide('pillars');
+};
+
+const renderClimateBalance=result=>{
+  const data=result.climateBalance;
+  if(!data) return;
+
+  const setText=(selector,value)=>{
+    const node=document.querySelector(selector);
+    if(node) node.textContent=value||'';
+  };
+
+  setText('#climate-season-copy',
+    data.month.season+' · '+data.month.plain+'. 태어난 달의 아래 글자는 '+data.month.branch+'('+data.month.korean+')예요.'
+  );
+  setText('#climate-primary-stem',data.primary.hanja);
+  setText('#climate-primary-label',data.primary.korean+data.primary.elementKo+' · '+data.primary.elementKo+' 기운');
+  setText('#climate-explanation',data.explanation);
+  setText('#climate-primary-presence',data.presenceSummary);
+  setText('#climate-caveat',data.caveat);
+  setText('#climate-comparison-copy',data.balancingComparison.text);
+
+  const balancing=result.structuralAnalysis?.usefulGod?.primary;
+  setText('#climate-balance-useful',balancing?balancing.label+' · 힘의 균형 후보':'단일 후보 보류');
+  setText('#climate-season-useful',data.primary.elementKo+' · 계절 기준 1순위');
+
+  const list=document.querySelector('#climate-candidate-list');
+  if(list){
+    list.replaceChildren();
+    for(const candidate of data.candidates){
+      const item=document.createElement('article');
+      item.className='climate-candidate '+(candidate.priority===1?'is-primary':'');
+      item.dataset.presence=candidate.presence.state;
+
+      const order=document.createElement('span');
+      order.textContent=String(candidate.priority).padStart(2,'0');
+
+      const mark=document.createElement('strong');
+      mark.textContent=candidate.hanja;
+
+      const copy=document.createElement('div');
+      const title=document.createElement('b');
+      title.textContent=candidate.korean+candidate.elementKo+' · '+candidate.elementKo;
+      const state=document.createElement('p');
+      state.textContent=candidate.presence.text;
+      copy.append(title,state);
+
+      item.append(order,mark,copy);
+      list.append(item);
+    }
+  }
+
+  const chapter=document.querySelector('#chapter-climate');
+  if(chapter){
+    chapter.dataset.sameDirection=String(Boolean(data.balancingComparison.sameElement));
+  }
 };
 
 const renderSymbolicStars=result=>{
@@ -1503,6 +1566,7 @@ const showResult=(result,sex,calendarMeta=null)=>{
   renderStructureFacts(result);
   renderDetailGuide(result);
   renderStructuralAnalysis(result);
+  renderClimateBalance(result);
   renderSymbolicStars(result);
   renderReading(result);
   renderFlow(result);
