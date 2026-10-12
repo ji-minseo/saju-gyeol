@@ -4163,3 +4163,99 @@ body{
     margin:0 0 8px;
   }
 }
+
+
+/* v0.9.4 beginner-first structure glossary */
+.structure-beginner-map{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  margin-top:25px;
+  border-top:1px solid #e7dfe5;
+  border-bottom:1px solid #e7dfe5;
+}
+.structure-beginner-map>div{
+  position:relative;
+  min-width:0;
+  padding:18px 17px 19px;
+  border-left:1px solid #eee7ec;
+}
+.structure-beginner-map>div:first-child{
+  border-left:0;
+  padding-left:0;
+}
+.structure-beginner-map>div:last-child{
+  padding-right:0;
+}
+.structure-beginner-map span{
+  display:grid;
+  place-items:center;
+  width:22px;
+  height:22px;
+  margin-bottom:10px;
+  border-radius:50%;
+  background:#72576b;
+  color:#fff;
+  font-size:8px;
+  font-weight:850;
+}
+.structure-beginner-map b{
+  display:block;
+  color:#4f3c49;
+  font-size:11px;
+  line-height:1.45;
+}
+.structure-beginner-map p{
+  margin-top:6px;
+  color:#847680;
+  font-size:10px;
+  line-height:1.65;
+  word-break:keep-all;
+}
+.structure-beginner-map strong{
+  color:#66505f;
+  font-weight:800;
+}
+.structure-beginner-map em{
+  color:#8c6681;
+  font-style:normal;
+  font-weight:800;
+}
+@media(max-width:760px){
+  .structure-beginner-map{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .structure-beginner-map>div{
+    padding:16px 14px;
+    border-bottom:1px solid #eee7ec;
+  }
+  .structure-beginner-map>div:nth-child(odd){
+    border-left:0;
+  }
+  .structure-beginner-map>div:nth-child(1),
+  .structure-beginner-map>div:nth-child(3){
+    padding-left:0;
+  }
+  .structure-beginner-map>div:nth-child(2),
+  .structure-beginner-map>div:nth-child(4){
+    padding-right:0;
+  }
+  .structure-beginner-map>div:nth-child(3),
+  .structure-beginner-map>div:nth-child(4){
+    border-bottom:0;
+  }
+}
+@media(max-width:430px){
+  .structure-beginner-map{
+    grid-template-columns:1fr;
+  }
+  .structure-beginner-map>div,
+  .structure-beginner-map>div:nth-child(n){
+    padding:14px 0;
+    border-left:0;
+    border-bottom:1px solid #eee7ec;
+  }
+  .structure-beginner-map>div:last-child{
+    border-bottom:0;
+  }
+}
