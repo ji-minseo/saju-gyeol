@@ -41,8 +41,8 @@ export function buildReadingGuide(result){
   const branch=day?.branch;
 
   const dayPillar=day
-    ?`당신의 일주는 ${day.hanja}입니다. 위의 ${stem.hanja}(${stem.korean})은 일간, 즉 해석에서 ‘나’를 잡는 기준이에요. ${stem.hanja}은 ${polarityLabel(stem.polarity)}의 ${ELEMENT_LABELS[stem.element]}이고, 아래의 ${branch.hanja}(${branch.korean})은 일지로 가까운 관계와 생활 리듬을 함께 읽는 자리입니다.`
-    :'출생시간과 관계없이 일주는 계산되며, 여기에서 일간과 일지의 역할을 설명합니다.';
+    ?`당신의 일주는 ${day.hanja}입니다. 두 글자 중 위의 ${stem.hanja}(${stem.korean})은 태어난 날의 위 글자로, 사주에서 ‘나’를 뜻하는 기준이에요. 이 글자를 일간이라고 불러요. ${stem.hanja}은 ${polarityLabel(stem.polarity)}의 ${ELEMENT_LABELS[stem.element]}이고, 아래의 ${branch.hanja}(${branch.korean})은 가까운 생활과 관계의 바탕을 보는 글자예요. 이 아래 글자를 일지라고 합니다.`
+    :'태어난 날의 두 글자 가운데 위 글자를 나를 뜻하는 기준으로, 아래 글자를 가까운 생활의 바탕으로 읽습니다.';
 
   const elementEntries=Object.entries(result.fiveElements?.counts||{})
     .map(([key,value])=>[key,Number(value||0)])
@@ -61,8 +61,8 @@ export function buildReadingGuide(result){
   const topCount=categoryEntries[0]?.[1]??0;
   const dominant=topCount>0?joinTop(categoryEntries,topCount):'뚜렷한 한 축 없음';
   const tenGods=topCount>0
-    ?`당신의 표면 십성에서는 ${dominant} 축이 ${topCount}회로 가장 자주 보입니다. 여기서 중요한 건 숫자만이 아니라 ‘어느 기둥의 천간·지지에 놓였는가’예요. 그래서 아래 상세 해석에서는 같은 십성도 년주·월주·일주·시주의 위치를 나눠 읽습니다.`
-    :'십성은 일간을 기준으로 계산하며, 아래 상세 해석에서는 각 십성이 어느 기둥과 위치에 놓였는지까지 함께 봅니다.';
+    ?`사주에서 ‘나’를 뜻하는 글자와 다른 글자들의 관계를 십성이라고 불러요. 당신에게는 ${dominant} 계열이 ${topCount}회로 가장 자주 보입니다. 숫자만 보는 게 아니라 어느 자리의 위·아래 글자에 놓였는지도 함께 봐요.`
+    :'십성은 ‘나’를 뜻하는 글자와 다른 글자들이 어떤 관계인지 붙인 이름이에요. 아래에서는 그 관계가 어느 자리에 놓였는지도 함께 봅니다.';
 
   return {dayPillar,elements,tenGods};
 }
