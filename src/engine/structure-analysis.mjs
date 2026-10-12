@@ -148,7 +148,7 @@ export function analyzeDayMasterStrength({dayStemIndex,pillars}){
       tenGod:monthTenGod,
       group:seasonGroup,
       score:seasonScore,
-      text:'월지 '+month.branch.hanja+'의 정기 '+STEMS[monthMainStem].hanja+'은(는) '+monthTenGod+'이라 일간의 힘을 '+seasonDirection+' 계절 조건으로 봅니다.'
+      text:'월지 '+month.branch.hanja+'의 정기 '+STEMS[monthMainStem].hanja+'('+monthTenGod+')은 일간의 힘을 '+seasonDirection+' 계절 조건으로 봅니다.'
     },
     roots,
     rootScore:Number(rootScore.toFixed(2)),
