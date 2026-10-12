@@ -169,6 +169,7 @@ const makeStar=(name,{hits=[],basis='',statusText='',mode='presence',extra=null}
   const meta=META[name];
   return {
     key:name,
+    label:name,
     ...meta,
     mode,
     present:mode==='cycle'?null:hits.length>0,
@@ -384,6 +385,7 @@ export function calculateSymbolicStars({dayStemIndex,pillars}){
     stars,
     present:stars.filter(x=>x.present===true),
     twelveStars,
+    twelveCatalog:TWELVE_NAMES,
     missingHour:!pillars.hour,
     explanation:'사주결은 일부 신살만 골라 보여주지 않고, 고정한 공통 24종 전체와 별도 체계인 12신살 전체를 함께 계산합니다. 다만 신살은 학파에 따라 범위와 표가 달라질 수 있고, 어느 하나만으로 길흉이나 사건을 단정하지 않습니다.'
   };
