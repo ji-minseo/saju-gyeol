@@ -3664,3 +3664,24 @@ body{
     margin-top:3px;
   }
 }
+
+
+/* v0.9.1 sticky compatibility — sticky needs every scrolling ancestor unclipped */
+.home-page .tool-shell,
+.home-page .result-preview{
+  overflow:visible!important;
+}
+@media(max-width:800px){
+  .home-page .result-preview{
+    overflow:visible!important;
+  }
+}
+@media(max-width:760px){
+  .home-page .tool-shell{
+    overflow:visible!important;
+  }
+}
+.context-reading-guide{
+  position:-webkit-sticky;
+  position:sticky;
+}
