@@ -46,6 +46,19 @@ const ROOT_WEIGHT={main:1.2,middle:.65,residual:.35};
 const POSITION_KO={year:'년지',month:'월지',day:'일지',hour:'시지'};
 const STEM_POSITION_KO={year:'년간',month:'월간',day:'일간',hour:'시간'};
 
+const GOD_PLAIN={
+  비견:'나와 비슷한 힘이 나란히 서는 관계',
+  겁재:'나와 비슷한 힘끼리 경쟁하거나 나누는 관계',
+  식신:'내 힘을 밖으로 만들고 표현하는 관계',
+  상관:'내 힘을 밖으로 드러내고 기존 방식을 바꾸려는 관계',
+  편재:'바깥의 기회와 자원을 빠르게 다루는 관계',
+  정재:'현실적인 자원과 결과를 꾸준히 관리하는 관계',
+  편관:'외부 압박과 경쟁, 책임을 강하게 받는 관계',
+  정관:'규칙·책임·기준을 받아들이는 관계',
+  편인:'새로운 관점과 정보를 받아들이는 관계',
+  정인:'배우고 정리하며 도움을 받는 관계'
+};
+
 const PATTERN_LABEL={
   식신:'식신격',상관:'상관격',
   편재:'편재격',정재:'정재격',
@@ -155,9 +168,9 @@ export function analyzeDayMasterStrength({dayStemIndex,pillars}){
     visible,
     visibleScore:Number(visibleScore.toFixed(2)),
     evidence:[
-      '월령 · '+monthTenGod+' '+(seasonScore>0?'+':'')+seasonScore,
-      '뿌리 · '+roots.length+'곳 '+(rootScore?('+'+Number(rootScore.toFixed(2))):'0'),
-      '표면 천간 · 도움 '+supportiveVisible.length+' / 소모·압박 '+drainingVisible.length
+      '태어난 달의 계절 힘 · '+monthTenGod+' '+(seasonScore>0?'+':'')+seasonScore,
+      '같은 기운의 받침 · '+roots.length+'곳 '+(rootScore?('+'+Number(rootScore.toFixed(2))):'0'),
+      '겉에 드러난 글자 · 도움 '+supportiveVisible.length+' / 소모·압박 '+drainingVisible.length
     ],
     explanation:'태어난 날의 위 글자를 ‘나’로 놓고, ① 태어난 달의 계절 기운이 나를 돕는지 ② 아래 글자들 속에 나와 같은 기운이 받쳐주는지 ③ 겉에 드러난 다른 글자들이 나를 돕는지 또는 힘을 쓰게 하는지를 함께 봅니다. 이 명식은 '+grade.label+' 쪽으로 분류됩니다. 이 상대적인 힘의 구분을 신강·신약이라고 불러요.',
     detail:{
@@ -204,7 +217,7 @@ export function analyzeBasePattern({dayStemIndex,pillars}){
     monthStage,
     exposed,
     exposedLabels:exposed.map(x=>STEM_POSITION_KO[x]),
-    explanation:'태어난 달의 아래 글자 '+month.branch.hanja+' 안에서 가장 중심이 되는 기운은 '+STEMS[monthMainStemIndex].hanja+'이고, 이 기운은 나를 뜻하는 글자와 '+mainTenGod+' 관계예요. 그래서 이 명식의 기본 골격에 ‘'+label+'’이라는 이름을 붙입니다. 이렇게 태어난 달의 중심 역할을 이름 붙인 것을 격국이라고 해요.',
+    explanation:'태어난 달의 아래 글자 '+month.branch.hanja+' 안에서 가장 중심이 되는 기운은 '+STEMS[monthMainStemIndex].hanja+'이에요. 이 기운은 나를 뜻하는 글자와 ‘'+mainTenGod+'’ 관계이고, 쉽게 말하면 '+GOD_PLAIN[mainTenGod]+'예요. 그래서 이 명식의 기본 골격에 ‘'+label+'’이라는 이름을 붙입니다. 이렇게 태어난 달의 중심 역할을 이름 붙인 것을 격국이라고 해요.',
     caveat:'종격·화격·전왕격 같은 특수격과 합화에 따른 격 변화는 이 자동 판정에 넣지 않습니다.'
   };
 }
