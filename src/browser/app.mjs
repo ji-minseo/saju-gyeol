@@ -50,9 +50,18 @@ const recentReadingTitle=document.querySelector('#recent-reading-title');
 const recentReadingMeta=document.querySelector('#recent-reading-meta');
 const restoreRecentReadingButton=document.querySelector('#restore-recent-reading');
 const clearRecentReadingButton=document.querySelector('#clear-recent-reading');
+const contextReadingGuide=document.querySelector('#context-reading-guide');
+const contextGuideKicker=document.querySelector('#context-guide-kicker');
+const contextGuideTitle=document.querySelector('#context-guide-title');
+const contextGuideBody=document.querySelector('#context-guide-body');
+const contextGuidePersonal=document.querySelector('#context-guide-personal');
+const contextGuideStep=document.querySelector('#context-guide-step');
 
 let latestShareState=null;
 let resultActionStatusTimer=null;
+let contextGuideChapters={};
+let contextGuideScrollBound=false;
+let contextGuideFrame=0;
 
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
 const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
@@ -1037,14 +1046,110 @@ clearRecentReadingButton?.addEventListener('click',()=>{
 refreshRecentReading();
 
 
+const CONTEXT_GUIDE_ORDER=['pillars','structure','summary','reading','deep','flow','details'];
+
+const activateContextGuide=key=>{
+  const chapter=contextGuideChapters[key]||contextGuideChapters.pillars;
+  if(!chapter||!contextReadingGuide) return;
+  if(contextReadingGuide.dataset.activeKey===key) return;
+  contextReadingGuide.dataset.activeKey=key;
+  if(contextGuideKicker) contextGuideKicker.textContent=chapter.kicker;
+  if(contextGuideTitle) contextGuideTitle.textContent=chapter.title;
+  if(contextGuideBody) contextGuideBody.textContent=chapter.body;
+  if(contextGuidePersonal){
+    contextGuidePersonal.textContent=chapter.personal||'';
+    contextGuidePersonal.hidden=!chapter.personal;
+  }
+  if(contextGuideStep){
+    const index=Math.max(0,CONTEXT_GUIDE_ORDER.indexOf(key));
+    contextGuideStep.textContent=String(index+1).padStart(2,'0')+' / '+String(CONTEXT_GUIDE_ORDER.length).padStart(2,'0');
+  }
+};
+
+const syncContextGuideToScroll=()=>{
+  if(!contextReadingGuide||preview.hidden) return;
+  const chapters=[...preview.querySelectorAll('[data-guide-key]')];
+  if(!chapters.length) return;
+  const anchor=Math.min(220,Math.max(110,window.innerHeight*.24));
+  let active=chapters[0];
+  for(const chapter of chapters){
+    if(chapter.getBoundingClientRect().top<=anchor) active=chapter;
+    else break;
+  }
+  activateContextGuide(active.dataset.guideKey);
+};
+
+const scheduleContextGuideSync=()=>{
+  if(contextGuideFrame) return;
+  contextGuideFrame=requestAnimationFrame(()=>{
+    contextGuideFrame=0;
+    syncContextGuideToScroll();
+  });
+};
+
+const bindContextGuideScroll=()=>{
+  if(contextGuideScrollBound) return;
+  contextGuideScrollBound=true;
+  window.addEventListener('scroll',scheduleContextGuideSync,{passive:true});
+  window.addEventListener('resize',scheduleContextGuideSync,{passive:true});
+};
+
 const renderReadingGuide=result=>{
   const guide=buildReadingGuide(result);
-  const dayCopy=document.querySelector('#guide-day-pillar-copy');
-  const elementsCopy=document.querySelector('#guide-elements-copy');
-  const tenGodsCopy=document.querySelector('#guide-ten-gods-copy');
-  if(dayCopy) dayCopy.textContent=guide.dayPillar;
-  if(elementsCopy) elementsCopy.textContent=guide.elements;
-  if(tenGodsCopy) tenGodsCopy.textContent=guide.tenGods;
+  const structure=result.structuralAnalysis;
+  const useful=structure?.usefulGod?.primary
+    ?structure.usefulGod.primary.label+'('+structure.usefulGod.primary.roleLabel+')'
+    :'단일 후보 보류';
+
+  contextGuideChapters={
+    pillars:{
+      kicker:'命式 · 네 기둥',
+      title:'지금은 태어난 순간의 네 기둥을 보고 있어요.',
+      body:'년주·월주·일주·시주는 서로 다른 자리를 뜻해요. 위 글자는 천간, 아래 글자는 지지이고, 그중 일주를 나를 읽는 중심으로 삼습니다.',
+      personal:guide.dayPillar
+    },
+    structure:{
+      kicker:'身强身弱 · 格局 · 用神',
+      title:'여기서는 “힘의 크기”, “기본 골격”, “균형 후보”를 따로 봐요.',
+      body:'신강·신약은 일간이 얼마나 받쳐지는지, 격국은 월령을 중심으로 잡는 구조의 이름, 용신은 그 구조의 균형을 돕는 오행 후보예요. 같은 개념이 아니라 순서대로 이어서 봅니다.',
+      personal:structure
+        ?structure.strength.label+' · '+structure.pattern.label+' · 억부 용신 '+useful
+        :'월령·뿌리·천간의 도움과 소모를 함께 계산합니다.'
+    },
+    summary:{
+      kicker:'KEY READING · 먼저 볼 결',
+      title:'여기는 긴 풀이 전에 핵심 네 가지를 먼저 압축해 보는 곳이에요.',
+      body:'성향·관계·일·돈을 각각 한 줄의 결로 먼저 보여주고, 바로 아래 챕터에서 왜 그런 해석이 나왔는지 십성·오행·위치 근거를 다시 풀어갑니다.',
+      personal:'짧은 요약은 결론이 아니라 아래 상세 해석의 길잡이예요.'
+    },
+    reading:{
+      kicker:'十星 · 성향·관계·일·돈',
+      title:'같은 명식을 생활 장면별로 나눠 읽고 있어요.',
+      body:'십성은 일간인 “나”와 다른 글자의 관계에 붙인 이름이에요. 같은 십성도 어느 기둥에 놓였는지에 따라 성향, 가까운 관계, 일, 돈에서 드러나는 방식이 달라질 수 있어요.',
+      personal:guide.tenGods
+    },
+    deep:{
+      kicker:'POSITION · 여러 결 겹쳐 보기',
+      title:'여기서는 한 단어로 성격을 단정하지 않고 서로 다른 단서를 겹쳐 봐요.',
+      body:'일주 하나만 보는 대신 일간·일지·반복되는 십성·오행·기둥 위치를 함께 놓고, 잘 쓰일 때와 과해질 때, 결정·압박·관계·일·돈에서의 차이를 나눠 읽습니다.',
+      personal:'같은 성질도 “어디에 놓였는지”와 “무엇과 함께 있는지”에 따라 표현이 달라져요.'
+    },
+    flow:{
+      kicker:'原局 × 大運 × 歲運',
+      title:'타고난 구조 위에 시간의 층을 겹쳐 보는 부분이에요.',
+      body:'원국은 태어난 순간의 기본 구조, 대운은 약 10년 단위의 큰 흐름, 세운은 해마다 바뀌는 흐름이에요. 사건을 예언하기보다 어떤 주제가 그 시기에 더 앞에 오기 쉬운지 비교합니다.',
+      personal:'좋고 나쁨을 한 점수로 매기기보다 원국이 어떤 흐름을 받는지 함께 봐요.'
+    },
+    details:{
+      kicker:'DETAILS · 해석의 근거표',
+      title:'마지막은 위 해석이 어디서 나왔는지 직접 확인하는 기술 자료예요.',
+      body:'오행은 표면 구성, 십성은 일간과의 관계, 지장간은 지지 안쪽 성분, 십이운성·지지 관계·공망·대운 배열은 서로 다른 계산표예요. 하나만 떼어 길흉으로 읽지 않습니다.',
+      personal:guide.elements
+    }
+  };
+
+  bindContextGuideScroll();
+  activateContextGuide('pillars');
 };
 
 const renderStructuralAnalysis=result=>{
@@ -1161,7 +1266,7 @@ const showResult=(result,sex,calendarMeta=null)=>{
   renderFlow(result);
   renderSummary(result,sex,calendarMeta);
   preview.hidden=false;
-  requestAnimationFrame(()=>preview.classList.add('is-visible'));
+  requestAnimationFrame(()=>{preview.classList.add('is-visible');scheduleContextGuideSync();});
   preview.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
 };
 
