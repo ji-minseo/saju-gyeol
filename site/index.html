@@ -20,7 +20,7 @@
   <meta name="twitter:title" content="사주결 | 무료 사주 풀이">
   <meta name="twitter:description" content="생년월일과 출생시간으로 나의 사주 흐름을 차분하게 읽어보세요.">
   <meta name="twitter:image" content="https://saju.everytinytool.com/assets/saju-hero.webp">
-  <link rel="stylesheet" href="./assets/style.css?v=20261012-reading3">
+  <link rel="stylesheet" href="./assets/style.css?v=20261012-guide2">
   <link rel="stylesheet" href="./assets/report-editorial.css?v=20261010-share1">
   <script type="application/ld+json">
   {
@@ -383,6 +383,8 @@
           <p>대운은 약 10년의 큰 흐름, 세운은 입춘을 기준으로 바뀌는 해의 흐름으로 읽습니다. 사건을 예언하기보다 그 시기에 앞에 오기 쉬운 주제를 보여드려요.</p>
         </div>
 
+        <aside class="flow-reading-bridge" id="flow-reading-bridge"><small>原局 × 時間 · 원국에 시간이 겹칠 때</small><p>계산 후 현재 대운과 세운이 원국에 어떻게 더해지는지 짧게 설명합니다.</p></aside>
+
         <section class="flow-report" aria-label="현재 대운과 세운">
           <article class="current-daeun-card" id="current-daeun-card">
             <div class="flow-card-top">
@@ -439,7 +441,7 @@
             <div class="hidden-stem-box">
               <div><small>地藏干 · 지장간</small><span>여 · 중 · 정</span></div>
               <div class="hidden-stems" id="hidden-stems"></div>
-              <p>지지는 정기(본기)를 대표 십성으로 표시하고, 지장간은 여·중·정 3층 표기를 따릅니다.</p>
+              <p class="detail-microcopy" id="hidden-stem-explainer">지장간은 지지 안쪽의 천간 성분을 펼쳐 보는 표예요. 계산 후 이 명식에서 왜 함께 보는지 설명합니다.</p>
             </div>
           </section>
         </div>
@@ -448,21 +450,24 @@
           <section class="fact-card">
             <div class="panel-title"><span>十二</span><h3>십이운성</h3></div>
             <div class="fact-chips" id="twelve-stages"></div>
+            <div class="fact-explainer"><small>WHY IT MATTERS</small><p id="twelve-stages-explainer">십이운성이 무엇을 뜻하고 이 명식에서 어디를 보면 되는지 설명합니다.</p></div>
           </section>
           <section class="fact-card">
             <div class="panel-title"><span>關係</span><h3>지지 관계</h3></div>
             <div class="fact-chips" id="branch-relations"></div>
-            <p>합·충·형·파·해는 구조만 표시하며 길흉을 자동 판정하지 않습니다.</p>
+            <div class="fact-explainer"><small>HOW TO READ</small><p id="branch-relations-explainer">합·충·형·파·해가 어느 자리 사이에서 나타나는지 설명합니다.</p><div class="relation-guide-list" id="branch-relation-guide"></div></div>
           </section>
           <section class="fact-card">
             <div class="panel-title"><span>空亡</span><h3>공망</h3></div>
             <div class="fact-main" id="void-summary">—</div>
             <p id="void-detail">일주가 속한 순(旬)을 기준으로 계산합니다.</p>
+            <div class="fact-explainer"><small>HOW TO READ</small><p id="void-explainer">공망을 불운 점수로 단정하지 않고 다른 구조와 함께 읽는 이유를 설명합니다.</p></div>
           </section>
           <section class="fact-card fact-card-wide">
             <div class="panel-title"><span>大運</span><h3>대운 흐름</h3></div>
             <div class="daeun-meta" id="daeun-meta">성별과 출생시간을 입력하면 계산합니다.</div>
             <p class="daeun-help">대운은 약 10년 단위로 바뀌는 큰 흐름이에요. 각 칸에는 그 시기에 앞에 오기 쉬운 십성 주제를 함께 표시합니다.</p>
+            <div class="fact-explainer is-wide"><small>HOW TO READ</small><p id="daeun-explainer">원국과 대운을 왜 따로 보고 다시 겹쳐 읽는지 설명합니다.</p></div>
             <div class="daeun-track" id="daeun-track"></div>
           </section>
         </div>
@@ -481,6 +486,6 @@
     <div><span>© SAJU GYEOL</span></div>
     <div class="footer-links"><a href="./methodology/">계산 기준</a></div>
   </footer>
-  <script src="./assets/engine-app.js?v=20261012-reading3" defer></script>
+  <script src="./assets/engine-app.js?v=20261012-guide2" defer></script>
 </body>
 </html>
