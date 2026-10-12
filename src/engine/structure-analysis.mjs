@@ -261,7 +261,7 @@ export function analyzeUsefulGod({strength,pillars}){
   const supportive=ranking.slice(1,3);
   const isStrong=strength.grade==='strong'||strength.grade==='very-strong';
   const direction=isStrong?'강한':'약한';
-  const action=isStrong?'힘을 밖으로 쓰거나 제어하는':'일간을 직접 돕거나 보충하는';
+  const action=isStrong?'이미 강한 힘을 밖으로 쓰거나 정리하는':'나를 직접 돕거나 보충하는';
 
   return {
     method:STRUCTURE_ANALYSIS_POLICY.usefulGodMethod,
@@ -270,7 +270,7 @@ export function analyzeUsefulGod({strength,pillars}){
     supportive:supportive.map(x=>({...x,label:ELEMENT_LABELS[x.element],roleLabel:GROUP_KO[x.role]})),
     counts,
     explanation:primary
-      ?'억부 기준으로는 '+direction+' 일간의 균형을 위해 '+action+' 쪽을 우선 봅니다. 현재 표면 분포까지 함께 비교했을 때 용신 1순위 후보는 '+ELEMENT_LABELS[primary.element]+'('+GROUP_KO[primary.role]+')입니다.'
+      ?'나를 뜻하는 글자가 주변에서 받는 도움과 쓰는 힘의 균형을 맞추는 관점에서, 지금은 '+action+' 기운을 우선 봅니다. 겉으로 드러난 오행 분포까지 함께 비교하면 균형을 돕는 1순위 후보는 '+ELEMENT_LABELS[primary.element]+'이에요. 이런 균형 후보를 용신이라고 불러요.'
       :'현재 기준에서는 단일 용신 후보를 정하지 않습니다.',
     caveat:'이 값은 억부 기준 후보입니다. 조후용신, 격국용신, 특수격 전환은 별도 판정이며 학파에 따라 결론이 달라질 수 있습니다.'
   };
