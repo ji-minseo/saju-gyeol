@@ -19,8 +19,8 @@ test('guide explains the actual day pillar, element distribution and ten-god emp
     assert.ok(guide.dayPillar.includes(result.pillars.day.branch.hanja));
     assert.ok(guide.elements.includes('가장'));
     assert.ok(guide.elements.includes('길흉 점수는 아니에요'));
-    assert.ok(guide.tenGods.includes('표면 십성'));
-    assert.ok(guide.tenGods.includes('어느 기둥의 천간·지지'));
+    assert.ok(guide.tenGods.includes('십성이라고'));
+    assert.ok(guide.tenGods.includes('어느 자리의 위·아래 글자'));
   }
 });
 
