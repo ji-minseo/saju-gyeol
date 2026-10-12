@@ -10,7 +10,7 @@ test('HOW TO READ is contextual instead of a standalone FAQ guidebook',async()=>
   assert.ok(html.includes('id="context-guide-body"'));
   assert.ok(html.includes('id="context-guide-personal"'));
 
-  for(const key of ['pillars','summary','day','structure','elements','tengods','relations','flow','appendix']){
+  for(const key of ['pillars','summary','day','structure','elements','tengods','relations','stars','flow','appendix']){
     assert.ok(html.includes('data-guide-key="'+key+'"'),key);
   }
 });
@@ -25,6 +25,7 @@ test('contextual guide copy changes by report chapter',async()=>{
     "五行 · FIVE ELEMENTS",
     "十星 · TEN GODS",
     "地支關係 · BRANCH RELATIONS",
+    "神煞 · 貴人 · 보조 상징",
     "原局 × 大運 × 歲運",
     "APPENDIX · 보조 데이터"
   ]){
