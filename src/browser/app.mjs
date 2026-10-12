@@ -1,5 +1,5 @@
 import {calculateSaju,ENGINE_VERSION} from '../engine/calculator.mjs';
-import {buildReadingV2} from '../content/reading-v2.mjs';
+import {buildReadingV3} from '../content/reading-v3.mjs';
 import {buildCurrentFlow} from '../content/flow-v1.mjs';
 import {lunarToSolarDate} from '../engine/lunar-calendar.mjs';
 
@@ -266,16 +266,113 @@ const toStoryTitle=(key,title)=>{
   return `${lead}${clean}이에요.`;
 };
 
-const renderReading=result=>{
-  const reading=buildReadingV2(result);
+const coreReadingKeys=['temperament','relationship','career','money'];
 
-  for(const [key,section] of Object.entries(reading)){
+const renderDeepReading=reading=>{
+  const deep=reading.deep;
+  if(!deep) return;
+
+  const setText=(selector,value)=>{
+    const node=document.querySelector(selector);
+    if(node) node.textContent=value||'';
+  };
+
+  const setEvidence=(selector,items=[])=>{
+    const node=document.querySelector(selector);
+    if(!node) return;
+    node.replaceChildren();
+    for(const item of items){
+      const chip=document.createElement('span');
+      chip.textContent=item;
+      node.append(chip);
+    }
+  };
+
+  setText('#deep-day-pillar',deep.portrait.evidence.find(x=>x.startsWith('일주 '))?.replace('일주 ','')||'—');
+  setText('#deep-portrait-title',deep.portrait.title);
+  setText('#deep-portrait-body',deep.portrait.body);
+  setText('#deep-portrait-tip',deep.portrait.tip);
+  setEvidence('#deep-portrait-evidence',deep.portrait.evidence);
+
+  setText('#deep-strength-title',deep.strengths.title);
+  setText('#deep-strength-body',deep.strengths.body);
+  setEvidence('#deep-strength-evidence',deep.strengths.evidence);
+
+  setText('#deep-overdrive-title',deep.overdrive.title);
+  setText('#deep-overdrive-body',deep.overdrive.body);
+  setText('#deep-overdrive-tip',deep.overdrive.tip);
+  setEvidence('#deep-overdrive-evidence',deep.overdrive.evidence);
+
+  for(const [key,section] of Object.entries(deep.patterns)){
+    const row=document.querySelector(`[data-deep-pattern="${key}"]`);
+    if(!row) continue;
+    row.querySelector('[data-deep-pattern-title]').textContent=section.title;
+    row.querySelector('[data-deep-pattern-body]').textContent=section.body;
+    const tip=row.querySelector('[data-deep-pattern-tip]');
+    if(tip) tip.textContent=section.tip||'';
+    const evidence=row.querySelector('[data-deep-pattern-evidence]');
+    if(evidence){
+      evidence.replaceChildren();
+      for(const item of section.evidence){
+        const chip=document.createElement('span');
+        chip.textContent=item;
+        evidence.append(chip);
+      }
+    }
+  }
+
+  const positions=document.querySelector('#ten-god-position-list');
+  if(positions){
+    positions.replaceChildren();
+    for(const item of deep.tenGodPositions){
+      const article=document.createElement('article');
+      article.className='ten-god-position-item';
+      article.dataset.position=item.key;
+
+      const head=document.createElement('div');
+      head.className='ten-god-position-head';
+
+      const mark=document.createElement('span');
+      mark.className='ten-god-position-pillar';
+      mark.textContent=item.pillar;
+
+      const meta=document.createElement('div');
+      const label=document.createElement('small');
+      label.textContent=`${item.label} · ${item.theme}`;
+      const title=document.createElement('h4');
+      title.textContent=item.title;
+      meta.append(label,title);
+      head.append(mark,meta);
+
+      const body=document.createElement('p');
+      body.textContent=item.body;
+
+      const evidence=document.createElement('div');
+      evidence.className='deep-evidence';
+      for(const value of item.evidence){
+        const chip=document.createElement('span');
+        chip.textContent=value;
+        evidence.append(chip);
+      }
+
+      article.append(head,body,evidence);
+      positions.append(article);
+    }
+  }
+};
+
+const renderReading=result=>{
+  const reading=buildReadingV3(result);
+
+  for(const key of coreReadingKeys){
+    const section=reading[key];
     const summaryCard=document.querySelector(`[data-summary="${key}"]`);
     const summaryTitle=summaryCard?.querySelector('[data-summary-title]');
     if(summaryTitle) summaryTitle.textContent=toStoryTitle(key,section.title);
   }
 
-  for(const [key,section] of Object.entries(reading)){
+  for(const key of coreReadingKeys){
+    const section=reading[key];
     const card=document.querySelector(`[data-reading="${key}"]`);
     if(!card) continue;
     card.querySelector('[data-reading-title]').textContent=toStoryTitle(key,section.title);
@@ -319,6 +416,8 @@ const renderReading=result=>{
       evidence.append(chip);
     }
   }
+
+  renderDeepReading(reading);
 };
 
 const addEvidenceChips=(container,items)=>{
@@ -515,7 +614,7 @@ const drawSectionKicker=(ctx,{index,title,y,pad,width})=>{
 
 const buildShareCanvas=async result=>{
   if(document.fonts?.ready) await document.fonts.ready;
-  const reading=buildReadingV2(result);
+  const reading=buildReadingV3(result);
   const canvas=document.createElement('canvas');
   canvas.width=SHARE_CARD.width;
   canvas.height=SHARE_CARD.height;
@@ -738,7 +837,7 @@ const setResultActionStatus=(message,{error=false}={})=>{
 };
 
 const shareSummaryText=result=>{
-  const reading=buildReadingV2(result);
+  const reading=buildReadingV3(result);
   return `사주결 · ${reading.temperament.title}\n${reading.career.title}\nhttps://saju.everytinytool.com/`;
 };
 
