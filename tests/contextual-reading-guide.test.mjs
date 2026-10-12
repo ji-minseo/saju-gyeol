@@ -71,3 +71,25 @@ test('data chapters expose personalized inline explanations',async()=>{
   assert.ok(source.includes("setInline('#chapter-elements-personal',guide.elements)"));
   assert.ok(source.includes("setInline('#chapter-ten-gods-personal',guide.tenGods)"));
 });
+
+
+test('structure chapter defines expert terms in plain Korean before relying on them',async()=>{
+  const html=await readFile(new URL('../site/index.html',import.meta.url),'utf8');
+  const source=await readFile(new URL('../src/browser/app.mjs',import.meta.url),'utf8');
+
+  assert.ok(html.includes('class="structure-beginner-map"'));
+  for(const phrase of [
+    '나를 뜻하는 글자',
+    '태어난 달의 계절 힘',
+    '그 계절의 중심 역할',
+    '균형을 돕는 오행 후보',
+    '일간</em>',
+    '월령</em>',
+    '격국</em>',
+    '용신</em>'
+  ]) assert.ok(html.includes(phrase),phrase);
+
+  assert.ok(source.includes("kicker:'STRUCTURE · 힘과 균형'"));
+  assert.ok(source.includes('명리에서는 각각 신강·신약, 격국, 용신이라고 불러요.'));
+  assert.equal(source.includes(":'월령·뿌리·천간의 도움과 소모를 함께 계산합니다.'"),false);
+});
