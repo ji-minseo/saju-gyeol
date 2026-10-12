@@ -13,6 +13,7 @@ import {
 import {twelveStage,branchRelations,dayVoid,BRANCH_RELATION_POLICY} from './derived-facts.mjs';
 import {calculateDaeun} from './fortune-cycles.mjs';
 import {analyzeStructure,STRUCTURE_ANALYSIS_POLICY} from './structure-analysis.mjs';
+import {calculateSymbolicStars,SYMBOLIC_STAR_POLICY} from './symbolic-stars.mjs';
 
 export const ENGINE_VERSION='0.9.0';
 export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
@@ -138,6 +139,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
   const relations=branchRelations(branchEntries);
   const voidInfo=dayVoid(day.index,branchEntries);
   const structuralAnalysis=analyzeStructure({dayStemIndex:day.stemIndex,pillars:pillarMap});
+  const symbolicStars=calculateSymbolicStars({dayStemIndex:day.stemIndex,pillars:pillarMap});
 
   const daeun=calculateDaeun({
     birthYear:date.year,
@@ -195,6 +197,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
       ...voidInfo
     },
     structuralAnalysis,
+    symbolicStars,
     daeun,
     metadata:{
       engineVersion:ENGINE_VERSION,
@@ -205,6 +208,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
       equationOfTime:KOREA_TIME_POLICY.equationOfTime,
       hiddenStemPolicy:HIDDEN_STEM_POLICY.scheme,
       structureAnalysisPolicy:STRUCTURE_ANALYSIS_POLICY,
+      symbolicStarPolicy:SYMBOLIC_STAR_POLICY,
       branchRelationPunishmentPolicy:BRANCH_RELATION_POLICY.punishment,
       solarTermSource:SOLAR_TERM_PROVIDER_METADATA.engine,
       solarTermProvider:SOLAR_TERM_PROVIDER_METADATA.packageVersion,
