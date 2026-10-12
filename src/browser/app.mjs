@@ -1047,6 +1047,63 @@ const renderReadingGuide=result=>{
   if(tenGodsCopy) tenGodsCopy.textContent=guide.tenGods;
 };
 
+const renderStructuralAnalysis=result=>{
+  const analysis=result.structuralAnalysis;
+  if(!analysis) return;
+  const {strength,pattern,usefulGod}=analysis;
+
+  const setText=(selector,value)=>{
+    const node=document.querySelector(selector);
+    if(node) node.textContent=value||'';
+  };
+  const fillChips=(selector,items=[])=>{
+    const node=document.querySelector(selector);
+    if(!node) return;
+    node.replaceChildren();
+    for(const item of items){
+      const chip=document.createElement('span');
+      chip.textContent=item;
+      node.append(chip);
+    }
+  };
+
+  setText('#structure-strength-label',strength.label);
+  setText('#structure-strength-copy',strength.explanation);
+  setText('#structure-season-detail',strength.season.text);
+  setText('#structure-root-detail',strength.detail.roots);
+  setText('#structure-support-detail',strength.detail.visibleSupport);
+  setText('#structure-pressure-detail',strength.detail.visiblePressure);
+  fillChips('#structure-strength-evidence',strength.evidence);
+
+  const marker=document.querySelector('#strength-marker');
+  if(marker){
+    const pct=Math.max(4,Math.min(96,50+(strength.score/8)*46));
+    marker.style.left=pct+'%';
+    marker.dataset.grade=strength.grade;
+    marker.title=strength.label+' · 상대 점수 '+strength.score;
+  }
+
+  setText('#structure-pattern-label',pattern.label);
+  setText('#structure-pattern-copy',pattern.explanation);
+  const patternMeta=[
+    '월지 '+pattern.monthBranch,
+    '정기 '+pattern.monthMainStem+' · '+pattern.monthMainTenGod,
+    pattern.exposedLabels.length?'투간 '+pattern.exposedLabels.join('·'):'정기 직접 투간 없음'
+  ];
+  fillChips('#structure-pattern-meta',patternMeta);
+  setText('#structure-pattern-caveat',pattern.caveat);
+
+  setText('#structure-useful-label',usefulGod.primary
+    ?usefulGod.primary.label+' · 용신 후보'
+    :'단일 용신 보류');
+  setText('#structure-useful-copy',usefulGod.explanation);
+  const supportive=usefulGod.primary
+    ?['1순위 '+usefulGod.primary.label+'('+usefulGod.primary.roleLabel+')',...usefulGod.supportive.map((x,i)=>(i+2)+'순위 '+x.label+'('+x.roleLabel+')')]
+    :['중화권 · 억부 단일 후보 없음'];
+  fillChips('#structure-supportive-labels',supportive);
+  setText('#structure-useful-caveat',usefulGod.caveat);
+};
+
 const renderDetailGuide=result=>{
   const detail=buildDetailGuide(result);
   const setText=(selector,value)=>{
@@ -1099,6 +1156,7 @@ const showResult=(result,sex,calendarMeta=null)=>{
   renderHiddenStems(result);
   renderStructureFacts(result);
   renderDetailGuide(result);
+  renderStructuralAnalysis(result);
   renderReading(result);
   renderFlow(result);
   renderSummary(result,sex,calendarMeta);
