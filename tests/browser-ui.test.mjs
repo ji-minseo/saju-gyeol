@@ -160,3 +160,16 @@ test('daeun rail is masked behind its labels and long symbolic-star marks stay o
   assert.match(css,/\.daeun-life-rail>span[\s\S]*?box-shadow:0 0 0 4px var\(--daeun-rail-bg\)/);
   assert.match(css,/\.symbolic-star-mark\{[\s\S]*?min-width:78px;[\s\S]*?white-space:nowrap;/);
 });
+
+
+test('seasonal balance renders classical candidates and compares them with balancing useful-god',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+
+  assert.match(html,/id="chapter-climate"/);
+  assert.match(html,/계절의 균형 · 조후/);
+  assert.match(source,/result\.climateBalance/);
+  assert.match(source,/candidate\.presence\.text/);
+  assert.match(source,/climate-balance-useful/);
+  assert.match(source,/climate-season-useful/);
+});
