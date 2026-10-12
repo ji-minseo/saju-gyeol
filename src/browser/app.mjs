@@ -1174,12 +1174,12 @@ const renderReadingGuide=result=>{
       personal:guide.dayPillar
     },
     structure:{
-      kicker:'身强身弱 · 格局 · 用神',
+      kicker:'STRUCTURE · 힘과 균형',
       title:'여기서는 “내 힘”, “태어난 달의 중심 역할”, “균형을 돕는 오행”을 차례로 봐요.',
-      body:'먼저 나를 뜻하는 글자가 주변에서 도움을 많이 받는지 봐요. 다음으로 태어난 달의 계절 기운에서 어떤 역할이 중심인지 이름을 붙이고, 마지막으로 치우침을 완화하는 데 도움이 될 오행 후보를 봅니다. 명리에서는 각각 신강·신약, 격국, 용신이라고 불러요.'
+      body:'먼저 나를 뜻하는 글자가 주변에서 도움을 많이 받는지 봐요. 다음으로 태어난 달의 계절 기운에서 어떤 역할이 중심인지 이름을 붙이고, 마지막으로 치우침을 완화하는 데 도움이 될 오행 후보를 봅니다. 명리에서는 각각 신강·신약, 격국, 용신이라고 불러요.',
       personal:structure
-        ?structure.strength.label+' · '+structure.pattern.label+' · 억부 용신 '+useful
-        :'월령·뿌리·천간의 도움과 소모를 함께 계산합니다.'
+        ?'현재 결과 · '+structure.strength.label+' · '+structure.pattern.label+' · 균형 후보 '+useful
+        :'계산 후 현재 구조를 쉬운 말로 보여드려요.'
     },
     elements:{
       kicker:'五行 · FIVE ELEMENTS',
@@ -1256,9 +1256,9 @@ const renderStructuralAnalysis=result=>{
   setText('#structure-pattern-label',pattern.label);
   setText('#structure-pattern-copy',pattern.explanation);
   const patternMeta=[
-    '월지 '+pattern.monthBranch,
-    '정기 '+pattern.monthMainStem+' · '+pattern.monthMainTenGod,
-    pattern.exposedLabels.length?'투간 '+pattern.exposedLabels.join('·'):'정기 직접 투간 없음'
+    '태어난 달 아래 글자 '+pattern.monthBranch,
+    '그 안의 대표 기운 '+pattern.monthMainStem+' · '+pattern.monthMainTenGod,
+    pattern.exposedLabels.length?'같은 대표 기운이 위 글자에도 보임 · '+pattern.exposedLabels.join('·'):'같은 대표 기운이 위 글자에는 직접 보이지 않음'
   ];
   fillChips('#structure-pattern-meta',patternMeta);
   setText('#structure-pattern-caveat',pattern.caveat);
@@ -1268,7 +1268,7 @@ const renderStructuralAnalysis=result=>{
     :'단일 용신 보류');
   setText('#structure-useful-copy',usefulGod.explanation);
   const supportive=usefulGod.primary
-    ?['1순위 '+usefulGod.primary.label+'('+usefulGod.primary.roleLabel+')',...usefulGod.supportive.map((x,i)=>(i+2)+'순위 '+x.label+'('+x.roleLabel+')')]
+    ?['1순위 '+usefulGod.primary.label,...usefulGod.supportive.map((x,i)=>(i+2)+'순위 '+x.label)]
     :['중화권 · 억부 단일 후보 없음'];
   fillChips('#structure-supportive-labels',supportive);
   setText('#structure-useful-caveat',usefulGod.caveat);
