@@ -6,6 +6,7 @@ test('result report presents four pillars as a cover before interpretation and t
   const html=await readFile('site/index.html','utf8');
   const summary=html.indexOf('id="result-summary"');
   const reading=html.indexOf('id="result-reading"');
+  const deep=html.indexOf('id="result-deep-reading"');
   const flow=html.indexOf('id="result-flow"');
   const details=html.indexOf('id="result-details"');
   const pillars=html.indexOf('class="pillar-grid"');
@@ -16,7 +17,8 @@ test('result report presents four pillars as a cover before interpretation and t
   assert.ok(pillars>0);
   assert.ok(pillars<summary);
   assert.ok(summary<reading);
-  assert.ok(reading<flow);
+  assert.ok(reading<deep);
+  assert.ok(deep<flow);
   assert.ok(flow<details);
   assert.ok(details<elements);
   assert.ok(elements<structure);
