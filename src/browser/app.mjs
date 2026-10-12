@@ -2,6 +2,7 @@ import {calculateSaju,ENGINE_VERSION} from '../engine/calculator.mjs';
 import {buildReadingV3} from '../content/reading-v3.mjs';
 import {buildCurrentFlow} from '../content/flow-v1.mjs';
 import {buildReadingGuide} from '../content/guide-v1.mjs';
+import {buildDetailGuide,explainCurrentFlow} from '../content/guide-v2.mjs';
 import {lunarToSolarDate} from '../engine/lunar-calendar.mjs';
 
 const form=document.querySelector('#birth-form');
@@ -432,6 +433,8 @@ const addEvidenceChips=(container,items)=>{
 
 const renderFlow=result=>{
   const flow=buildCurrentFlow(result,{today:new Date()});
+  const bridge=document.querySelector('#flow-reading-bridge p');
+  if(bridge) bridge.textContent=explainCurrentFlow(flow);
   if(flowAsOf) flowAsOf.textContent=`${flow.asOf.replaceAll('-','.')} 현재`;
 
   const daeun=flow.daeun;
@@ -1044,6 +1047,34 @@ const renderReadingGuide=result=>{
   if(tenGodsCopy) tenGodsCopy.textContent=guide.tenGods;
 };
 
+const renderDetailGuide=result=>{
+  const detail=buildDetailGuide(result);
+  const setText=(selector,value)=>{
+    const node=document.querySelector(selector);
+    if(node) node.textContent=value||'';
+  };
+
+  setText('#hidden-stem-explainer',detail.hiddenStems);
+  setText('#twelve-stages-explainer',detail.twelveStages);
+  setText('#branch-relations-explainer',detail.branchRelations);
+  setText('#void-explainer',detail.void);
+  setText('#daeun-explainer',detail.daeun);
+
+  const relationGuide=document.querySelector('#branch-relation-guide');
+  if(relationGuide){
+    relationGuide.replaceChildren();
+    for(const item of detail.relationItems){
+      const row=document.createElement('div');
+      const label=document.createElement('b');
+      label.textContent=`${item.label} · ${item.branches}`;
+      const copy=document.createElement('span');
+      copy.textContent=item.positions?`${item.positions} · ${item.meaning}`:item.meaning;
+      row.append(label,copy);
+      relationGuide.append(row);
+    }
+  }
+};
+
 const renderSummary=(result,sex,calendarMeta=null)=>{
   const [y,m,d]=result.input.birthDate.split('-');
   const time=result.input.timeKnown?result.input.birthTime:'출생시간 미상';
@@ -1067,6 +1098,7 @@ const showResult=(result,sex,calendarMeta=null)=>{
   renderTenGods(result);
   renderHiddenStems(result);
   renderStructureFacts(result);
+  renderDetailGuide(result);
   renderReading(result);
   renderFlow(result);
   renderSummary(result,sex,calendarMeta);
