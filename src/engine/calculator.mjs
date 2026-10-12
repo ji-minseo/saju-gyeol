@@ -12,8 +12,9 @@ import {
 } from './solar-term-provider.mjs';
 import {twelveStage,branchRelations,dayVoid,BRANCH_RELATION_POLICY} from './derived-facts.mjs';
 import {calculateDaeun} from './fortune-cycles.mjs';
+import {analyzeStructure,STRUCTURE_ANALYSIS_POLICY} from './structure-analysis.mjs';
 
-export const ENGINE_VERSION='0.8.0';
+export const ENGINE_VERSION='0.9.0';
 export const SUPPORTED_SOLAR_TERM_YEARS={...SOLAR_TERM_SUPPORT};
 
 const parseDate=value=>{
@@ -91,6 +92,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
 
   const hour=time?hourPillar(day.stemIndex,hourBranchIndex(time.hour,time.minute)):null;
   const pillars=[year,month,day,hour];
+  const pillarMap={year,month,day,hour};
   const counts=surfaceElementCounts(pillars);
 
   const visibleStemTenGods={
@@ -135,6 +137,8 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
   );
   const relations=branchRelations(branchEntries);
   const voidInfo=dayVoid(day.index,branchEntries);
+  const structuralAnalysis=analyzeStructure({dayStemIndex:day.stemIndex,pillars:pillarMap});
+
   const daeun=calculateDaeun({
     birthYear:date.year,
     birthInstantMs:instant?.epochMs??null,
@@ -190,6 +194,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
       method:'day-pillar-xun',
       ...voidInfo
     },
+    structuralAnalysis,
     daeun,
     metadata:{
       engineVersion:ENGINE_VERSION,
@@ -199,6 +204,7 @@ const buildResult=({date,time,instant,state,dayBoundary,terms,sex})=>{
       longitudeCorrection:KOREA_TIME_POLICY.longitudeCorrection,
       equationOfTime:KOREA_TIME_POLICY.equationOfTime,
       hiddenStemPolicy:HIDDEN_STEM_POLICY.scheme,
+      structureAnalysisPolicy:STRUCTURE_ANALYSIS_POLICY,
       branchRelationPunishmentPolicy:BRANCH_RELATION_POLICY.punishment,
       solarTermSource:SOLAR_TERM_PROVIDER_METADATA.engine,
       solarTermProvider:SOLAR_TERM_PROVIDER_METADATA.packageVersion,
