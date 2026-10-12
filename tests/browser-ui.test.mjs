@@ -132,15 +132,16 @@ test('daeun timeline renders an explanation card for every cycle',async()=>{
 });
 
 
-test('symbolic stars render as explained supporting data',async()=>{
+test('full symbolic-star catalog renders as explained supporting data',async()=>{
   const html=await readFile('site/index.html','utf8');
   const source=await readFile('src/browser/app.mjs','utf8');
 
   assert.match(html,/id="chapter-symbolic-stars"/);
   assert.match(html,/id="symbolic-stars-list"/);
-  assert.match(html,/천을귀인·문창귀인·도화·역마·화개/);
+  assert.match(html,/24종 \+ 12신살 전체/);
   assert.match(source,/const renderSymbolicStars=result=>/);
   assert.match(source,/className='symbolic-star-card '/);
+  assert.match(source,/id=\"twelve-star-anchors\"|#twelve-star-anchors/);
   assert.match(source,/renderSymbolicStars\(result\)/);
 });
 
@@ -150,4 +151,12 @@ test('tool-shell inner corners match the rounded outer shell',async()=>{
   assert.match(css,/\.home-page \.tool-shell>\.birth-form\{[\s\S]*?border-radius:0 25px 0 0;/);
   assert.match(css,/\.home-page:not\(\.has-result\) \.tool-shell>\.service-strip\{[\s\S]*?border-radius:0 0 25px 25px;/);
   assert.match(css,/\.home-page\.has-result \.tool-shell>\.result-preview\{[\s\S]*?border-radius:0 0 25px 25px;/);
+});
+
+
+test('daeun rail is masked behind its labels and long symbolic-star marks stay on one line',async()=>{
+  const css=await readFile('site/assets/style.css','utf8');
+  assert.match(css,/\.daeun-life-rail strong,[\s\S]*?background:var\(--daeun-rail-bg\)/);
+  assert.match(css,/\.daeun-life-rail>span[\s\S]*?box-shadow:0 0 0 4px var\(--daeun-rail-bg\)/);
+  assert.match(css,/\.symbolic-star-mark\{[\s\S]*?min-width:78px;[\s\S]*?white-space:nowrap;/);
 });
