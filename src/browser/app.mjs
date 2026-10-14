@@ -72,9 +72,11 @@ let contextGuideChapters={};
 let contextGuideScrollBound=false;
 let contextGuideFrame=0;
 let latestPremiumInput=null;
+let latestPremiumResult=null;
+let premiumCheckoutConfig=null;
 
 const premiumPreviewMode=new URLSearchParams(location.search).get(PREMIUM_REPORT_CONFIG.previewQuery)==='1';
-const premiumOfferVisible=PREMIUM_REPORT_CONFIG.checkoutEnabled||premiumPreviewMode;
+let premiumOfferVisible=premiumPreviewMode;
 
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
 const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
@@ -123,6 +125,7 @@ const premiumPriceLabel=()=>new Intl.NumberFormat('ko-KR',{
 }).format(PREMIUM_REPORT_CONFIG.price);
 
 const renderPremiumOffer=result=>{
+  latestPremiumResult=result;
   if(!premiumReportOffer) return;
   premiumReportOffer.hidden=!premiumOfferVisible;
   if(!premiumOfferVisible) return;
@@ -175,34 +178,117 @@ const renderPremiumOffer=result=>{
     dayBoundary:result.metadata?.dayBoundary||'midnight'
   };
 
-  if(premiumPreviewMode&&!PREMIUM_REPORT_CONFIG.checkoutEnabled){
+  if(premiumPreviewMode&&!premiumCheckoutConfig?.enabled){
     premiumReportCta?.classList.add('is-preview');
-    if(premiumReportNote) premiumReportNote.textContent='미리보기 모드입니다. 상품 UI와 리포트 엔진은 준비됐고, 실제 결제는 토스 상점키와 유료 API 주소를 연결한 뒤 공개됩니다.';
+    if(premiumReportNote) premiumReportNote.textContent='미리보기 모드입니다. PortOne + NHN KCP 계약 후 Store ID·채널 키·V2 API Secret을 연결하면 실제 결제가 자동으로 열립니다.';
+  }else{
+    premiumReportCta?.classList.remove('is-preview');
+  }
+};
+
+const premiumApiUrl=path=>PREMIUM_REPORT_CONFIG.apiBase.replace(/\/$/,'')+path;
+
+const loadPremiumCheckoutConfig=async()=>{
+  if(!PREMIUM_REPORT_CONFIG.apiBase) return null;
+  try{
+    const response=await fetch(premiumApiUrl('/v1/premium/config'),{headers:{accept:'application/json'}});
+    const data=await response.json();
+    if(!response.ok) throw new Error(data?.message||'결제 설정을 확인하지 못했어요.');
+    premiumCheckoutConfig=data;
+    premiumOfferVisible=Boolean(data.enabled)||premiumPreviewMode;
+    if(latestPremiumResult) renderPremiumOffer(latestPremiumResult);
+    return data;
+  }catch{
+    premiumCheckoutConfig=null;
+    premiumOfferVisible=premiumPreviewMode;
+    if(latestPremiumResult) renderPremiumOffer(latestPremiumResult);
+    return null;
+  }
+};
+
+const finalizePremiumPayment=async({paymentId,token})=>{
+  const response=await fetch(premiumApiUrl('/v1/premium/confirm'),{
+    method:'POST',
+    headers:{'content-type':'application/json'},
+    body:JSON.stringify({paymentId,token})
+  });
+  const result=await response.json();
+  if(!response.ok) throw new Error(result?.message||'결제 확인에 실패했어요.');
+
+  sessionStorage.removeItem('saju-gyeol:premium-order:'+paymentId);
+  sessionStorage.setItem('saju-gyeol:premium-access:'+paymentId,result.accessToken);
+  sessionStorage.setItem('saju-gyeol:premium-report:'+paymentId,JSON.stringify(result.report));
+  window.dispatchEvent(new CustomEvent('saju:premium-payment-complete',{detail:result}));
+  return result;
+};
+
+const handlePremiumRedirectReturn=async()=>{
+  const params=new URLSearchParams(location.search);
+  const paymentId=params.get('paymentId');
+  if(!paymentId) return;
+  const token=sessionStorage.getItem('saju-gyeol:premium-order:'+paymentId);
+  if(!token) return;
+
+  const code=params.get('code');
+  if(code){
+    sessionStorage.removeItem('saju-gyeol:premium-order:'+paymentId);
+    return;
+  }
+
+  try{
+    await finalizePremiumPayment({paymentId,token});
+  }catch(error){
+    console.error('premium payment verification failed',error);
   }
 };
 
 const beginPremiumCheckout=async()=>{
   if(!latestPremiumInput) return;
-  if(!PREMIUM_REPORT_CONFIG.checkoutEnabled||!PREMIUM_REPORT_CONFIG.apiBase){
+  const config=premiumCheckoutConfig||await loadPremiumCheckoutConfig();
+  if(!config?.enabled){
     if(premiumReportNote){
-      premiumReportNote.textContent='지금은 운영자 미리보기 상태예요. 토스페이먼츠 상점키와 유료 API 배포 주소를 연결하면 이 버튼이 실제 결제로 전환됩니다.';
+      premiumReportNote.textContent='현재 결제 오픈 전이에요. PortOne + NHN KCP 심사와 연동 정보 설정이 끝나면 이 버튼이 자동으로 활성화됩니다.';
     }
     return;
   }
+
   if(premiumReportCta) premiumReportCta.disabled=true;
   try{
-    const response=await fetch(PREMIUM_REPORT_CONFIG.apiBase.replace(/\/$/,'')+'/v1/premium/order',{
+    const response=await fetch(premiumApiUrl('/v1/premium/order'),{
       method:'POST',
       headers:{'content-type':'application/json'},
       body:JSON.stringify({reportRequest:latestPremiumInput})
     });
     const order=await response.json();
     if(!response.ok) throw new Error(order?.message||'주문을 만들지 못했어요.');
-    sessionStorage.setItem('saju-gyeol:premium-order:'+order.orderId,order.token);
-    if(premiumReportNote){
-      premiumReportNote.textContent='주문 준비가 완료됐어요. 결제 SDK 연결 단계로 이동합니다.';
+
+    sessionStorage.setItem('saju-gyeol:premium-order:'+order.paymentId,order.token);
+
+    const PortOne=await import(PREMIUM_REPORT_CONFIG.sdkUrl);
+    const redirectUrl=location.origin+location.pathname;
+    const payment=await PortOne.requestPayment({
+      storeId:order.storeId,
+      channelKey:order.channelKey,
+      paymentId:order.paymentId,
+      orderName:order.productName,
+      totalAmount:order.amount,
+      currency:'KRW',
+      payMethod:order.payMethod||PREMIUM_REPORT_CONFIG.payMethod,
+      redirectUrl
+    });
+
+    if(payment?.code!==undefined){
+      throw new Error(payment.message||'결제가 완료되지 않았어요.');
     }
-    window.dispatchEvent(new CustomEvent('saju:premium-order-ready',{detail:order}));
+
+    if(payment?.paymentId){
+      const result=await finalizePremiumPayment({
+        paymentId:payment.paymentId,
+        token:order.token
+      });
+      if(premiumReportNote) premiumReportNote.textContent='결제가 확인됐어요. 정밀 리포트를 준비했습니다.';
+      window.dispatchEvent(new CustomEvent('saju:premium-report-ready',{detail:result}));
+    }
   }catch(error){
     if(premiumReportNote) premiumReportNote.textContent=String(error?.message||error);
   }finally{
@@ -211,6 +297,8 @@ const beginPremiumCheckout=async()=>{
 };
 
 premiumReportCta?.addEventListener('click',beginPremiumCheckout);
+loadPremiumCheckoutConfig();
+handlePremiumRedirectReturn();
 
 const renderPillar=(key,pillar,stemTenGod,branchTenGod)=>{
   const card=document.querySelector(`[data-pillar="${key}"]`);
