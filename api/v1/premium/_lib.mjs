@@ -96,25 +96,23 @@ export const buildReport=request=>buildPremiumReportV1(
   {today:seoulDateString()}
 );
 
-export const createOrderId=()=>('saju_'+randomUUID().replaceAll('-','').slice(0,28));
+export const createPaymentId=()=>('saju'+randomUUID().replaceAll('-','').slice(0,28));
 
-export const confirmTossPayment=async({paymentKey,orderId,amount})=>{
-  const secret=process.env.TOSS_SECRET_KEY;
-  if(!secret) throw Object.assign(new Error('Toss secret key is not configured'),{status:503});
-  const auth=Buffer.from(secret+':').toString('base64');
-  const response=await fetch('https://api.tosspayments.com/v1/payments/confirm',{
-    method:'POST',
-    headers:{
-      'Authorization':'Basic '+auth,
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify({paymentKey,orderId,amount})
-  });
+export const getPortOnePayment=async paymentId=>{
+  const secret=process.env.PORTONE_API_SECRET;
+  if(!secret) throw Object.assign(new Error('PortOne API secret is not configured'),{status:503});
+  const response=await fetch(
+    'https://api.portone.io/payments/'+encodeURIComponent(paymentId),
+    {
+      method:'GET',
+      headers:{'Authorization':'PortOne '+secret}
+    }
+  );
   const data=await response.json();
   if(!response.ok){
-    throw Object.assign(new Error(data?.message||'payment confirmation failed'),{
+    throw Object.assign(new Error(data?.message||'payment lookup failed'),{
       status:response.status,
-      code:data?.code||'TOSS_CONFIRM_FAILED'
+      code:data?.type||'PORTONE_PAYMENT_LOOKUP_FAILED'
     });
   }
   return data;
