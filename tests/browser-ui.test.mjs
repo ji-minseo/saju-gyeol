@@ -189,3 +189,36 @@ test('twelve-star UI shows personal assignments first and keeps full catalog sec
   assert.match(css,/\.twelve-star-catalog span\.is-active\{[\s\S]*?opacity:1;/);
   assert.match(css,/\.twelve-star-catalog span\.is-inactive\{[\s\S]*?opacity:\.38;/);
 });
+
+
+test('premium storefront is gated for preview until checkout backend is configured',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+  const config=await readFile('src/premium/config.mjs','utf8');
+
+  assert.match(html,/id="premium-report-offer" hidden/);
+  assert.match(html,/사주결 정밀 리포트/);
+  assert.match(html,/₩5,900/);
+  assert.match(source,/premiumPreviewMode/);
+  assert.match(source,/premiumOfferVisible/);
+  assert.match(source,/renderPremiumOffer\(result\)/);
+  assert.match(config,/price:5900/);
+  assert.match(config,/checkoutEnabled:false/);
+});
+
+test('paid report generator stays out of the public browser bundle source',async()=>{
+  const source=await readFile('src/browser/app.mjs','utf8');
+  assert.doesNotMatch(source,/premium\/report-v1\.mjs/);
+  assert.doesNotMatch(source,/buildPremiumReportV1/);
+  assert.match(source,/premium\/config\.mjs/);
+});
+
+test('premium payment worker validates fixed amount before releasing report',async()=>{
+  const worker=await readFile('premium-api/worker.mjs','utf8');
+  assert.match(worker,/const PRICE=5900/);
+  assert.match(worker,/order\.amount!==PRICE/);
+  assert.match(worker,/Number\(body\.amount\)!==PRICE/);
+  assert.match(worker,/api\.tosspayments\.com\/v1\/payments\/confirm/);
+  assert.match(worker,/buildPremiumReportV1/);
+  assert.match(worker,/PREMIUM_SIGNING_SECRET/);
+});
