@@ -1291,6 +1291,7 @@ const renderClimateBalance=result=>{
 const renderSymbolicStars=result=>{
   const container=document.querySelector('#symbolic-stars-list');
   const summary=document.querySelector('#symbolic-stars-summary');
+  const activeTwelve=document.querySelector('#twelve-star-active');
   const catalog=document.querySelector('#twelve-star-catalog');
   const anchors=document.querySelector('#twelve-star-anchors');
   const footnote=document.querySelector('#symbolic-star-footnote');
@@ -1410,12 +1411,32 @@ const renderSymbolicStars=result=>{
     container.append(section);
   }
 
+  const activeNames=[...new Set((data.twelveStars||[]).flatMap(anchor=>anchor.rows.map(row=>row.label)))];
+
+  if(activeTwelve){
+    activeTwelve.replaceChildren();
+    if(activeNames.length){
+      for(const name of activeNames){
+        const chip=document.createElement('span');
+        chip.textContent=name;
+        activeTwelve.append(chip);
+      }
+    }else{
+      const empty=document.createElement('p');
+      empty.textContent='현재 확인 가능한 자리에서는 12신살 배정 항목이 없어요.';
+      activeTwelve.append(empty);
+    }
+  }
+
   if(catalog){
     catalog.replaceChildren();
+    const activeSet=new Set(activeNames);
     const names=data.twelveCatalog||[];
     for(const name of names){
       const chip=document.createElement('span');
       chip.textContent=name;
+      chip.className=activeSet.has(name)?'is-active':'is-inactive';
+      if(activeSet.has(name)) chip.setAttribute('aria-label',name+' · 내 명식에 해당');
       catalog.append(chip);
     }
   }
@@ -1429,7 +1450,7 @@ const renderSymbolicStars=result=>{
       const heading=document.createElement('div');
       heading.className='twelve-star-anchor-head';
       const title=document.createElement('h4');
-      title.textContent=anchor.anchorLabel+' '+anchor.anchorBranch+' 기준';
+      title.textContent='내 명식 · '+anchor.anchorLabel+' '+anchor.anchorBranch+' 기준';
       const group=document.createElement('span');
       group.textContent='삼합 '+anchor.group;
       heading.append(title,group);
