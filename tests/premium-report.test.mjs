@@ -28,7 +28,7 @@ test('premium report explicitly reconciles strength and seasonal balance instead
   assert.match(report.signalLine,/신강|신약|중화/);
   assert.match(report.signalLine,/힘의 균형/);
   assert.match(report.signalLine,/계절의 균형/);
-  assert.match(balance.body,/서로 다른|같은 방향/);
+  assert.match(balance.body,/질문이 달라|서로 다른|같은 방향/);
   assert.doesNotMatch(balance.body,/진짜 용신|유일한 용신|무조건/);
 });
 
