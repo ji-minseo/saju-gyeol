@@ -272,7 +272,7 @@ const beginPremiumCheckout=async()=>{
       paymentId:order.paymentId,
       orderName:order.productName,
       totalAmount:order.amount,
-      currency:'KRW',
+      currency:'CURRENCY_KRW',
       payMethod:order.payMethod||PREMIUM_REPORT_CONFIG.payMethod,
       redirectUrl
     });
