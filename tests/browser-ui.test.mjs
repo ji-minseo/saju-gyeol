@@ -203,7 +203,9 @@ test('premium storefront is gated for preview until checkout backend is configur
   assert.match(source,/premiumOfferVisible/);
   assert.match(source,/renderPremiumOffer\(result\)/);
   assert.match(config,/price:5900/);
-  assert.match(config,/checkoutEnabled:false/);
+  assert.match(config,/checkoutProvider:'portone-v2'/);
+  assert.match(config,/checkoutEnabled:'server'/);
+  assert.match(config,/cdn\.portone\.io\/v2\/browser-sdk\.esm\.js/);
 });
 
 test('paid report generator stays out of the public browser bundle source',async()=>{
@@ -213,12 +215,21 @@ test('paid report generator stays out of the public browser bundle source',async
   assert.match(source,/premium\/config\.mjs/);
 });
 
-test('premium payment worker validates fixed amount before releasing report',async()=>{
-  const worker=await readFile('premium-api/worker.mjs','utf8');
-  assert.match(worker,/const PRICE=5900/);
-  assert.match(worker,/order\.amount!==PRICE/);
-  assert.match(worker,/Number\(body\.amount\)!==PRICE/);
-  assert.match(worker,/api\.tosspayments\.com\/v1\/payments\/confirm/);
-  assert.match(worker,/buildPremiumReportV1/);
-  assert.match(worker,/PREMIUM_SIGNING_SECRET/);
+test('premium payment API verifies PortOne payment status and amount before releasing report',async()=>{
+  const shared=await readFile('api/v1/premium/_lib.mjs','utf8');
+  const confirm=await readFile('api/v1/premium/confirm.mjs','utf8');
+  const config=await readFile('api/v1/premium/config.mjs','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+
+  assert.match(shared,/https:\/\/api\.portone\.io\/payments\//);
+  assert.match(shared,/Authorization':'PortOne '/);
+  assert.match(confirm,/payment\.status!=='PAID'/);
+  assert.match(confirm,/Number\(payment\.amount\?\.total\)!==PRICE/);
+  assert.match(confirm,/payment\.currency!=='KRW'/);
+  assert.match(confirm,/buildReport\(order\.reportRequest\)/);
+  assert.match(config,/provider:'portone-v2'/);
+  assert.match(config,/pgProvider:'NHN KCP'/);
+  assert.match(source,/PortOne\.requestPayment/);
+  assert.match(source,/currency:'CURRENCY_KRW'/);
+  assert.match(source,/finalizePremiumPayment/);
 });
