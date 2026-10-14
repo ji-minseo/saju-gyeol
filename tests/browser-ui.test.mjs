@@ -173,3 +173,19 @@ test('seasonal balance renders classical candidates and compares them with balan
   assert.match(source,/climate-balance-useful/);
   assert.match(source,/climate-season-useful/);
 });
+
+
+test('twelve-star UI shows personal assignments first and keeps full catalog secondary',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+  const css=await readFile('site/assets/style.css','utf8');
+
+  assert.match(html,/id="twelve-star-active"/);
+  assert.match(html,/전체 12신살 기준 보기/);
+  assert.match(html,/class="twelve-star-catalog-details"/);
+  assert.match(source,/const activeNames=\[\.\.\.new Set/);
+  assert.match(source,/chip\.className=activeSet\.has\(name\)\?'is-active':'is-inactive'/);
+  assert.match(source,/내 명식 · /);
+  assert.match(css,/\.twelve-star-catalog span\.is-active\{[\s\S]*?opacity:1;/);
+  assert.match(css,/\.twelve-star-catalog span\.is-inactive\{[\s\S]*?opacity:\.38;/);
+});
