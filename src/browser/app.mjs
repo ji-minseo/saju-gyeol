@@ -4,6 +4,7 @@ import {buildCurrentFlow} from '../content/flow-v1.mjs';
 import {buildReadingGuide} from '../content/guide-v1.mjs';
 import {buildDetailGuide,explainCurrentFlow} from '../content/guide-v2.mjs';
 import {lunarToSolarDate} from '../engine/lunar-calendar.mjs';
+import {PREMIUM_REPORT_CONFIG} from '../premium/config.mjs';
 
 const form=document.querySelector('#birth-form');
 const dateInput=document.querySelector('#birth-date');
@@ -56,12 +57,24 @@ const contextGuideTitle=document.querySelector('#context-guide-title');
 const contextGuideBody=document.querySelector('#context-guide-body');
 const contextGuidePersonal=document.querySelector('#context-guide-personal');
 const contextGuideStep=document.querySelector('#context-guide-step');
+const premiumReportOffer=document.querySelector('#premium-report-offer');
+const premiumReportPrice=document.querySelector('#premium-report-price');
+const premiumSignalLine=document.querySelector('#premium-signal-line');
+const premiumPreviewFriction=document.querySelector('#premium-preview-friction');
+const premiumPreviewBalance=document.querySelector('#premium-preview-balance');
+const premiumPreviewTiming=document.querySelector('#premium-preview-timing');
+const premiumReportCta=document.querySelector('#premium-report-cta');
+const premiumReportNote=document.querySelector('#premium-report-note');
 
 let latestShareState=null;
 let resultActionStatusTimer=null;
 let contextGuideChapters={};
 let contextGuideScrollBound=false;
 let contextGuideFrame=0;
+let latestPremiumInput=null;
+
+const premiumPreviewMode=new URLSearchParams(location.search).get(PREMIUM_REPORT_CONFIG.previewQuery)==='1';
+const premiumOfferVisible=PREMIUM_REPORT_CONFIG.checkoutEnabled||premiumPreviewMode;
 
 const tenGodLabels={year:'년간',month:'월간',day:'일간',hour:'시간'};
 const elementNames={wood:'목',fire:'화',earth:'토',metal:'금',water:'수'};
@@ -101,6 +114,103 @@ const setError=message=>{
   errorBox.textContent=message;
   errorBox.hidden=!message;
 };
+
+
+const premiumPriceLabel=()=>new Intl.NumberFormat('ko-KR',{
+  style:'currency',
+  currency:PREMIUM_REPORT_CONFIG.currency,
+  maximumFractionDigits:0
+}).format(PREMIUM_REPORT_CONFIG.price);
+
+const renderPremiumOffer=result=>{
+  if(!premiumReportOffer) return;
+  premiumReportOffer.hidden=!premiumOfferVisible;
+  if(!premiumOfferVisible) return;
+
+  const structure=result.structuralAnalysis;
+  const climate=result.climateBalance;
+  const useful=structure?.usefulGod?.primary?.label||'단일 후보 보류';
+  const climateElement=climate?.primary?.elementKo||'—';
+  const same=Boolean(climate?.balancingComparison?.sameElement);
+  const flow=buildCurrentFlow(result,{today:new Date()});
+  const current=flow.daeunTimeline.find(x=>x.isCurrent);
+  const currentIndex=flow.daeunTimeline.findIndex(x=>x.isCurrent);
+  const next=currentIndex>=0?flow.daeunTimeline[currentIndex+1]||null:null;
+  const deep=buildReadingV3(result).deep;
+
+  if(premiumReportPrice) premiumReportPrice.textContent=premiumPriceLabel();
+  if(premiumReportCta){
+    const price=premiumReportCta.querySelector('strong');
+    if(price) price.textContent=premiumPriceLabel();
+  }
+  if(premiumSignalLine){
+    premiumSignalLine.textContent=[
+      structure?.strength?.label,
+      structure?.pattern?.label,
+      '힘의 균형 '+useful,
+      '계절의 균형 '+climateElement
+    ].filter(Boolean).join(' · ');
+  }
+
+  if(premiumPreviewFriction){
+    premiumPreviewFriction.textContent=deep?.meta?.primaryLabel
+      ?deep.meta.primaryLabel+'의 강점이 어디서 과해지는지'
+      :'내 장점과 피로가 같은 뿌리에서 나오는 지점';
+  }
+  if(premiumPreviewBalance){
+    premiumPreviewBalance.textContent=same
+      ?'억부와 조후가 같은 방향을 가리킬 때 무엇이 달라지는지'
+      :'억부 '+useful+' · 조후 '+climateElement+'이 서로 다른 이유';
+  }
+  if(premiumPreviewTiming){
+    premiumPreviewTiming.textContent=current
+      ?'지금 '+current.pillar.hanja+' 대운'+(next?' → 다음 '+next.pillar.hanja+' 대운에서 달라지는 것':'을 실제 선택 기준으로 읽기')
+      :'현재 흐름을 원국과 함께 묶어 읽기';
+  }
+
+  latestPremiumInput={
+    birthDate:result.input.birthDate,
+    birthTime:result.input.birthTime,
+    sex:result.input.sex,
+    dayBoundary:result.metadata?.dayBoundary||'midnight'
+  };
+
+  if(premiumPreviewMode&&!PREMIUM_REPORT_CONFIG.checkoutEnabled){
+    premiumReportCta?.classList.add('is-preview');
+    if(premiumReportNote) premiumReportNote.textContent='미리보기 모드입니다. 상품 UI와 리포트 엔진은 준비됐고, 실제 결제는 토스 상점키와 유료 API 주소를 연결한 뒤 공개됩니다.';
+  }
+};
+
+const beginPremiumCheckout=async()=>{
+  if(!latestPremiumInput) return;
+  if(!PREMIUM_REPORT_CONFIG.checkoutEnabled||!PREMIUM_REPORT_CONFIG.apiBase){
+    if(premiumReportNote){
+      premiumReportNote.textContent='지금은 운영자 미리보기 상태예요. 토스페이먼츠 상점키와 유료 API 배포 주소를 연결하면 이 버튼이 실제 결제로 전환됩니다.';
+    }
+    return;
+  }
+  if(premiumReportCta) premiumReportCta.disabled=true;
+  try{
+    const response=await fetch(PREMIUM_REPORT_CONFIG.apiBase.replace(/\/$/,'')+'/v1/premium/order',{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({reportRequest:latestPremiumInput})
+    });
+    const order=await response.json();
+    if(!response.ok) throw new Error(order?.message||'주문을 만들지 못했어요.');
+    sessionStorage.setItem('saju-gyeol:premium-order:'+order.orderId,order.token);
+    if(premiumReportNote){
+      premiumReportNote.textContent='주문 준비가 완료됐어요. 결제 SDK 연결 단계로 이동합니다.';
+    }
+    window.dispatchEvent(new CustomEvent('saju:premium-order-ready',{detail:order}));
+  }catch(error){
+    if(premiumReportNote) premiumReportNote.textContent=String(error?.message||error);
+  }finally{
+    if(premiumReportCta) premiumReportCta.disabled=false;
+  }
+};
+
+premiumReportCta?.addEventListener('click',beginPremiumCheckout);
 
 const renderPillar=(key,pillar,stemTenGod,branchTenGod)=>{
   const card=document.querySelector(`[data-pillar="${key}"]`);
@@ -1581,6 +1691,7 @@ const showResult=(result,sex,calendarMeta=null)=>{
   renderPillar('day',result.pillars.day,result.tenGods.visibleStems.day,result.tenGods.visibleBranches.day);
   renderPillar('hour',result.pillars.hour,result.tenGods.visibleStems.hour,result.tenGods.visibleBranches.hour);
   renderReadingGuide(result);
+  renderPremiumOffer(result);
   renderElements(result);
   renderTenGods(result);
   renderHiddenStems(result);
