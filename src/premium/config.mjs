@@ -6,7 +6,7 @@ export const PREMIUM_REPORT_CONFIG={
   currency:'KRW',
   checkoutProvider:'toss',
   checkoutEnabled:false,
-  apiBase:'',
+  apiBase:'https://saju-gyeol-premium.vercel.app/api',
   tossClientKey:'',
   previewQuery:'premiumPreview'
 };
