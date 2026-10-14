@@ -8,7 +8,12 @@ export default async function handler(req,res){
     return;
   }
   try{
-    const enabled=Boolean(process.env.TOSS_CLIENT_KEY&&process.env.TOSS_SECRET_KEY&&process.env.PREMIUM_SIGNING_SECRET);
+    const enabled=Boolean(
+      process.env.PORTONE_STORE_ID&&
+      process.env.PORTONE_CHANNEL_KEY&&
+      process.env.PORTONE_API_SECRET&&
+      process.env.PREMIUM_SIGNING_SECRET
+    );
     for(const [key,value] of Object.entries(corsHeaders(req))) res.setHeader(key,value);
     res.statusCode=200;
     res.setHeader('Content-Type','application/json; charset=utf-8');
@@ -17,9 +22,12 @@ export default async function handler(req,res){
       productName:PRODUCT_NAME,
       price:PRICE,
       currency:'KRW',
-      provider:'toss',
+      provider:'portone-v2',
+      pgProvider:'NHN KCP',
+      payMethod:'CARD',
       enabled,
-      clientKey:enabled?process.env.TOSS_CLIENT_KEY:null
+      storeId:enabled?process.env.PORTONE_STORE_ID:null,
+      channelKey:enabled?process.env.PORTONE_CHANNEL_KEY:null
     }));
   }catch(error){fail(req,res,error);}
 }
