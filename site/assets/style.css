@@ -4983,3 +4983,119 @@ body{
     gap:6px;
   }
 }
+
+
+/* v0.10.1 distinguish personal twelve stars from the full reference catalog */
+.twelve-star-my{
+  margin-top:20px;
+  padding:16px 0 18px;
+  border-top:1px solid #e7dfe5;
+  border-bottom:1px solid #e7dfe5;
+}
+.twelve-star-my>small{
+  display:block;
+  color:#8f7186;
+  font-size:8.5px;
+  font-weight:850;
+  letter-spacing:.08em;
+}
+.twelve-star-my>p{
+  margin-top:9px;
+  color:#958892;
+  font-size:9px;
+  line-height:1.65;
+}
+.twelve-star-active{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:11px;
+}
+.twelve-star-active span{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:6px 10px;
+  border:1px solid #cdbbc8;
+  border-radius:999px;
+  background:#f3e9f0;
+  color:#654d5e;
+  font-size:10px;
+  font-weight:850;
+}
+.twelve-star-active>p{
+  color:#9a8d96;
+  font-size:9.5px;
+}
+
+.twelve-star-catalog-details{
+  margin-top:14px;
+  border-bottom:1px solid #ebe4e9;
+}
+.twelve-star-catalog-details>summary{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:42px;
+  color:#705a69;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
+  list-style:none;
+}
+.twelve-star-catalog-details>summary::-webkit-details-marker{display:none}
+.twelve-star-catalog-details>summary::after{
+  content:"+";
+  margin-left:auto;
+  color:#a4929e;
+  font-size:15px;
+  font-weight:500;
+}
+.twelve-star-catalog-details[open]>summary::after{content:"−"}
+.twelve-star-catalog-details>summary span{
+  color:#aa9ca6;
+  font-size:8.5px;
+  font-weight:600;
+}
+.twelve-star-catalog-details .twelve-star-catalog{
+  margin-top:4px;
+  padding-bottom:4px;
+}
+.twelve-star-catalog span.is-active{
+  border-color:#cdbbc8;
+  background:#f3e9f0;
+  color:#654d5e;
+  opacity:1;
+  font-weight:850;
+}
+.twelve-star-catalog span.is-inactive{
+  background:#faf9fa;
+  color:#aaa0a7;
+  border-color:#eee9ec;
+  opacity:.38;
+  font-weight:650;
+}
+.twelve-star-catalog-note{
+  margin:8px 0 15px;
+  color:#a2959e;
+  font-size:8.5px;
+  line-height:1.6;
+}
+.twelve-star-anchors{
+  margin-top:24px;
+}
+
+@media(max-width:520px){
+  .twelve-star-catalog-details>summary{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:3px;
+    padding:10px 22px 10px 0;
+    position:relative;
+  }
+  .twelve-star-catalog-details>summary::after{
+    position:absolute;
+    right:0;
+    top:12px;
+  }
+}
