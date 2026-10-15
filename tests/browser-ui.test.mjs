@@ -233,3 +233,40 @@ test('premium payment API verifies PortOne payment status and amount before rele
   assert.match(source,/currency:'CURRENCY_KRW'/);
   assert.match(source,/finalizePremiumPayment/);
 });
+
+
+test('merchant footer and legal pages expose PG review information',async()=>{
+  const home=await readFile('site/index.html','utf8');
+  const terms=await readFile('site/terms/index.html','utf8');
+  const privacy=await readFile('site/privacy/index.html','utf8');
+  const refund=await readFile('site/refund/index.html','utf8');
+  const premium=await readFile('site/premium/index.html','utf8');
+
+  for(const html of [home,terms,privacy,refund,premium]){
+    assert.match(html,/지지마켓/);
+    assert.match(html,/329-59-00909/);
+    assert.match(html,/einimich@naver\.com/);
+  }
+
+  assert.match(home,/href="\/terms\/"/);
+  assert.match(home,/href="\/privacy\/"/);
+  assert.match(home,/href="\/refund\/"/);
+  assert.match(home,/href="\/premium\/"/);
+  assert.match(terms,/이용약관/);
+  assert.match(privacy,/개인정보처리방침/);
+  assert.match(refund,/환불·취소 정책/);
+  assert.match(premium,/사주결 정밀 리포트/);
+  assert.match(premium,/5,900원/);
+  assert.match(premium,/맞춤형 디지털 콘텐츠/);
+});
+
+test('premium checkout requires explicit immediate digital-content consent',async()=>{
+  const html=await readFile('site/index.html','utf8');
+  const source=await readFile('src/browser/app.mjs','utf8');
+
+  assert.match(html,/id="premium-refund-consent"/);
+  assert.match(html,/결제와 동시에 맞춤 리포트 생성·제공이 시작되는 것에 동의합니다/);
+  assert.match(html,/\.\/refund\//);
+  assert.match(source,/premiumRefundConsent\?\.checked/);
+  assert.match(source,/premiumRefundConsent\?\.focus\(\)/);
+});
