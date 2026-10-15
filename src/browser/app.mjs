@@ -65,6 +65,7 @@ const premiumPreviewBalance=document.querySelector('#premium-preview-balance');
 const premiumPreviewTiming=document.querySelector('#premium-preview-timing');
 const premiumReportCta=document.querySelector('#premium-report-cta');
 const premiumReportNote=document.querySelector('#premium-report-note');
+const premiumRefundConsent=document.querySelector('#premium-refund-consent');
 
 let latestShareState=null;
 let resultActionStatusTimer=null;
@@ -244,6 +245,11 @@ const handlePremiumRedirectReturn=async()=>{
 
 const beginPremiumCheckout=async()=>{
   if(!latestPremiumInput) return;
+  if(!premiumRefundConsent?.checked){
+    if(premiumReportNote) premiumReportNote.textContent='결제 전에 맞춤형 디지털 콘텐츠의 즉시 제공 및 청약철회 안내를 확인하고 동의해주세요.';
+    premiumRefundConsent?.focus();
+    return;
+  }
   const config=premiumCheckoutConfig||await loadPremiumCheckoutConfig();
   if(!config?.enabled){
     if(premiumReportNote){
