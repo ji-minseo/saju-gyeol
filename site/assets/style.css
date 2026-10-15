@@ -5395,16 +5395,18 @@ body{
 .legal-footer-brand span{
   display:block;
   margin-top:6px;
-  color:#978a92;
-  font-size:9px;
+  color:#c3bdc1;
+  font-size:8px;
+  opacity:.72;
 }
 .legal-footer-business{
   display:flex;
   flex-wrap:wrap;
   gap:6px 18px;
-  color:#8e8189;
-  font-size:9px;
+  color:#c8c2c6;
+  font-size:8px;
   line-height:1.7;
+  opacity:.62;
 }
 .legal-footer a{
   color:inherit;
@@ -5422,9 +5424,10 @@ body{
 }
 .legal-footer-note{
   max-width:850px;
-  color:#a0959b;
-  font-size:8.5px;
+  color:#c4bec2;
+  font-size:8px;
   line-height:1.65;
+  opacity:.68;
 }
 
 .legal-page{
