@@ -245,6 +245,8 @@ test('merchant footer and legal pages expose PG review information',async()=>{
   for(const html of [home,terms,privacy,refund,premium]){
     assert.match(html,/지지마켓/);
     assert.match(html,/329-59-00909/);
+    assert.match(html,/010-3071-6160/);
+    assert.match(html,/통신판매업 신고 · 면제 대상|통신판매업 신고<\/dt><dd>면제 대상/);
     assert.match(html,/einimich@naver\.com/);
   }
 
@@ -269,4 +271,19 @@ test('premium checkout requires explicit immediate digital-content consent',asyn
   assert.match(html,/\.\/refund\//);
   assert.match(source,/premiumRefundConsent\?\.checked/);
   assert.match(source,/premiumRefundConsent\?\.focus\(\)/);
+});
+
+
+test('merchant pages do not claim a pending mail-order registration',async()=>{
+  for(const path of [
+    'site/index.html',
+    'site/terms/index.html',
+    'site/privacy/index.html',
+    'site/refund/index.html',
+    'site/premium/index.html'
+  ]){
+    const html=await readFile(path,'utf8');
+    assert.doesNotMatch(html,/신고 완료 후 표기 예정/);
+    assert.match(html,/010-3071-6160/);
+  }
 });
